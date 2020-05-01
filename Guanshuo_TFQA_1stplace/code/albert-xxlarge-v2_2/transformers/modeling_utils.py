@@ -56,8 +56,7 @@ except ImportError:
 class PreTrainedModel(nn.Module):
     r""" Base class for all models.
 
-        :class:`~transformers.PreTrainedModel` takes care of storing the configuration of the models and handles methods for loading/downloading/saving models
-        as well as a few methods common to all models to (i) resize the input embeddings and (ii) prune heads in the self-attention heads.
+        :class:`~transformers.PreTrainedModel` takes care of storing the configuration of the models and handles methods for loading/downloading/saving models as well as a few methods common to all models to (i) resize the input embeddings and (ii) prune heads in the self-attention heads.
 
         Class attributes (overridden by derived classes):
             - ``config_class``: a class derived from :class:`~transformers.PretrainedConfig` to use as configuration class for this model architecture.

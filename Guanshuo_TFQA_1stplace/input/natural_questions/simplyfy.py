@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from tqdm import tqdm
 import jsonlines
-from test_utils import simplify_nq_example
+from input.natural_questions.test_utils import simplify_nq_example
 import json
 
 
