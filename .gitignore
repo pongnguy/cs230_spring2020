@@ -1,5 +1,9 @@
 # Datasets
 datasets/
+*.jsonl
+
+# Models
+*.bin
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
