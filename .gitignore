@@ -134,3 +134,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/uncased_L-12_H-768_A-12/
