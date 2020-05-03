@@ -10,81 +10,21 @@ from typing import TypedDict, List
 import tensorflow as tf
 
 
-# Format for dataset statistics
-class DataBinEntry(TypedDict):
-    binPos: int
-    binVal: int
+def format_KaggleToSquad(dataset_kaggle):
 
-class DataBin(TypedDict):
-    minBinPos: int
-    maxBinPos: int
-    numBins: int
-    bins: DataBinEntry
+    #Initialize the squad data dictionary
+    dataset_Squad = {'version': 'v2.0', 'data': []}
+    exampleCount = 0
 
+    for example in dataset_kaggle:
+        dataset_Squad['data'].append({'title': example['document_url'], 'paragraphs': []})
+        for annotation in example['annotations']:  # annotations is an array in Kaggle, however it only ever has one element in the training data
+            dataset_Squad['data'][-1]['paragraphs'].append({'qas': [{'question': example['question_text'], 'id': annotation['annotation_id'], 'is_impossibe': False if (len(annotation['short_answers'])>0) else True, 'answers': []}], 'context': example['document_text'], 'long_answer_candidates': example['long_answer_candidates']})
+            for short_answer in annotation['short_answers']:   # only a single question gets copied since Kaggle dataset only has a single question per training example, however I am still indexing the last element in the qas array
+                curAnswer = dataset_Squad['data'][-1]['paragraphs'][-1]['qas'][-1]['answers']
+                curAnswer.append({'text': 'TODO', 'answer_start': short_answer['start_token'], 'answer_end': short_answer['end_token']})
 
-"""
-# Format for Kaggle dataset
-class Kaggle_longAnswerCandidate(TypedDict):
-    start_token: int
-    top_level: bool
-    end_token: int
-
-class Kaggle_longAnswer(TypedDict):
-    start_token: int
-    candidate_index: int
-    end_token: int
-
-class Kaggle_shortAnswer(TypedDict):
-    start_token: int
-    end_token: int
-
-class Kaggle_annotation(TypedDict):
-    yes_no_answer: str
-    long_answer: Kaggle_longAnswer
-    short_answers: Kaggle_shortAnswer
-    annotation_id: int
-
-class Kaggle_dataset(TypedDict):
-    document_text: str
-    long_answer_candidates: List[Kaggle_longAnswerCandidate]
-    question_text: str
-    annotations: List[Kaggle_annotation]
-    document_url: str
-    example_id: int"""
-
-# Structure of the Kaggle data
-# Note: TypedDict is supported in python3.8
-DatasetKaggle = TypedDict('DatasetKaggle', {'document_text': str, 'long_answer_candidates': List[TypedDict('long_answer_candidate', {'start_token': int, 'top_level': bool, 'end_token': int})], 'question_text': str, 'annotations': List[TypedDict('annotation', {'yes_no_answer': str, 'long_answer': TypedDict('long_answer', {'start_token': int, 'candidate_index': int, 'end_token': int}), 'short_answers': List[TypedDict('short_answer', {'start_token': int, 'end_token': int})], 'annotation_id': int})], 'document_url': str, 'example_id': int})
-
-
-"""
-# Format for SQuAD v2.0 dataset
-class SQuADv2_answers(TypedDict):
-    test: str
-    answer_start: int
-
-
-class SQuADv2_qa(TypedDict):
-    question: str
-    id: str
-    answers: list[SQuADv2_answers]
-    is_impossible: bool
-
-
-class SQuADv2_paragraph(TypedDict):
-    qas: list
-    context: str
-
-
-class SQuADv2_data(TypedDict):
-    title: str
-    paragraphs: list[SQuADv2_paragraph]
-
-
-class SQuADv2(TypedDict):
-    version: str
-    data: list[SQuADv2_data]"""
-
+    return dataset_Squad
 
 def random_sample_negative_candidates(distribution):
     temp = np.random.random()
@@ -112,7 +52,23 @@ def input_datasets_Kaggle(json_dir, max_data = 9999999999):
     #max_data = 9999999999
 
     id_list = []
-    data_dict = DatasetKaggle # alfred
+    data_dict =  []  #DatasetKaggle # alfred
+    with open(json_dir) as f:
+        for n, line in tqdm(enumerate(f)):
+            if n >= max_data:
+                break
+            data_dict.append(json.loads(line))
+
+        return data_dict
+
+
+def inputdata_KaggleWinner(json_dir, max_data = 9999999999):
+    # prepare input
+    #json_dir = '../../input/simplified-nq-train.jsonl'
+    #max_data = 9999999999
+
+    id_list = []
+    data_dict = {}
     with open(json_dir) as f:
         for n, line in tqdm(enumerate(f)):
             if n > max_data:
@@ -130,12 +86,12 @@ def input_datasets_Kaggle(json_dir, max_data = 9999999999):
             elif annotations['long_answer']['candidate_index'] != -1:
                 is_pos = True
 
-            if is_pos and len(data['long_answer_candidates'])>1:
+            if is_pos and len(data['long_answer_candidates']) > 1:
                 data_id = data['example_id']
                 id_list.append(data_id)
 
                 # uniform sampling
-                distribution = np.ones((len(data['long_answer_candidates']),),dtype=np.float32)
+                distribution = np.ones((len(data['long_answer_candidates']),), dtype=np.float32)
                 if is_pos:
                     distribution[data['annotations'][0]['long_answer']['candidate_index']] = 0.
                 distribution /= len(distribution)
@@ -156,20 +112,19 @@ def input_datasets_Kaggle(json_dir, max_data = 9999999999):
 
                 # initialize data_dict
                 data_dict[data_id] = {
-                                      'question_text': data['question_text'],
-                                      'annotations': data['annotations'],
-                                      'positive_text': positive_candidate_words,
-                                      'positive_start': positive_candidate_start,
-                                      'positive_end': positive_candidate_end,
-                                      'negative_text': negative_candidate_words,
-                                      'negative_start': negative_candidate_start,
-                                      'negative_end': negative_candidate_end,
-                                     }
-
-    # Check that the inputted results are well formatted
-    assert(type(data_dict)==DatasetKaggle)
+                    'question_text': data['question_text'],
+                    'annotations': data['annotations'],
+                    'positive_text': positive_candidate_words,
+                    'positive_start': positive_candidate_start,
+                    'positive_end': positive_candidate_end,
+                    'negative_text': negative_candidate_words,
+                    'negative_start': negative_candidate_start,
+                    'negative_end': negative_candidate_end,
+                }
 
     return data_dict
+
+
 
 
 def convert_examples_to_features(examples, tokenizer, max_seq_length,
@@ -339,17 +294,61 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
             unique_id += 1
 
 
-#def compute_lengths(dataset: Dataset):
+def compute_lengthHistogram(datasetKaggle, numBins):
     """
-    Outputs a histogram of the lengths of the text in the input data which is processed
+        Outputs various statistics of the Kaggle dataset
 
-    :param dataset: the input dataset formatted as
+        :param datasetKaggle: the input dataset formatted as a dictionary
+        :type datasetKaggle: dict
+        :return: dictionary with the processed information
+        :rtype: dict
 
 
-    :type dict:
+    """
+
+
+    maxLength = 0
+    minLength = 9999999999
+
+    for example in datasetKaggle: # first pass through data to determine the mix and max length
+        maxLength = max(len(example['document_text']), maxLength)
+        minLength = min(len(example['document_text']), minLength)
+
+    for example in datasetKaggle:
+        # TODO implement code to do the binning
+
+    return {'max_length': maxLength, 'min_length': minLength}
+
+
+
+
+
+
+def compute_statistics(datasetKaggle):
+    """
+    Outputs various statistics of the Kaggle dataset
+
+    :param datasetKaggle: the input dataset formatted as a dictionary
+    :type datasetKaggle: dict
     :return: dictionary with the processed information
-    :rtype: DataBin
-
+    :rtype: dict
 
 
     """
+
+    yesNoAnswer = 0
+    annotationsMax = 0
+    averageLength = 0
+    totalExamples = len(datasetKaggle)
+
+    for example in datasetKaggle:
+        annotationsMax = max(len(example['annotations']), annotationsMax)  # check for the maximum number of annotations
+        if example['annotations'][0]['yes_no_answer'] != 'NONE':
+            yesNoAnswer += 1
+
+        averageLength = len(example['document_text']) / totalExamples
+    output = {'annotationsMax': annotationsMax, 'num_yesNo': yesNoAnswer, 'text_avgLength': averageLength}
+    return output
+
+
+
