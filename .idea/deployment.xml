@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" autoUpload="Always" compareModeInSync="SIZE">
     <serverData>
-      <paths name="AWS EC2">
+      <paths name="EC2 (Ohio)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="EC2 (Virginia)">
         <serverdata>
           <mappings>
             <mapping deploy="/alfred" local="$PROJECT_DIR$" web="/" />
@@ -10,5 +17,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
