@@ -8,8 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/uncased_L-12_H-768_A-12" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/bert_as_service" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/final_project" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bert" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bert_qa" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bert-as-service" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
