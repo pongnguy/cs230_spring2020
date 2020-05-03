@@ -8,6 +8,7 @@ Main file for all the high-level functions/class
 # 2) TBD
 
 import input as inputting
+import bert_qa.modeling as models
 
 json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 
