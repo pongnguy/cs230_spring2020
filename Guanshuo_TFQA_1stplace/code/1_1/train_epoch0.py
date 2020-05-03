@@ -8,7 +8,7 @@ from torch import optim
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import torch
-from apex import amp
+#from apex import amp
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 import random
