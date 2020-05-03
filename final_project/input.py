@@ -6,9 +6,11 @@ General file for inputting the data
 from tqdm import tqdm
 import json
 import numpy as np
-from typing import List, TypedDict
+from typing import TypedDict, List
 
 
+# Structure of the Kaggle data
+# Note: TypedDict is supported in python3.8
 DatasetKaggle = TypedDict('DatasetKaggle', {'document_text': str, 'long_answer_candidates': List[TypedDict('long_answer_candidate', {'start_token': int, 'top_level': bool, 'end_token': int})], 'question_text': str, 'annotations': List[TypedDict('annotation', {'yes_no_answer': str, 'long_answer': TypedDict('long_answer', {'start_token': int, 'candidate_index': int, 'end_token': int}), 'short_answers': List[TypedDict('short_answer', {'start_token': int, 'end_token': int})], 'annotation_id': int})], 'document_url': str, 'example_id': int})
 
 
@@ -31,7 +33,7 @@ def input_datasets_Kaggle(json_dir, max_data = 9999999999):
     :param max_data:  maximum number of rows to input
     :type max_data:  int
     :returns: processed dataset
-    :rtype: dict
+    :rtype: DatasetKaggle
     """
 
     # prepare input
@@ -92,3 +94,8 @@ def input_datasets_Kaggle(json_dir, max_data = 9999999999):
                                       'negative_start': negative_candidate_start,
                                       'negative_end': negative_candidate_end,
                                      }
+
+    # Check that the inputted results are well formatted
+    assert(type(data_dict)==DatasetKaggle)
+
+    return data_dict
