@@ -77,13 +77,13 @@ class Collator(object):
         candidate_end = data['positive_end']
         candidate_words = data['positive_text']        
 
-        words_to_tokens_index = []  # Alfred
+        words_to_tokens_index = []
         candidate_tokens = []
         for i, word in enumerate(candidate_words):
             words_to_tokens_index.append(len(candidate_tokens))
             if re.match(r'<.+>', word):  # remove paragraph tag
                 continue
-            tokens = self.tokenizer.tokenize(word)
+            tokens = self.tokenizer.tokenize(word)  # Alfred creating tokens
             if len(candidate_tokens)+len(tokens) > max_answer_tokens:
                 break
             candidate_tokens += tokens
@@ -338,7 +338,7 @@ def main():
     model_path = '../../huggingface_pretrained/bert-base-uncased/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
-    tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
+    tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)  # Alfred instantiation of BerkTokenizer
     model = BertForQuestionAnswering.from_pretrained(model_path, config=config)
 
     if args.local_rank == 0:
@@ -360,7 +360,7 @@ def main():
     train_datagen = TFQADataset(id_list=id_list)
     train_sampler = DistributedSampler(train_datagen)
     train_collate = Collator(data_dict=data_dict, 
-                             tokenizer=tokenizer, 
+                             tokenizer=tokenizer,   # Alfred adding tokenizer
                              max_seq_len=max_seq_len, 
                              max_question_len=max_question_len)
     train_generator = DataLoader(dataset=train_datagen,

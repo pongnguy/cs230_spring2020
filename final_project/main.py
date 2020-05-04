@@ -23,3 +23,8 @@ with open('squad_formatted.json', 'w') as f:
 dataset_statistics = inputting.compute_statistics(dataset_kaggle)
 
 print("Finished loading, formatting, and outputting the data")
+
+
+# Playing with creating a Tokenizer
+
+#create_tokenizer_from_hub_module(bert_hub_module_handle):
