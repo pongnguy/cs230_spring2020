@@ -77,7 +77,7 @@ class Collator(object):
         candidate_end = data['positive_end']
         candidate_words = data['positive_text']        
 
-        words_to_tokens_index = []
+        words_to_tokens_index = []  # Alfred
         candidate_tokens = []
         for i, word in enumerate(candidate_words):
             words_to_tokens_index.append(len(candidate_tokens))
