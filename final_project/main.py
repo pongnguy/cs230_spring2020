@@ -8,7 +8,7 @@ Main file for all the high-level functions/class
 # 2) TBD
 
 #from Extend_BERT_as_QA_Chatbot import create_pretraining_data as ebqachat
-import input as inputting
+import preprocess as inputting
 #import bert_qa.modeling as models
 import json
 
