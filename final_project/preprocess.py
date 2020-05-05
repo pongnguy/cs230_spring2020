@@ -346,7 +346,7 @@ def compute_statistics(datasetKaggle):
         if example['annotations'][0]['yes_no_answer'] != 'NONE':
             yesNoAnswer += 1
 
-        averageLength = len(example['document_text']) / totalExamples
+        averageLength += len(example['document_text']) / totalExamples
     output = {'annotationsMax': annotationsMax, 'num_yesNo': yesNoAnswer, 'text_avgLength': averageLength}
     return output
 
