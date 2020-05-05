@@ -314,8 +314,8 @@ def compute_lengthHistogram(datasetKaggle, numBins):
         maxLength = max(len(example['document_text']), maxLength)
         minLength = min(len(example['document_text']), minLength)
 
-    for example in datasetKaggle:
-        # TODO implement code to do the binning
+    """for example in datasetKaggle:
+        # TODO implement code to do the binning"""
 
     return {'max_length': maxLength, 'min_length': minLength}
 
