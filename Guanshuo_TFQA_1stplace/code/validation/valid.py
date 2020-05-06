@@ -4,7 +4,7 @@ import os
 from tqdm import tqdm
 import torch.nn as nn
 from torch import optim
-import torch.nn.functional as F
+import torch.nn.functional as F   # Alfred
 from torch.utils.data import Dataset, DataLoader
 import torch
 import re
@@ -406,6 +406,7 @@ def reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted,
     batch_size = 384
 
 
+
     # build model
     model_path = '../bert-large-uncased_4/model/'
     config = BertConfig.from_pretrained(model_path)
@@ -413,6 +414,7 @@ def reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted,
     config.vocab_size = 30531
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
     model = BertForQuestionAnswering.from_pretrained('../bert-large-uncased_4/weights/epoch3/', config=config)
+
 
     # add new tokens
     new_token_dict = {
@@ -643,7 +645,7 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
     config.num_labels = 5
     config.vocab_size = 30531
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
-    model = BertForQuestionAnswering.from_pretrained(model_dir, config=config)
+    model = BertForQuestionAnswering.from_pretrained(model_dir, config=config)  # Alfred  BERT pre-trained on SQuAD was directly used
 
     # add new tokens
     new_token_dict = {
@@ -714,9 +716,9 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
             batch_attention_mask = batch_attention_mask.cuda()
             batch_token_type_ids = batch_token_type_ids.cuda()
             logits1, logits2, logits3 = model(batch_input_ids, batch_attention_mask, batch_token_type_ids)
-            test_prob1[start:end, :batch_max_seq_len] += F.softmax(logits1,dim=1).cpu().data.numpy()
+            test_prob1[start:end, :batch_max_seq_len] += F.softmax(logits1,dim=1).cpu().data.numpy()  # Alfred see Guanshuo's comment in his writeup
             test_prob2[start:end, :batch_max_seq_len] += F.softmax(logits2,dim=1).cpu().data.numpy()
-            test_prob3[start:end] += F.softmax(logits3,dim=1).cpu().data.numpy()
+            test_prob3[start:end] += F.softmax(logits3,dim=1).cpu().data.numpy()  # Alfred class_prob += 0.3 * test_prob3
             list_words_to_tokens_index += batch_words_to_tokens_index
             list_offset += batch_offset
 
@@ -728,7 +730,7 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
             test_word_prob1[i,j] = test_prob1[i, list_words_to_tokens_index[i][j]+list_offset[i]]
             test_word_prob2[i,j] = test_prob2[i, list_words_to_tokens_index[i][j]+list_offset[i]]
 
-    return test_word_prob1, test_word_prob2, test_prob3
+    return test_word_prob1, test_word_prob2, test_prob3  # Alfred     class_prob += 0.3 * test_prob3
 
 
 def albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len):
@@ -947,17 +949,20 @@ def albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_
     return test_word_prob1, test_word_prob2, test_prob3
 
 
+print('starting')
 # This function performs a full prediction on the validation set using a fast model (bert-base) to reduce the candidates for larger model predictions.
-# Propose only the top-k (top10 in this case) most probable candidates from each document, each candidate must have long answer probability larger than a threshold (0.2), the rest candidates are set to negative.
+# Propose only the top-k (top10 in this case) most probable candidates from each document, each candidate must have long answer probability larger than a threshold (0.2), the rest candidates are set to negative.  # Alfred
 # id_candidate_list_sorted stores (document id, candidate number) as keys, each of each contains its long answer probability (score).
 start_time = time.time()
-data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted = reduce1(n_candidate=10, th_candidate=0.2)
-print("--- %s seconds ---" % (time.time() - start_time))
+data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted = reduce1(n_candidate=4, th_candidate=0.2)
+print("--- %s seconds ---1" % (time.time() - start_time))
 
+"""
 # Futher reduce the number of candidates from top10 to top4.
 start_time = time.time()
 id_candidate_list_sorted = reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, n_candidate=4, th_candidate=0.35)
-print("--- %s seconds ---" % (time.time() - start_time))
+print("--- %s seconds ---2" % (time.time() - start_time))
+"""
 
 # Acutual predictions start here. 
 start_time = time.time()
@@ -968,11 +973,12 @@ start_prob = np.zeros((len(id_candidate_list_sorted),word_len),dtype=np.float32)
 end_prob = np.zeros((len(id_candidate_list_sorted),word_len),dtype=np.float32)
 start_label = np.zeros((len(id_candidate_list_sorted),),dtype=int)
 end_label = np.zeros((len(id_candidate_list_sorted),),dtype=int)
-# class_prob stores the 5-class classifier prob outputs.
+# class_prob stores the 5-class classifier prob outputs. # Alfred
 # no answer(0), long but not short answer(1), short answer with span(2), NO(3), YES(4)
 class_prob = np.zeros((len(id_candidate_list_sorted),5),dtype=np.float32)
 
 # Perform prediction using two albert-xxl and two bert-large models. Weighted average of both long and short predictions for ensembling.
+"""
 model_dir = '../albert-xxlarge-v2_2/weights/epoch2/'
 test_prob1, test_prob2, test_prob3 = albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len)
 start_prob += 0.3*test_prob1
@@ -988,11 +994,12 @@ test_prob1, test_prob2, test_prob3 = bert_large_predict(data_dict, id_list, id_c
 start_prob += 0.2*test_prob1
 end_prob += 0.2*test_prob2
 class_prob += 0.2*test_prob3
+"""
 model_dir = '../bert-large-uncased_5/weights/epoch3/'
 test_prob1, test_prob2, test_prob3 = bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len)
 start_prob += 0.2*test_prob1
 end_prob += 0.2*test_prob2
-class_prob += 0.2*test_prob3
+class_prob += 0.2*test_prob3  # Alfred class_prob is weighted average of test_prob3 from different models
 
 # The start and end words have the largest probabilities.
 start_label = np.argmax(start_prob, axis=1)
@@ -1009,16 +1016,19 @@ for doc_id in id_list:
                          'yes_no_answer': 'NONE'
                         }
 
+
+print('from candidates to documents')
+
 # from cadidates to document
 for i, (doc_id, candidate_index) in tqdm(enumerate(id_candidate_list_sorted)):
     # process long answer
-    long_answer_score = 1.0 - class_prob[i,0] # 1 - no_answer_score
+    long_answer_score = 1.0 - class_prob[i,0] # 1 - no_answer_score # Alfred
     if long_answer_score > temp_dict[doc_id]['long_answer_score']:
         temp_dict[doc_id]['long_answer_score'] = long_answer_score
         temp_dict[doc_id]['long_answer']['start_token'] = data_dict[doc_id]['long_answer_candidates'][candidate_index]['start_token']
         temp_dict[doc_id]['long_answer']['end_token'] = data_dict[doc_id]['long_answer_candidates'][candidate_index]['end_token']
         # process short answer
-        short_answer_score = 1.0 - class_prob[i,0] - class_prob[i,1] # 1 - no_answer_score - long_but_not_short_answer_score
+        short_answer_score = 1.0 - class_prob[i,0] - class_prob[i,1] # 1 - no_answer_score - long_but_not_short_answer_score # Alfred
         temp_dict[doc_id]['short_answers_score'] = short_answer_score
 
         temp_dict[doc_id]['short_answers'][0]['start_token'] = -1
@@ -1036,6 +1046,8 @@ for i, (doc_id, candidate_index) in tqdm(enumerate(id_candidate_list_sorted)):
                 temp_dict[doc_id]['short_answers'][0]['start_token'] = short_start_word
                 temp_dict[doc_id]['short_answers'][0]['end_token'] = short_end_word
 
+print('Copy the temporary dictionary')
+
 # Copy the temporary dictionary into the final dictionary that meets the required format for validation.
 final_dict = {}
 final_dict['predictions'] = []
@@ -1052,8 +1064,9 @@ for doc_id in id_list:
 
 # dump to json
 with open('predictions.json', 'w') as fp:
+    print('json.dump')
     json.dump(final_dict, fp)
-print("--- %s seconds ---" % (time.time() - start_time))
+print("--- %s seconds ---3" % (time.time() - start_time))
 
 
 

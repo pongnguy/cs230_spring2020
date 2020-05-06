@@ -417,8 +417,11 @@ def get_metrics_with_answer_stats(long_answer_stats, short_answer_stats):
 
 
 def main(_):
+  print('starting')
+  print('gold_path' + FLAGS.gold_path)
   cache_path = os.path.join(os.path.dirname(FLAGS.gold_path), 'cache')
   if FLAGS.cache_gold_data and os.path.exists(cache_path):
+    print('Reading from cache: %s')
     logging.info('Reading from cache: %s', format(cache_path))
     nq_gold_dict = pickle.load(open(cache_path, 'r'))
   else:
@@ -458,6 +461,7 @@ def main(_):
 
 
 if __name__ == '__main__':
+  print('--name--')
   flags.mark_flag_as_required('gold_path')
   flags.mark_flag_as_required('predictions_path')
   app.run(main)
