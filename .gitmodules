@@ -3,7 +3,7 @@
 	url = https://github.com/pongnguy/bert
 [submodule "bert_as_service"]
 	path = bert_as_service
-	url = https://github.com/pongnguy/bert_as_service
+	url = https://github.com/pongnguy/bert-as-service
 [submodule "bert_qa"]
 	path = bert_qa
 	url = https://github.com/pongnguy/bert_qa
