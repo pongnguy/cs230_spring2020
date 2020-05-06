@@ -1,0 +1,6 @@
+[submodule "bert"]
+	path = bert
+	url = https://github.com/pongnguy/bert
+[submodule "bert_as_service"]
+	path = bert_as_service
+	url = https://github.com/pongnguy/bert_as_service
