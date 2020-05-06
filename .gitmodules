@@ -1,4 +1,4 @@
- [submodule "bert"]
+[submodule "bert"]
 	path = bert
 	url = https://github.com/pongnguy/bert
 [submodule "bert_as_service"]
