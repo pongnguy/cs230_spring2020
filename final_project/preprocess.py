@@ -2,6 +2,7 @@
 General file for inputting the data
 
 """
+from gzip import GzipFile
 
 from tqdm import tqdm
 import json
@@ -53,7 +54,18 @@ def jsonlToJson(json_dir, max_data = 9999999999):
 
     id_list = []
     data_dict =  []  #DatasetKaggle # alfred
-    n = 0
+
+    if isinstance(json_dir, str):
+        gzipped_input_file = open(json_dir, 'rb')
+    #logging.info('parsing %s ..... ', gzipped_input_file.name)
+    #annotation_dict = {}
+    with GzipFile(fileobj=gzipped_input_file) as input_file:
+        for line in input_file:
+            json_example = json.loads(line)
+            data_dict.append(json_example)
+
+
+    """n = 0
     with open(json_dir) as f:
         n += 1
         #iterable = enumerate(f)
@@ -64,7 +76,7 @@ def jsonlToJson(json_dir, max_data = 9999999999):
             #line = f.readline()
             if n >= max_data:
                 break
-            data_dict.append(json.loads(line))
+            data_dict.append(json.loads(line))"""
 
     return data_dict
 
