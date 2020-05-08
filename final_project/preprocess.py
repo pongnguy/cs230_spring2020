@@ -10,26 +10,6 @@ from typing import TypedDict, List
 import tensorflow as tf
 
 
-class DictWrap(object):
-    """
-    Class to wrap a python dictionary.
-    This helps with tab completion for object introspection in IPython
-
-        myD = {'one' : 1, 'two' : 2}
-        d = DictWrap(myD)
-
-    Now in IPython you can inspect and autocomplete with d.o<TAB>
-    """
-
-    def __init__(self, d):
-        """
-        Construct a DictWrap instance from a python dictionary d
-        """
-        for k,v in d.items():
-            setattr(self, k, v)
-
-
-
 def format_KaggleToSquad(dataset_kaggle):
 
     #Initialize the squad data dictionary
@@ -73,8 +53,15 @@ def jsonlToJson(json_dir, max_data = 9999999999):
 
     id_list = []
     data_dict =  []  #DatasetKaggle # alfred
+    n = 0
     with open(json_dir) as f:
-        for n, line in tqdm(enumerate(f)):
+        n += 1
+        #iterable = enumerate(f)
+        #tqdm_val = tqdm(iterable)
+        #for n, line in tqdm_val:
+            #print(n)
+        for line in f.readline():
+            #line = f.readline()
             if n >= max_data:
                 break
             data_dict.append(json.loads(line))
