@@ -8,7 +8,7 @@ Main file for all the high-level functions/class
 # 2) TBD
 
 #from Extend_BERT_as_QA_Chatbot import create_pretraining_data as ebqachat
-import input as inputting
+import preprocess as inputting
 #import bert_qa.modeling as models
 import json
 
@@ -17,11 +17,14 @@ import json
 
 json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 
-dataset_kaggle = inputting.input_datasets_Kaggle(json_dir, 1000)
+num_entries = 10
+
+dataset_kaggle = inputting.jsonlToJson(json_dir, num_entries)
 dataset_squad = inputting.format_KaggleToSquad(dataset_kaggle)
 
+dataset_kaggle_statistics = inputting.compute_statistics(dataset_kaggle)
 
-with open('dataset_Kaggle_1000.json', 'w') as f:
+with open('dataset_Kaggle_' + str(num_entries) + '.json', 'w') as f:
     f.seek(0)
     f.write(json.dumps(dataset_kaggle))
 

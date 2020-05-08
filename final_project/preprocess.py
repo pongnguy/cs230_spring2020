@@ -10,6 +10,26 @@ from typing import TypedDict, List
 import tensorflow as tf
 
 
+class DictWrap(object):
+    """
+    Class to wrap a python dictionary.
+    This helps with tab completion for object introspection in IPython
+
+        myD = {'one' : 1, 'two' : 2}
+        d = DictWrap(myD)
+
+    Now in IPython you can inspect and autocomplete with d.o<TAB>
+    """
+
+    def __init__(self, d):
+        """
+        Construct a DictWrap instance from a python dictionary d
+        """
+        for k,v in d.items():
+            setattr(self, k, v)
+
+
+
 def format_KaggleToSquad(dataset_kaggle):
 
     #Initialize the squad data dictionary
@@ -35,7 +55,7 @@ def random_sample_negative_candidates(distribution):
             break
     return index
 
-def input_datasets_Kaggle(json_dir, max_data = 9999999999):
+def jsonlToJson(json_dir, max_data = 9999999999):
     """
     Inputting the data from Kaggle
 
@@ -59,7 +79,7 @@ def input_datasets_Kaggle(json_dir, max_data = 9999999999):
                 break
             data_dict.append(json.loads(line))
 
-        return data_dict
+    return data_dict
 
 
 def inputdata_KaggleWinner(json_dir, max_data = 9999999999):
@@ -346,7 +366,7 @@ def compute_statistics(datasetKaggle):
         if example['annotations'][0]['yes_no_answer'] != 'NONE':
             yesNoAnswer += 1
 
-        averageLength = len(example['document_text']) / totalExamples
+        averageLength += len(example['document_text']) / totalExamples
     output = {'annotationsMax': annotationsMax, 'num_yesNo': yesNoAnswer, 'text_avgLength': averageLength}
     return output
 
