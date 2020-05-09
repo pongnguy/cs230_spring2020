@@ -53,8 +53,25 @@ def jsonlToJson(json_dir, max_data = 9999999999):
     #max_data = 9999999999
 
     id_list = []
-    data_dict =  []  #DatasetKaggle # alfred
+    data_dict =  { "lines": [] }  #DatasetKaggle # alfred
+    n = 0
+    with open(json_dir, 'r', 1, 'utf16') as f:
+        n += 1
+        #iterable = enumerate(f)
+        #tqdm_val = tqdm(iterable)
+        #for n, line in tqdm_val:
+            #print(n)
+        for n, line in enumerate(f):
+            #line = f.readline()
+            if n >= max_data:
+                break
+            line_json = json.loads(line)
+            data_dict['lines'].append(line_json)
 
+    return data_dict
+
+
+"""
     if isinstance(json_dir, str):
         gzipped_input_file = open(json_dir, 'rb')
     #logging.info('parsing %s ..... ', gzipped_input_file.name)
@@ -63,23 +80,7 @@ def jsonlToJson(json_dir, max_data = 9999999999):
         for line in input_file:
             json_example = json.loads(line)
             data_dict.append(json_example)
-
-
-    """n = 0
-    with open(json_dir) as f:
-        n += 1
-        #iterable = enumerate(f)
-        #tqdm_val = tqdm(iterable)
-        #for n, line in tqdm_val:
-            #print(n)
-        for line in f.readline():
-            #line = f.readline()
-            if n >= max_data:
-                break
-            data_dict.append(json.loads(line))"""
-
-    return data_dict
-
+"""
 
 def inputdata_KaggleWinner(json_dir, max_data = 9999999999):
     # prepare input
