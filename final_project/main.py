@@ -7,33 +7,41 @@ Main file for all the high-level functions/class
 # 1) Instantiate a BERT model and feed in a (tokenized?) input string
 # 2) TBD
 
-#from Extend_BERT_as_QA_Chatbot import create_pretraining_data as ebqachat
-from final_project import preprocess as inputting
+
+import preprocess as inputting
 #import bert_qa.modeling as models
 import json
 
 
+# Format the
 
 
+# Translate JSONL to JSON
+#dataset_simplified = inputting.jsonlToJson('../Guanshuo_TFQA_1stplace/input/natural_questions/simplified-nq-valid.jsonl')
+
+
+json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 #json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 
-#num_entries = 10
+num_entries = 1000
 
-#dataset_kaggle = inputting.jsonlToJson(json_dir, num_entries)
-#dataset_squad = inputting.format_KaggleToSquad(dataset_kaggle)
+dataset_kaggle = inputting.jsonlToJson(json_dir, num_entries)
+dataset_squad = inputting.format_KaggleToSquad(dataset_kaggle)
 
 #dataset_kaggle_statistics = inputting.compute_statistics(dataset_kaggle)
 
-dataset_simplified = inputting.jsonlToJson('../Guanshuo_TFQA_1stplace/input/natural_questions/v1.0-simplified_nq-dev-all.jsonl')
 
-#with open('dataset_Kaggle_' + str(num_entries) + '.json', 'w') as f:
-#    f.seek(0)
-#    f.write(json.dumps(dataset_kaggle))
 
-with open(file='../Guanshuo_TFQA_1stplace/input/natural_questions/simplified_dump.json', mode='w', encoding='utf-16') as f:
+with open('squad_formatted_' + str(num_entries) + '.json', 'w') as f:
     f.seek(0)
-    #output = json.dumps(dataset_simplified, ensure_ascii=False).encode('utf16')
-    f.write(json.dumps(dataset_simplified, ensure_ascii=False))
+    f.write(json.dumps(dataset_squad))
+
+
+
+#with open('../Guanshuo_TFQA_1stplace/input/natural_questions/simplified-nq-valid.json', 'w') as f:
+#    f.seek(0)
+#    #output = json.dumps(dataset_simplified, ensure_ascii=False).encode('utf16')
+#    f.write(json.dumps(dataset_squad, ensure_ascii=False))
 
 #with open('squad_formatted.json', 'w') as f:
 #    f.seek(0)

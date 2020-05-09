@@ -1,6 +1,30 @@
+[submodule "apex"]
+	path = apex
+	url = https://github.com/NVIDIA/apex
 [submodule "bert"]
 	path = bert
 	url = https://github.com/pongnguy/bert
 [submodule "bert_as_service"]
 	path = bert_as_service
-	url = https://github.com/pongnguy/bert_as_service
+	url = https://github.com/pongnguy/bert-as-service
+[submodule "bert_qa"]
+	path = bert_qa
+	url = https://github.com/pongnguy/bert-qa
+[submodule "Extend_BERT_as_QA_Chatbot"]
+	path = Extend_BERT_as_QA_Chatbot
+	url = https://github.com/pongnguy/Extend_BERT_as_QA_Chatbot
+[submodule "natural_questions"]
+	path = natural_questions
+	url = https://github.com/pongnguy/natural_questions
+[submodule "PreSumm"]
+	path = PreSumm
+	url = https://github.com/pongnguy/PreSumm
+[submodule "transformers"]
+	path = transformers
+	url = https://github.com/pongnguy/transformers
+[submodule "trax"]
+	path = trax
+	url = https://github.com/pongnguy/trax
+[submodule "wiki-reading"]
+	path = wiki-reading
+	url = https://github.com/pongnguy/wiki-reading

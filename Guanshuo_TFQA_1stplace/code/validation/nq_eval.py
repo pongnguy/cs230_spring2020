@@ -228,7 +228,7 @@ def score_answers(gold_annotation_dict, pred_dict):
     gold_id_set = set(gold_annotation_dict.keys())
     pred_id_set = set(pred_dict.keys())
 
-    if gold_id_set.symmetric_difference(pred_id_set):
+    if gold_id_set.symmetric_difference(pred_id_set):   # Alfred JSON diff
         raise ValueError('ERROR: the example ids in gold annotations and example '
                          'ids in the prediction are not equal.')
 

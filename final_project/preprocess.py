@@ -7,7 +7,7 @@ from gzip import GzipFile
 from tqdm import tqdm
 import json
 import numpy as np
-from typing import TypedDict, List
+#from typing import TypedDict, List
 import tensorflow as tf
 
 
@@ -17,7 +17,7 @@ def format_KaggleToSquad(dataset_kaggle):
     dataset_Squad = {'version': 'v2.0', 'data': []}
     exampleCount = 0
 
-    for example in dataset_kaggle:
+    for example in dataset_kaggle['lines']:
         dataset_Squad['data'].append({'title': example['document_url'], 'paragraphs': []})
         for annotation in example['annotations']:  # annotations is an array in Kaggle, however it only ever has one element in the training data
             dataset_Squad['data'][-1]['paragraphs'].append({'qas': [{'question': example['question_text'], 'id': annotation['annotation_id'], 'is_impossibe': False if (len(annotation['short_answers'])>0) else True, 'answers': []}], 'context': example['document_text'], 'long_answer_candidates': example['long_answer_candidates']})
@@ -55,8 +55,12 @@ def jsonlToJson(json_dir, max_data = 9999999999):
     id_list = []
     data_dict =  { "lines": [] }  #DatasetKaggle # alfred
     n = 0
-    with open(json_dir, 'r', 1, 'utf16') as f:
+    with open(json_dir, 'r', 1) as f:
+    #with open(json_dir, 'r', 1, 'utf16') as f:
         n += 1
+        if n % 100 == 0:
+            print(n)
+
         #iterable = enumerate(f)
         #tqdm_val = tqdm(iterable)
         #for n, line in tqdm_val:
