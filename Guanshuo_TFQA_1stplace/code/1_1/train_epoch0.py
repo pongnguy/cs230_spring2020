@@ -241,13 +241,14 @@ def random_sample_negative_candidates(distribution):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--local_rank", type=int, default=-1, help="local_rank for distributed training on gpus")
+    parser.add_argument("--local_rank", type=int, default=-1, help="local_rank for distributed training on gpus")  # Alfred what does this line do??
 
     args = parser.parse_args()
 
-    torch.cuda.set_device(args.local_rank)
-    device = torch.device("cuda", args.local_rank)
-    torch.distributed.init_process_group(backend="nccl")
+    torch.cuda.set_device(args.local_rank)    # Alfred not sure what this line is doing in view of the next line, code still works
+    device = torch.device("cuda", 0)
+    #device = torch.device("cuda", args.local_rank)
+    #torch.distributed.init_process_group(backend="nccl")    # Alfred (not using distributed since only one GPU) nccl is good for distributed GPU training, Gloo good for distributed CPU training
     args.device = device
 
     seed = 1001
@@ -257,6 +258,8 @@ def main():
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
 
+
+    print('prepare intput')
 
     # prepare input
     json_dir = '../../input/simplified-nq-train.jsonl'
@@ -329,11 +332,12 @@ def main():
     batch_size = 4
     ep = 0
 
+    print('build model')
 
     # build model
-    if args.local_rank not in [-1, 0]:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
+    #if args.local_rank not in [-1, 0]:
+    #    # Make sure only the first process in distributed training will download model & vocab
+    #    torch.distributed.barrier()
 
     model_path = '../../huggingface_pretrained/bert-base-uncased/'
     config = BertConfig.from_pretrained(model_path)
@@ -341,9 +345,9 @@ def main():
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)  # Alfred instantiation of BerkTokenizer
     model = BertForQuestionAnswering.from_pretrained(model_path, config=config)
 
-    if args.local_rank == 0:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
+    #if args.local_rank == 0:
+    #    # Make sure only the first process in distributed training will download model & vocab
+    #    torch.distributed.barrier()
 
     model.to(args.device)
 
@@ -353,6 +357,8 @@ def main():
             model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True
         )
 
+
+    print('training')
 
     # training
 
