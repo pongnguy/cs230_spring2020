@@ -3,4 +3,4 @@
 [cache]
     type = "reflink,symlink,hardlink,copy"
 ['remote "local_dataset"']
-    url = C:/Users/alfred/Datasets/dvc_remote
+    url = C:/Users/alfre/Datasets/dvc_remote
