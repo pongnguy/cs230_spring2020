@@ -1,3 +1,19 @@
-*****************************************
-Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
-*****************************************
+prepare intput
+6
+build model
+training
+-- line number 9
+allocated: 418M, max allocated: 418M, cached: 472M, max cached: 472M
+-- batch number 0
+allocated: 418M, max allocated: 418M, cached: 472M, max cached: 472M
+-- batch number 1
+allocated: 1691M, max allocated: 1696M, cached: 1958M, max cached: 1958M
+-- batch number 2
+allocated: 1693M, max allocated: 2854M, cached: 2998M, max cached: 2998M
+-- batch number 3
+allocated: 1689M, max allocated: 2854M, cached: 3268M, max cached: 3268M
+-- batch number 4
+allocated: 1691M, max allocated: 2855M, cached: 3268M, max cached: 3268M
+-- batch number 5
+allocated: 1692M, max allocated: 2855M, cached: 3268M, max cached: 3268M
+epoch: 0, train_loss1: 5.906474294977798, train_loss2: 5.978299795689502, train_loss3: 1.701041082541148, train_acc1: 0.0, train_acc2: 0.0, train_acc3: 0.1249999937500003

@@ -1,0 +1,2 @@
+6
+epoch: 1, train_loss1: 5.649819926058504, train_loss2: 5.769215891386923, train_loss3: 1.687686026096344, train_acc1: 0.0, train_acc2: 0.0, train_acc3: 0.12499999375000033

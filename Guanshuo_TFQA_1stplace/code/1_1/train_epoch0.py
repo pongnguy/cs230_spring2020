@@ -2,6 +2,8 @@ import argparse
 import numpy as np
 import pandas as pd
 import os
+
+from apex import amp
 from tqdm import tqdm
 import torch.nn as nn
 from torch import optim
@@ -238,6 +240,16 @@ def random_sample_negative_candidates(distribution):
     return index
 
 
+def stat_cuda(msg):
+    print('--', msg)
+    print('allocated: %dM, max allocated: %dM, cached: %dM, max cached: %dM' % (
+        torch.cuda.memory_allocated() / 1024 / 1024,
+        torch.cuda.max_memory_allocated() / 1024 / 1024,
+        torch.cuda.memory_cached() / 1024 / 1024,
+        torch.cuda.max_memory_cached() / 1024 / 1024
+    ))
+
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -267,7 +279,8 @@ def main():
 
     id_list = []
     data_dict = {}
-    with open(json_dir) as f:
+    with open(json_dir, encoding='utf-16') as f:
+    #with open(json_dir) as f:
         for n, line in tqdm(enumerate(f)):
             if n > max_data:
                 break
@@ -329,7 +342,8 @@ def main():
     max_seq_len = 384
     max_question_len = 64
     learning_rate = 0.00002
-    batch_size = 4
+    batch_size = 1
+    #batch_size = 4
     ep = 0
 
     print('build model')
@@ -353,9 +367,7 @@ def main():
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     model, optimizer = amp.initialize(model, optimizer, opt_level="O1",verbosity=0)
-    model = torch.nn.parallel.DistributedDataParallel(
-            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True
-        )
+    #model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
 
     print('training')
@@ -364,7 +376,8 @@ def main():
 
     # iterator for training
     train_datagen = TFQADataset(id_list=id_list)
-    train_sampler = DistributedSampler(train_datagen)
+    train_sampler = RandomSampler(train_datagen)
+    #train_sampler = DistributedSampler(train_datagen)
     train_collate = Collator(data_dict=data_dict, 
                              tokenizer=tokenizer,   # Alfred adding tokenizer
                              max_seq_len=max_seq_len, 
@@ -373,7 +386,9 @@ def main():
                                  sampler=train_sampler,
                                  collate_fn=train_collate,
                                  batch_size=batch_size,
+                                 #num_workers=1,
                                  num_workers=3,
+                                 #pin_memory=False)
                                  pin_memory=True)
 
     # train
@@ -384,6 +399,9 @@ def main():
     accuracies2 = AverageMeter() # end
     accuracies3 = AverageMeter() # class
     model.train()
+
+    stat_cuda('line number ' + str(n))
+
     for j,(batch_input_ids, batch_attention_mask, batch_token_type_ids, batch_y_start, batch_y_end, batch_y) in enumerate(train_generator):
         batch_input_ids = batch_input_ids.cuda()
         batch_attention_mask = batch_attention_mask.cuda()
@@ -392,6 +410,7 @@ def main():
         labels2 = batch_y_end.cuda()
         labels3 = batch_y.cuda()
 
+        stat_cuda('batch number ' + str(j))
         logits1, logits2, logits3 = model(batch_input_ids, batch_attention_mask, batch_token_type_ids)
         y_true = (batch_y_start, batch_y_end, batch_y)
         loss1, loss2, loss3 = loss_fn((logits1, logits2, logits3), (labels1, labels2, labels3))
@@ -414,13 +433,14 @@ def main():
 
         optimizer.step()
 
-    if args.local_rank == 0:
+    if args.local_rank == 0 or True:  # Alfred changed to always execute
         print('epoch: {}, train_loss1: {}, train_loss2: {}, train_loss3: {}, train_acc1: {}, train_acc2: {}, train_acc3: {}'.format(ep,losses1.avg,losses2.avg,losses3.avg,accuracies1.avg,accuracies2.avg,accuracies3.avg), flush=True)
 
         out_dir = 'weights/epoch0/'
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
-        torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
+        torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
+        #torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
 
 if __name__ == "__main__":
     main()

@@ -246,8 +246,9 @@ def main():
     args = parser.parse_args()
 
     torch.cuda.set_device(args.local_rank)
-    device = torch.device("cuda", args.local_rank)
-    torch.distributed.init_process_group(backend="nccl")
+    device = torch.device("cuda", 0)
+    #device = torch.device("cuda", args.local_rank)
+    #torch.distributed.init_process_group(backend="nccl")
     args.device = device
 
     seed = 1002
@@ -264,7 +265,8 @@ def main():
 
     id_list = []
     data_dict = {}
-    with open(json_dir) as f:
+    with open(json_dir, encoding='utf-16') as f:
+    #with open(json_dir) as f:
         for n, line in tqdm(enumerate(f)):
             if n > max_data:
                 break
@@ -326,14 +328,15 @@ def main():
     max_seq_len = 384
     max_question_len = 64
     learning_rate = 0.00002
-    batch_size = 4
+    batch_size = 1
+    #batch_size = 4
     ep = 1
 
 
     # build model
-    if args.local_rank not in [-1, 0]:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
+    #if args.local_rank not in [-1, 0]:
+    #    # Make sure only the first process in distributed training will download model & vocab
+    #    torch.distributed.barrier()
 
     model_path = '../../huggingface_pretrained/bert-base-uncased/'
     config = BertConfig.from_pretrained(model_path)
@@ -341,24 +344,23 @@ def main():
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
     model = BertForQuestionAnswering.from_pretrained('weights/epoch0/', config=config)
 
-    if args.local_rank == 0:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
+    #if args.local_rank == 0:
+    #    # Make sure only the first process in distributed training will download model & vocab
+    #    torch.distributed.barrier()
 
     model.to(args.device)
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     model, optimizer = amp.initialize(model, optimizer, opt_level="O1",verbosity=0)
-    model = torch.nn.parallel.DistributedDataParallel(
-            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True
-        )
+    #model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
 
     # training
 
     # iterator for training
     train_datagen = TFQADataset(id_list=id_list)
-    train_sampler = DistributedSampler(train_datagen)
+    train_sampler = RandomSampler(train_datagen)
+    #train_sampler = DistributedSampler(train_datagen)
     train_collate = Collator(data_dict=data_dict, 
                              tokenizer=tokenizer, 
                              max_seq_len=max_seq_len, 
@@ -367,6 +369,7 @@ def main():
                                  sampler=train_sampler,
                                  collate_fn=train_collate,
                                  batch_size=batch_size,
+                                 #num_workers=2,
                                  num_workers=3,
                                  pin_memory=True)
 
@@ -408,13 +411,14 @@ def main():
 
         optimizer.step()
 
-    if args.local_rank == 0:
+    if args.local_rank == 0 or True:  # Alfred always execute this
         print('epoch: {}, train_loss1: {}, train_loss2: {}, train_loss3: {}, train_acc1: {}, train_acc2: {}, train_acc3: {}'.format(ep,losses1.avg,losses2.avg,losses3.avg,accuracies1.avg,accuracies2.avg,accuracies3.avg), flush=True)
 
         out_dir = 'weights/epoch1/'
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
-        torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
+        torch.save(model.state_dict(), out_dir+'pytorch_model.bin')
+        #torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
 
 if __name__ == "__main__":
     main()
