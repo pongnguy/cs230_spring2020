@@ -1,19 +1,1037 @@
 prepare intput
-6
+515
 build model
 training
--- line number 9
+-- line number 999
 allocated: 418M, max allocated: 418M, cached: 472M, max cached: 472M
 -- batch number 0
 allocated: 418M, max allocated: 418M, cached: 472M, max cached: 472M
 -- batch number 1
 allocated: 1691M, max allocated: 1696M, cached: 1958M, max cached: 1958M
 -- batch number 2
-allocated: 1693M, max allocated: 2854M, cached: 2998M, max cached: 2998M
+allocated: 1693M, max allocated: 2854M, cached: 3268M, max cached: 3268M
 -- batch number 3
-allocated: 1689M, max allocated: 2854M, cached: 3268M, max cached: 3268M
+allocated: 1690M, max allocated: 2854M, cached: 3268M, max cached: 3268M
 -- batch number 4
-allocated: 1691M, max allocated: 2855M, cached: 3268M, max cached: 3268M
+allocated: 1690M, max allocated: 2856M, cached: 3268M, max cached: 3268M
 -- batch number 5
-allocated: 1692M, max allocated: 2855M, cached: 3268M, max cached: 3268M
-epoch: 0, train_loss1: 5.906474294977798, train_loss2: 5.978299795689502, train_loss3: 1.701041082541148, train_acc1: 0.0, train_acc2: 0.0, train_acc3: 0.1249999937500003
+allocated: 1690M, max allocated: 2856M, cached: 3268M, max cached: 3268M
+-- batch number 6
+allocated: 1692M, max allocated: 2856M, cached: 3268M, max cached: 3268M
+-- batch number 7
+allocated: 1689M, max allocated: 2856M, cached: 3268M, max cached: 3268M
+-- batch number 8
+allocated: 1691M, max allocated: 2856M, cached: 3268M, max cached: 3268M
+-- batch number 9
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 10
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 11
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 12
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 13
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 14
+allocated: 1695M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 15
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 16
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 17
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 18
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 19
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 20
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 21
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 22
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 23
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 24
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 25
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 26
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 27
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 28
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 29
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 30
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 31
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 32
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 33
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 34
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 35
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 36
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 37
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 38
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 39
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 40
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 41
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 42
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 43
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 44
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 45
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 46
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 47
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 48
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 49
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 50
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 51
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 52
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 53
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 54
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 55
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 56
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 57
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 58
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 59
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 60
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 61
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 62
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 63
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 64
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 65
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 66
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 67
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 68
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 69
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 70
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 71
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 72
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 73
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 74
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 75
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 76
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 77
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 78
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 79
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 80
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 81
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 82
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 83
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 84
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 85
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 86
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 87
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 88
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 89
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 90
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 91
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 92
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 93
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 94
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 95
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 96
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 97
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 98
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 99
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 100
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 101
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 102
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 103
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 104
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 105
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 106
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 107
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 108
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 109
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 110
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 111
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 112
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 113
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 114
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 115
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 116
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 117
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 118
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 119
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 120
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 121
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 122
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 123
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 124
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 125
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 126
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 127
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 128
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 129
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 130
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 131
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 132
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 133
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 134
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 135
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 136
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 137
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 138
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 139
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 140
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 141
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 142
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 143
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 144
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 145
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 146
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 147
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 148
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 149
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 150
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 151
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 152
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 153
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 154
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 155
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 156
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 157
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 158
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 159
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 160
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 161
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 162
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 163
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 164
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 165
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 166
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 167
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 168
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 169
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 170
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 171
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 172
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 173
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 174
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 175
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 176
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 177
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 178
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 179
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 180
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 181
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 182
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 183
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 184
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 185
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 186
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 187
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 188
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 189
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 190
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 191
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 192
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 193
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 194
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 195
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 196
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 197
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 198
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 199
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 200
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 201
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 202
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 203
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 204
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 205
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 206
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 207
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 208
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 209
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 210
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 211
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 212
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 213
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 214
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 215
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 216
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 217
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 218
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 219
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 220
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 221
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 222
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 223
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 224
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 225
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 226
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 227
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 228
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 229
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 230
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 231
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 232
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 233
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 234
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 235
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 236
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 237
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 238
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 239
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 240
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 241
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 242
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 243
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 244
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 245
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 246
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 247
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 248
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 249
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 250
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 251
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 252
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 253
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 254
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 255
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 256
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 257
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 258
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 259
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 260
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 261
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 262
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 263
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 264
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 265
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 266
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 267
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 268
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 269
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 270
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 271
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 272
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 273
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 274
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 275
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 276
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 277
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 278
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 279
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 280
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 281
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 282
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 283
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 284
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 285
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 286
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 287
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 288
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 289
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 290
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 291
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 292
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 293
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 294
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 295
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 296
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 297
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 298
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 299
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 300
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 301
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 302
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 303
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 304
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 305
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 306
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 307
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 308
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 309
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 310
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 311
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 312
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 313
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 314
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 315
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 316
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 317
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 318
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 319
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 320
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 321
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 322
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 323
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 324
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 325
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 326
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 327
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 328
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 329
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 330
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 331
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 332
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 333
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 334
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 335
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 336
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 337
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 338
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 339
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 340
+allocated: 1695M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 341
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 342
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 343
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 344
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 345
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 346
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 347
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 348
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 349
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 350
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 351
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 352
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 353
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 354
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 355
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 356
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 357
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 358
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 359
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 360
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 361
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 362
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 363
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 364
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 365
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 366
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 367
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 368
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 369
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 370
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 371
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 372
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 373
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 374
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 375
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 376
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 377
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 378
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 379
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 380
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 381
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 382
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 383
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 384
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 385
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 386
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 387
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 388
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 389
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 390
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 391
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 392
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 393
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 394
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 395
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 396
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 397
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 398
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 399
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 400
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 401
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 402
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 403
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 404
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 405
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 406
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 407
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 408
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 409
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 410
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 411
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 412
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 413
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 414
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 415
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 416
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 417
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 418
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 419
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 420
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 421
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 422
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 423
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 424
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 425
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 426
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 427
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 428
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 429
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 430
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 431
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 432
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 433
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 434
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 435
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 436
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 437
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 438
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 439
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 440
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 441
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 442
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 443
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 444
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 445
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 446
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 447
+allocated: 1688M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 448
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 449
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 450
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 451
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 452
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 453
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 454
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 455
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 456
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 457
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 458
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 459
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 460
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 461
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 462
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 463
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 464
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 465
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 466
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 467
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 468
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 469
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 470
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 471
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 472
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 473
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 474
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 475
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 476
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 477
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 478
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 479
+allocated: 1694M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 480
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 481
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 482
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 483
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 484
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 485
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 486
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 487
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 488
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 489
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 490
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 491
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 492
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 493
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 494
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 495
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 496
+allocated: 1689M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 497
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 498
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 499
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 500
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 501
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 502
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 503
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 504
+allocated: 1693M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 505
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 506
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 507
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 508
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 509
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 510
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 511
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 512
+allocated: 1690M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 513
+allocated: 1691M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+-- batch number 514
+allocated: 1692M, max allocated: 2857M, cached: 3268M, max cached: 3268M
+epoch: 0, train_loss1: 3.7036940262010702, train_loss2: 3.966997631354593, train_loss3: 0.9387589081977178, train_acc1: 0.2169013986748663, train_acc2: 0.10422534741519549, train_acc3: 0.7183098448085706
