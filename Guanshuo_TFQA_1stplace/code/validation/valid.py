@@ -219,7 +219,7 @@ def reduce1(n_candidate=10, th_candidate=0.2):
     model.cuda()
     optimizer = optim.Adam(model.parameters(), lr=1e-5)
     model, optimizer = amp.initialize(model, optimizer, opt_level="O1",verbosity=0)
-    if torch.cuda.device_count() > 1:
+    if torch.cuda.device_count() > 1:       # Alfred should switch all parallel code to this to support single GPU execution
         model = torch.nn.DataParallel(model)
 
 
@@ -995,7 +995,8 @@ start_prob += 0.2*test_prob1
 end_prob += 0.2*test_prob2
 class_prob += 0.2*test_prob3
 """
-model_dir = '../bert-large-uncased_5/weights/epoch3/'
+model_dir = '../1_1/weights/epoch2/'
+#model_dir = '../bert-large-uncased_5/weights/epoch3/'
 test_prob1, test_prob2, test_prob3 = bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len)
 start_prob += 0.2*test_prob1
 end_prob += 0.2*test_prob2

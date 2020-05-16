@@ -324,12 +324,14 @@ def main():
     random.shuffle(id_list)
 
 
+
+
     # hyperparameters
     max_seq_len = 384
     max_question_len = 64
     learning_rate = 0.00002
-    batch_size = 1
-    #batch_size = 4
+    #batch_size = 1
+    batch_size = 4
     ep = 1
 
 
@@ -359,7 +361,7 @@ def main():
 
     # iterator for training
     train_datagen = TFQADataset(id_list=id_list)
-    train_sampler = RandomSampler(train_datagen)
+    train_sampler = SequentialSampler(train_datagen)
     #train_sampler = DistributedSampler(train_datagen)
     train_collate = Collator(data_dict=data_dict, 
                              tokenizer=tokenizer, 
@@ -374,7 +376,7 @@ def main():
                                  pin_memory=True)
 
     # train
-    losses1 = AverageMeter() # start
+    losses1 = AverageMeter() # start  # Alfred three different quantities that get predicted??
     losses2 = AverageMeter() # end
     losses3 = AverageMeter() # class
     accuracies1 = AverageMeter() # start

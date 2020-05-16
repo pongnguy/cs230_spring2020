@@ -18,13 +18,15 @@ import re
 import json
 from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, BertConfig, get_linear_schedule_with_warmup
 
+import wandb
+
 
 def get_class_accuracy(logits, labels):
     predictions = np.argmax(F.softmax(logits,dim=1).cpu().data.numpy(), axis=1)
     return np.float32(np.sum(predictions=labels)) / len(labels), len(labels)
 
 def get_position_accuracy(logits, labels):
-    predictions = np.argmax(F.softmax(logits,dim=1).cpu().data.numpy(), axis=1)
+    predictions = np.argmax(F.softmax(logits,dim=1).cpu().data.numpy(), axis=1)  # Alfred prediction is based on the maximum probability
     total_num = 0
     sum_correct = 0
     for i in range(len(labels)):
@@ -279,8 +281,8 @@ def main():
 
     id_list = []
     data_dict = {}
-    with open(json_dir, encoding='utf-16') as f:
-    #with open(json_dir) as f:
+    #with open(json_dir, encoding='utf-16') as f:
+    with open(json_dir) as f:
         for n, line in tqdm(enumerate(f)):
             if n > max_data:
                 break
@@ -342,9 +344,25 @@ def main():
     max_seq_len = 384
     max_question_len = 64
     learning_rate = 0.00002
-    batch_size = 1
-    #batch_size = 4
+    #batch_size = 1
+    batch_size = 4
     ep = 0
+
+    # For wandb
+    config = dict (
+        max_seq_len=384,
+        max_question_len = 64,
+        learning_rate = 0.00002,
+        # batch_size = 1,
+        batch_size = 4,
+        ep = 0
+    )
+    wandb.init(
+        project = 'kaggle-winner',
+        notes = 'epoch0',
+        tags = ['baseline', 'epoch0'],
+        config = config
+    )
 
     print('build model')
 
@@ -369,6 +387,8 @@ def main():
     model, optimizer = amp.initialize(model, optimizer, opt_level="O1",verbosity=0)
     #model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
+    #wandb
+    wandb.watch(model)
 
     print('training')
 
@@ -376,9 +396,9 @@ def main():
 
     # iterator for training
     train_datagen = TFQADataset(id_list=id_list)
-    train_sampler = RandomSampler(train_datagen)
+    train_sampler = SequentialSampler(train_datagen)
     #train_sampler = DistributedSampler(train_datagen)
-    train_collate = Collator(data_dict=data_dict, 
+    train_collate = Collator(data_dict=data_dict,   # Alfred adding the dataset
                              tokenizer=tokenizer,   # Alfred adding tokenizer
                              max_seq_len=max_seq_len, 
                              max_question_len=max_question_len)
@@ -391,6 +411,8 @@ def main():
                                  #pin_memory=False)
                                  pin_memory=True)
 
+    total_generator = len(train_generator)
+
     # train
     losses1 = AverageMeter() # start
     losses2 = AverageMeter() # end
@@ -400,7 +422,7 @@ def main():
     accuracies3 = AverageMeter() # class
     model.train()
 
-    stat_cuda('line number ' + str(n))
+    #stat_cuda('line number ' + str(n))
 
     for j,(batch_input_ids, batch_attention_mask, batch_token_type_ids, batch_y_start, batch_y_end, batch_y) in enumerate(train_generator):
         batch_input_ids = batch_input_ids.cuda()
@@ -410,14 +432,16 @@ def main():
         labels2 = batch_y_end.cuda()
         labels3 = batch_y.cuda()
 
-        stat_cuda('batch number ' + str(j))
+        #stat_cuda('batch number ' + str(j))
         logits1, logits2, logits3 = model(batch_input_ids, batch_attention_mask, batch_token_type_ids)
         y_true = (batch_y_start, batch_y_end, batch_y)
-        loss1, loss2, loss3 = loss_fn((logits1, logits2, logits3), (labels1, labels2, labels3))
+        loss1, loss2, loss3 = loss_fn((logits1, logits2, logits3), (labels1, labels2, labels3))  # Alfred uses cross entropy loss
         loss = loss1+loss2+loss3
         acc1, n_position1 = get_position_accuracy(logits1, labels1)
         acc2, n_position2 = get_position_accuracy(logits2, labels2)
         acc3, n_position3 = get_position_accuracy(logits3, labels3)
+
+        wandb.log({'batch percent': j / total_generator * 100, 'loss1': loss1, 'loss2': loss2, 'loss3': loss3, 'loss_sum': loss, 'accuracy1': acc1, 'accuracy2': acc2, 'accuracy3': acc3})
 
         losses1.update(loss1.item(), n_position1)
         losses2.update(loss2.item(), n_position2)
