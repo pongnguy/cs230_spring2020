@@ -281,8 +281,8 @@ def main():
 
     id_list = []
     data_dict = {}
-    #with open(json_dir, encoding='utf-16') as f:
-    with open(json_dir) as f:
+    with open(json_dir, encoding='utf-16') as f:
+    #with open(json_dir) as f:
         for n, line in tqdm(enumerate(f)):
             if n > max_data:
                 break
@@ -463,8 +463,14 @@ def main():
         out_dir = 'weights/epoch0/'
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
-        torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
-        #torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
+        #os.remove(out_dir + 'pytorch_model.bin')
+        #os.system('dvc remove ' + out_dir + 'pytorch_model.bin'+'.dvc')
+        #file = open(out_dir + 'pytorch_model.bin', mode='w')
+        try:
+            torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
+        except:
+            os.system('dvc remove ' + out_dir + 'pytorch_model.bin' + '.dvc')   # Alfred need to remove file from DVC linking otherwise get error when trying to overwrite
+            torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
 
 if __name__ == "__main__":
     main()

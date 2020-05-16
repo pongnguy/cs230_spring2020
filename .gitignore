@@ -1,3 +1,7 @@
+# Weights and biases
+wandb/
+
+
 # Pycharm
 .idea
 

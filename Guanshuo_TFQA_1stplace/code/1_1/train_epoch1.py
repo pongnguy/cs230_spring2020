@@ -419,8 +419,13 @@ def main():
         out_dir = 'weights/epoch1/'
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
-        torch.save(model.state_dict(), out_dir+'pytorch_model.bin')
-        #torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
+
+        try:
+            torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
+            # torch.save(model.module.state_dict(), out_dir+'pytorch_model.bin')
+        except:
+            os.system('dvc remove ' + out_dir + 'pytorch_model.bin' + '.dvc')   # Alfred need to remove file from DVC linking otherwise get error when trying to overwrite
+            torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
 
 if __name__ == "__main__":
     main()
