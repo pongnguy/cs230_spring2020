@@ -4,3 +4,9 @@
     type = "reflink,symlink,hardlink,copy"
 ['remote "local_dataset"']
     url = C:/Users/alfre/Datasets/dvc_remote
+['remote "aws_s3"']
+    url = s3://dvc-remote
+['remote "aws_s3_1"']
+    url = http://dvc-remote.s3.amazonaws.com
+['remote "aws_s3_2"']
+    url = s3://dvc-remote/cs230

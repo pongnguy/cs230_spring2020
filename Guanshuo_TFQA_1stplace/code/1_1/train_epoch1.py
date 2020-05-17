@@ -16,6 +16,7 @@ import re
 import json
 from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, BertConfig, get_linear_schedule_with_warmup
 
+import wandb
 
 def get_class_accuracy(logits, labels):
     predictions = np.argmax(F.softmax(logits,dim=1).cpu().data.numpy(), axis=1)
@@ -265,59 +266,65 @@ def main():
 
     id_list = []
     data_dict = {}
-    with open(json_dir, encoding='utf-16') as f:
+    #with open(json_dir, encoding='utf-16') as f:
     #with open(json_dir) as f:
-        for n, line in tqdm(enumerate(f)):
-            if n > max_data:
-                break
-            data = json.loads(line)
 
-            is_pos = False
-            annotations = data['annotations'][0]
-            if annotations['yes_no_answer'] == 'YES':
-                is_pos = True
-            elif annotations['yes_no_answer'] == 'NO':
-                is_pos = True
-            elif annotations['short_answers']:
-                is_pos = True
-            elif annotations['long_answer']['candidate_index'] != -1:
-                is_pos = True
+    try:
+        f = open(json_dir)
+    except:
+        f = open(json_dir, encoding='utf-16')
 
-            if is_pos and len(data['long_answer_candidates'])>1:
-                data_id = data['example_id']
-                id_list.append(data_id)
+    for n, line in tqdm(enumerate(f)):
+        if n > max_data:
+            break
+        data = json.loads(line)
 
-                # uniform sampling
-                distribution = np.ones((len(data['long_answer_candidates']),),dtype=np.float32)
-                if is_pos:
-                    distribution[data['annotations'][0]['long_answer']['candidate_index']] = 0.
-                distribution /= len(distribution)
-                negative_candidate_index = random_sample_negative_candidates(distribution)
+        is_pos = False
+        annotations = data['annotations'][0]
+        if annotations['yes_no_answer'] == 'YES':
+            is_pos = True
+        elif annotations['yes_no_answer'] == 'NO':
+            is_pos = True
+        elif annotations['short_answers']:
+            is_pos = True
+        elif annotations['long_answer']['candidate_index'] != -1:
+            is_pos = True
 
-                #
-                doc_words = data['document_text'].split()
-                # negative
-                candidate = data['long_answer_candidates'][negative_candidate_index]
-                negative_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]  
-                negative_candidate_start = candidate['start_token']
-                negative_candidate_end = candidate['end_token']
-                # positive
-                candidate = data['long_answer_candidates'][annotations['long_answer']['candidate_index']]
-                positive_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]
-                positive_candidate_start = candidate['start_token']
-                positive_candidate_end = candidate['end_token']
+        if is_pos and len(data['long_answer_candidates'])>1:
+            data_id = data['example_id']
+            id_list.append(data_id)
 
-                # initialize data_dict
-                data_dict[data_id] = {
-                                      'question_text': data['question_text'],
-                                      'annotations': data['annotations'],  
-                                      'positive_text': positive_candidate_words,
-                                      'positive_start': positive_candidate_start,  
-                                      'positive_end': positive_candidate_end,   
-                                      'negative_text': negative_candidate_words,       
-                                      'negative_start': negative_candidate_start,  
-                                      'negative_end': negative_candidate_end,               
-                                     }
+            # uniform sampling
+            distribution = np.ones((len(data['long_answer_candidates']),),dtype=np.float32)
+            if is_pos:
+                distribution[data['annotations'][0]['long_answer']['candidate_index']] = 0.
+            distribution /= len(distribution)
+            negative_candidate_index = random_sample_negative_candidates(distribution)
+
+            #
+            doc_words = data['document_text'].split()
+            # negative
+            candidate = data['long_answer_candidates'][negative_candidate_index]
+            negative_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]
+            negative_candidate_start = candidate['start_token']
+            negative_candidate_end = candidate['end_token']
+            # positive
+            candidate = data['long_answer_candidates'][annotations['long_answer']['candidate_index']]
+            positive_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]
+            positive_candidate_start = candidate['start_token']
+            positive_candidate_end = candidate['end_token']
+
+            # initialize data_dict
+            data_dict[data_id] = {
+                                  'question_text': data['question_text'],
+                                  'annotations': data['annotations'],
+                                  'positive_text': positive_candidate_words,
+                                  'positive_start': positive_candidate_start,
+                                  'positive_end': positive_candidate_end,
+                                  'negative_text': negative_candidate_words,
+                                  'negative_start': negative_candidate_start,
+                                  'negative_end': negative_candidate_end,
+                                 }
 
 
     print(len(id_list))
@@ -334,6 +341,23 @@ def main():
     batch_size = 4
     ep = 1
 
+
+    # For wandb
+    config = dict (
+        max_seq_len=384,
+        max_question_len = 64,
+        learning_rate = 0.00002,
+        # batch_size = 1,
+        batch_size = 4,
+        ep = 1
+    )
+    wandb.init(
+        project = 'kaggle-winner',
+        notes = 'epoch1',
+        tags = ['baseline', 'epoch1'],
+        config = config,
+        entity = 'alfredwechselberger'
+    )
 
     # build model
     #if args.local_rank not in [-1, 0]:
@@ -357,6 +381,9 @@ def main():
     #model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
 
+    #wandb
+    wandb.watch(model, log="all")
+
     # training
 
     # iterator for training
@@ -374,6 +401,8 @@ def main():
                                  #num_workers=2,
                                  num_workers=3,
                                  pin_memory=True)
+
+    total_generator = len(train_generator)
 
     # train
     losses1 = AverageMeter() # start  # Alfred three different quantities that get predicted??
@@ -398,6 +427,9 @@ def main():
         acc1, n_position1 = get_position_accuracy(logits1, labels1)
         acc2, n_position2 = get_position_accuracy(logits2, labels2)
         acc3, n_position3 = get_position_accuracy(logits3, labels3)
+
+        wandb.log({'batch percent': j / total_generator * 100, 'loss1': loss1, 'loss2': loss2, 'loss3': loss3,
+                   'loss_sum': loss, 'accuracy1': acc1, 'accuracy2': acc2, 'accuracy3': acc3})
 
         losses1.update(loss1.item(), n_position1)
         losses2.update(loss2.item(), n_position2)

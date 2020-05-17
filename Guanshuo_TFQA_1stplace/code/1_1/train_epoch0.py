@@ -281,59 +281,64 @@ def main():
 
     id_list = []
     data_dict = {}
-    with open(json_dir, encoding='utf-16') as f:
+    #with open(json_dir, encoding='utf-16') as f:
     #with open(json_dir) as f:
-        for n, line in tqdm(enumerate(f)):
-            if n > max_data:
-                break
-            data = json.loads(line)
+    try:
+        f = open(json_dir)
+    except:
+        f = open(json_dir, encoding='utf-16')
 
-            is_pos = False
-            annotations = data['annotations'][0]
-            if annotations['yes_no_answer'] == 'YES':
-                is_pos = True
-            elif annotations['yes_no_answer'] == 'NO':
-                is_pos = True
-            elif annotations['short_answers']:
-                is_pos = True
-            elif annotations['long_answer']['candidate_index'] != -1:
-                is_pos = True
+    for n, line in tqdm(enumerate(f)):
+        if n > max_data:
+            break
+        data = json.loads(line)
 
-            if is_pos and len(data['long_answer_candidates'])>1:
-                data_id = data['example_id']
-                id_list.append(data_id)
+        is_pos = False
+        annotations = data['annotations'][0]
+        if annotations['yes_no_answer'] == 'YES':
+            is_pos = True
+        elif annotations['yes_no_answer'] == 'NO':
+            is_pos = True
+        elif annotations['short_answers']:
+            is_pos = True
+        elif annotations['long_answer']['candidate_index'] != -1:
+            is_pos = True
 
-                # uniform sampling
-                distribution = np.ones((len(data['long_answer_candidates']),),dtype=np.float32)
-                if is_pos:
-                    distribution[data['annotations'][0]['long_answer']['candidate_index']] = 0.
-                distribution /= len(distribution)
-                negative_candidate_index = random_sample_negative_candidates(distribution)
+        if is_pos and len(data['long_answer_candidates'])>1:
+            data_id = data['example_id']
+            id_list.append(data_id)
 
-                #
-                doc_words = data['document_text'].split()
-                # negative
-                candidate = data['long_answer_candidates'][negative_candidate_index]
-                negative_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]  
-                negative_candidate_start = candidate['start_token']
-                negative_candidate_end = candidate['end_token']
-                # positive
-                candidate = data['long_answer_candidates'][annotations['long_answer']['candidate_index']]
-                positive_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]
-                positive_candidate_start = candidate['start_token']
-                positive_candidate_end = candidate['end_token']
+            # uniform sampling
+            distribution = np.ones((len(data['long_answer_candidates']),),dtype=np.float32)
+            if is_pos:
+                distribution[data['annotations'][0]['long_answer']['candidate_index']] = 0.
+            distribution /= len(distribution)
+            negative_candidate_index = random_sample_negative_candidates(distribution)
 
-                # initialize data_dict
-                data_dict[data_id] = {
-                                      'question_text': data['question_text'],
-                                      'annotations': data['annotations'],  
-                                      'positive_text': positive_candidate_words,
-                                      'positive_start': positive_candidate_start,  
-                                      'positive_end': positive_candidate_end,   
-                                      'negative_text': negative_candidate_words,       
-                                      'negative_start': negative_candidate_start,  
-                                      'negative_end': negative_candidate_end,               
-                                     }
+            #
+            doc_words = data['document_text'].split()
+            # negative
+            candidate = data['long_answer_candidates'][negative_candidate_index]
+            negative_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]
+            negative_candidate_start = candidate['start_token']
+            negative_candidate_end = candidate['end_token']
+            # positive
+            candidate = data['long_answer_candidates'][annotations['long_answer']['candidate_index']]
+            positive_candidate_words = doc_words[candidate['start_token']:candidate['end_token']]
+            positive_candidate_start = candidate['start_token']
+            positive_candidate_end = candidate['end_token']
+
+            # initialize data_dict
+            data_dict[data_id] = {
+                                  'question_text': data['question_text'],
+                                  'annotations': data['annotations'],
+                                  'positive_text': positive_candidate_words,
+                                  'positive_start': positive_candidate_start,
+                                  'positive_end': positive_candidate_end,
+                                  'negative_text': negative_candidate_words,
+                                  'negative_start': negative_candidate_start,
+                                  'negative_end': negative_candidate_end,
+                                 }
 
 
     print(len(id_list))
@@ -361,7 +366,8 @@ def main():
         project = 'kaggle-winner',
         notes = 'epoch0',
         tags = ['baseline', 'epoch0'],
-        config = config
+        config = config,
+        entity= 'alfredwechselberger'
     )
 
     print('build model')
@@ -388,7 +394,7 @@ def main():
     #model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
     #wandb
-    wandb.watch(model)
+    wandb.watch(model, log='all')
 
     print('training')
 
