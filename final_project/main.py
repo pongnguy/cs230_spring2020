@@ -8,7 +8,7 @@ Main file for all the high-level functions/class
 # 2) TBD
 
 
-import preprocess as inputting
+from .preprocess import jsonlToJson, format_KaggleToSquad
 #import bert_qa.modeling as models
 import json
 
@@ -25,8 +25,8 @@ json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 
 num_entries = 1000
 
-dataset_kaggle = inputting.jsonlToJson(json_dir, num_entries)
-dataset_squad = inputting.format_KaggleToSquad(dataset_kaggle)
+dataset_kaggle = jsonlToJson(json_dir, num_entries)
+dataset_squad = format_KaggleToSquad(dataset_kaggle)
 
 #dataset_kaggle_statistics = inputting.compute_statistics(dataset_kaggle)
 
