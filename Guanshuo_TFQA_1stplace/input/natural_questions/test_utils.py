@@ -77,7 +77,7 @@ def simplify_nq_example(nq_example):
   Removes byte offsets from annotations, and removes `document_html` and
   `document_tokens` fields. All annotations in the ouput are represented as
   [start_token, end_token) offsets into the blank separated tokens in the
-  `document_text` field.
+  `document_text` field.  # Alfred removes elements from the dataset to reduce the file size
 
   WARNING: Tokens are separated by a single blank character. Do not split on
     arbitrary whitespace since different implementations have different
