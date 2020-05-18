@@ -14,6 +14,8 @@ import time
 from apex import amp
 
 
+# Alfred testing
+
 def reduce1(n_candidate=10, th_candidate=0.2):
 
     class TFQADataset(Dataset):
@@ -139,7 +141,8 @@ def reduce1(n_candidate=10, th_candidate=0.2):
     data_dict = {}
     # for debugging only
     max_data = 9999999999
-    with open(json_dir) as f:
+
+    with open(json_dir, encoding='utf-8') as f:
         for n, line in tqdm(enumerate(f)):
             if n > max_data:
                 break
@@ -176,6 +179,7 @@ def reduce1(n_candidate=10, th_candidate=0.2):
     # hyperparameters
     max_seq_len = 360
     max_question_len = 64
+    #batch_size = 100
     batch_size = 768
 
 
@@ -183,9 +187,10 @@ def reduce1(n_candidate=10, th_candidate=0.2):
     model_path = '../bert-base-uncased_1/model/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
-    config.vocab_size = 30531
+    #config.vocab_size = 30531  # Alfred this is already defined in the model in config.json as 30522
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
-    model = BertForQuestionAnswering.from_pretrained('../bert-base-uncased_1/weights/epoch2/', config=config)
+    model = BertForQuestionAnswering.from_pretrained('../1_1/weights/epoch2/', config=config)
+    #model = BertForQuestionAnswering.from_pretrained('../bert-base-uncased_1/weights/epoch2/', config=config)
 
     # add new tokens
     new_token_dict = {
@@ -236,7 +241,8 @@ def reduce1(n_candidate=10, th_candidate=0.2):
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                num_workers=16,
+                                #num_workers=4,  # Alfred I only have maximum 8 cores
+                                #num_workers=16,
                                 pin_memory=True)
 
 
@@ -411,7 +417,7 @@ def reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted,
     model_path = '../bert-large-uncased_4/model/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
-    config.vocab_size = 30531
+    #config.vocab_size = 30531  # Alfred this is already defined in the model in config.json as 30522
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
     model = BertForQuestionAnswering.from_pretrained('../bert-large-uncased_4/weights/epoch3/', config=config)
 
@@ -465,7 +471,8 @@ def reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted,
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                num_workers=16,
+                                num_workers=4, # Alfred I only have maximum 8 cores
+                                #num_workers=16,
                                 pin_memory=True)
 
 
@@ -643,7 +650,7 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
     model_path = '../bert-large-uncased_4/model/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
-    config.vocab_size = 30531
+    #config.vocab_size = 30531  # Alfred this is already defined in the model in config.json as 30522
     tokenizer = BertTokenizer.from_pretrained(model_path, do_lower_case=True)
     model = BertForQuestionAnswering.from_pretrained(model_dir, config=config)  # Alfred  BERT pre-trained on SQuAD was directly used
 
@@ -696,7 +703,8 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                num_workers=16,
+                                num_workers=4,  # Alfred I only have maximum 8 cores
+                                #num_workers=16,
                                 pin_memory=True)
 
 
@@ -912,7 +920,8 @@ def albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                num_workers=16,
+                                num_workers=4, # Alfred I only have maximum 8 cores
+                                #num_workers=16,
                                 pin_memory=True)
 
 

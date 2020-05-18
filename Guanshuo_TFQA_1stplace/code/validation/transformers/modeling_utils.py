@@ -433,7 +433,8 @@ class PreTrainedModel(nn.Module):
 
         if state_dict is None and not from_tf:
             try:
-                state_dict = torch.load(resolved_archive_file, map_location="cpu")
+                state_dict = torch.load('../1_1/weights/epoch1/pytorch_model.bin', map_location="cpu")  # Alfred fix this later for correct rel
+                #state_dict = torch.load(resolved_archive_file, map_location="cpu")
             except Exception:
                 raise OSError(
                     "Unable to load weights from pytorch checkpoint file. "
