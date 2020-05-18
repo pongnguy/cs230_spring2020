@@ -1,4 +1,22 @@
---name--
-starting
-gold_path../../input/natural_questions/v1.0-simplified_nq-dev-all.jsonl.gz
-{"long-best-threshold-f1": 0.0, "long-best-threshold-precision": 0.0, "long-best-threshold-recall": 0.0, "long-best-threshold": 0.0, "long-recall-at-precision>=0.5": 0, "long-precision-at-precision>=0.5": 0, "long-recall-at-precision>=0.75": 0, "long-precision-at-precision>=0.75": 0, "long-recall-at-precision>=0.9": 0, "long-precision-at-precision>=0.9": 0, "short-best-threshold-f1": 0.0, "short-best-threshold-precision": 0.0, "short-best-threshold-recall": 0.0, "short-best-threshold": 0.0, "short-recall-at-precision>=0.5": 0, "short-precision-at-precision>=0.5": 0, "short-recall-at-precision>=0.75": 0, "short-precision-at-precision>=0.75": 0, "short-recall-at-precision>=0.9": 0, "short-precision-at-precision>=0.9": 0}
+{
+  "long-best-threshold-f1": 0.5454545454545454,
+  "long-best-threshold-precision": 0.42857142857142855,
+  "long-best-threshold-recall": 0.75,
+  "long-best-threshold": 0.9907558402046561,
+  "long-recall-at-precision>=0.5": 0.5,
+  "long-precision-at-precision>=0.5": 0.5,
+  "long-recall-at-precision>=0.75": 0,
+  "long-precision-at-precision>=0.75": 0,
+  "long-recall-at-precision>=0.9": 0,
+  "long-precision-at-precision>=0.9": 0,
+  "short-best-threshold-f1": 0.5,
+  "short-best-threshold-precision": 0.5,
+  "short-best-threshold-recall": 0.5,
+  "short-best-threshold": 0.9925474595511332,
+  "short-recall-at-precision>=0.5": 0.5,
+  "short-precision-at-precision>=0.5": 0.5,
+  "short-recall-at-precision>=0.75": 0,
+  "short-precision-at-precision>=0.75": 0,
+  "short-recall-at-precision>=0.9": 0,
+  "short-precision-at-precision>=0.9": 0
+}

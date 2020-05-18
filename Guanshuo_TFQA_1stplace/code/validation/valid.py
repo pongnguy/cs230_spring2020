@@ -14,8 +14,6 @@ import time
 from apex import amp
 
 
-# Alfred testing
-
 def reduce1(n_candidate=10, th_candidate=0.2):
 
     class TFQADataset(Dataset):
@@ -179,12 +177,13 @@ def reduce1(n_candidate=10, th_candidate=0.2):
     # hyperparameters
     max_seq_len = 360
     max_question_len = 64
-    #batch_size = 100
+    #batch_size = 100     # Alfred
     batch_size = 768
 
 
     # build model
-    model_path = '../bert-base-uncased_1/model/'
+    model_path = '../../huggingface_pretrained/bert-base-uncased/'
+    #model_path = '../bert-base-uncased_1/model/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
     #config.vocab_size = 30531  # Alfred this is already defined in the model in config.json as 30522
@@ -241,7 +240,7 @@ def reduce1(n_candidate=10, th_candidate=0.2):
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                #num_workers=4,  # Alfred I only have maximum 8 cores
+                                #num_workers=1,  # Alfred I only have maximum 8 cores
                                 #num_workers=16,
                                 pin_memory=True)
 
@@ -414,7 +413,8 @@ def reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted,
 
 
     # build model
-    model_path = '../bert-large-uncased_4/model/'
+    model_path = '../../huggingface_pretrained/bert-base-uncased/'
+    #model_path = '../bert-large-uncased_4/model/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
     #config.vocab_size = 30531  # Alfred this is already defined in the model in config.json as 30522
@@ -471,7 +471,7 @@ def reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted,
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                num_workers=4, # Alfred I only have maximum 8 cores
+                                #num_workers=4, # Alfred I only have maximum 8 cores
                                 #num_workers=16,
                                 pin_memory=True)
 
@@ -647,7 +647,8 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
 
 
     # build model
-    model_path = '../bert-large-uncased_4/model/'
+    model_path = '../../huggingface_pretrained/bert-base-uncased/'
+    #model_path = '../bert-large-uncased_4/model/'
     config = BertConfig.from_pretrained(model_path)
     config.num_labels = 5
     #config.vocab_size = 30531  # Alfred this is already defined in the model in config.json as 30522
@@ -703,7 +704,7 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
                                 collate_fn=test_collate,
                                 batch_size=batch_size,
                                 shuffle=False,
-                                num_workers=4,  # Alfred I only have maximum 8 cores
+                                #num_workers=4,  # Alfred I only have maximum 8 cores
                                 #num_workers=16,
                                 pin_memory=True)
 
@@ -740,7 +741,7 @@ def bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_l
 
     return test_word_prob1, test_word_prob2, test_prob3  # Alfred     class_prob += 0.3 * test_prob3
 
-
+""" 
 def albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len):
 
     class TFQADataset(Dataset):
@@ -863,7 +864,8 @@ def albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_
 
 
     # build model
-    model_path = '../albert-xxlarge-v2_2/model/'
+    model_path = '../../huggingface_pretrained/bert-base-uncased/'
+    #model_path = '../albert-xxlarge-v2_2/model/'
     config = AlbertConfig.from_pretrained(model_path)
     config.num_labels = 5
     config.vocab_size = 30010
@@ -956,7 +958,7 @@ def albert_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_
 
 
     return test_word_prob1, test_word_prob2, test_prob3
-
+"""
 
 print('starting')
 # This function performs a full prediction on the validation set using a fast model (bert-base) to reduce the candidates for larger model predictions.
@@ -966,12 +968,12 @@ start_time = time.time()
 data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted = reduce1(n_candidate=4, th_candidate=0.2)
 print("--- %s seconds ---1" % (time.time() - start_time))
 
-"""
+
 # Futher reduce the number of candidates from top10 to top4.
 start_time = time.time()
 id_candidate_list_sorted = reduce2(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, n_candidate=4, th_candidate=0.35)
 print("--- %s seconds ---2" % (time.time() - start_time))
-"""
+
 
 # Acutual predictions start here. 
 start_time = time.time()
@@ -998,12 +1000,14 @@ test_prob1, test_prob2, test_prob3 = albert_predict(data_dict, id_list, id_candi
 start_prob += 0.3*test_prob1
 end_prob += 0.3*test_prob2
 class_prob += 0.3*test_prob3
+
 model_dir = '../bert-large-uncased_4/weights/epoch3/'
 test_prob1, test_prob2, test_prob3 = bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len)
 start_prob += 0.2*test_prob1
 end_prob += 0.2*test_prob2
 class_prob += 0.2*test_prob3
 """
+
 model_dir = '../1_1/weights/epoch2/'
 #model_dir = '../bert-large-uncased_5/weights/epoch3/'
 test_prob1, test_prob2, test_prob3 = bert_large_predict(data_dict, id_list, id_candidate_len_dict, id_candidate_list_sorted, model_dir, word_len)
