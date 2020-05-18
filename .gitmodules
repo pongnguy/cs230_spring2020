@@ -15,7 +15,7 @@
 	url = https://github.com/pongnguy/Extend_BERT_as_QA_Chatbot
 [submodule "knowledge_distillation"]
 	path = knowledge_distillation
-	url = https://github.com/pongnguy/knowledge-distillation
+	url = https://github.com/pongnguy/knowledge_distillation
 [submodule "natural_questions"]
 	path = natural_questions
 	url = https://github.com/pongnguy/natural_questions
