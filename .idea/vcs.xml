@@ -8,5 +8,6 @@
     <mapping directory="$PROJECT_DIR$/bert_qa" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/transformers" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/wiki-reading" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../knowledge-distillation" vcs="Git" />
   </component>
 </project>
