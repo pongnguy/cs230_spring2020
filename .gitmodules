@@ -16,12 +16,18 @@
 [submodule "knowledge_distillation"]
 	path = knowledge_distillation
 	url = https://github.com/pongnguy/knowledge_distillation
+[submodule "models"]
+	path = models
+	url = https://github.com/onnx/models.git
 [submodule "natural_questions"]
 	path = natural_questions
 	url = https://github.com/pongnguy/natural_questions
 [submodule "PreSumm"]
 	path = PreSumm
 	url = https://github.com/pongnguy/PreSumm
+[submodule "simpletransformers"]
+	path = simpletransformers
+	url = https://github.com/ThilinaRajapakse/simpletransformers
 [submodule "transformers"]
 	path = transformers
 	url = https://github.com/pongnguy/transformers
