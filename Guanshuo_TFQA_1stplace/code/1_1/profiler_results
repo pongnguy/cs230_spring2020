@@ -1,0 +1,93 @@
+--------------------------------------------------------------------------------
+  Environment Summary
+--------------------------------------------------------------------------------
+PyTorch 1.2.0 compiled w/ CUDA 10.0
+Running with Python 3.7 and CUDA 10.0.130
+
+`pip list` truncated output:
+numpy==1.18.4
+torch==1.2.0
+torchvision==0.4.0
+--------------------------------------------------------------------------------
+  cProfile output
+--------------------------------------------------------------------------------
+         40643277 function calls (40310575 primitive calls) in 253.170 seconds
+
+   Ordered by: internal time
+   List reduced from 12769 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      258  110.781    0.429  110.781    0.429 {method 'run_backward' of 'torch._C._EngineBase' objects}
+110190/89292   54.821    0.000   64.987    0.001 C:\Users\alfre\.conda\envs\jupyter\lib\site-packages\apex\amp\wrap.py:12(wrapper)
+   205266   12.730    0.000   17.447    0.000 C:\Users\alfre\.conda\envs\jupyter\lib\site-packages\apex\amp\wrap.py:45(wrapper)
+    51682   12.039    0.000   28.978    0.001 C:\Users\alfre\.conda\envs\jupyter\lib\site-packages\apex\amp\scaler.py:19(axpby_check_overflow_python)
+   305917   10.724    0.000   11.068    0.000 C:\Users\alfre\.conda\envs\jupyter\lib\site-packages\apex\amp\wrap.py:97(wrapper)
+     1548    4.620    0.003    4.620    0.003 {method 'cuda' of 'torch._C._TensorBase' objects}
+    54696    2.494    0.000    2.494    0.000 {method 'half' of 'torch._C._TensorBase' objects}
+    52137    2.450    0.000    2.450    0.000 {method 'to' of 'torch._C._TensorBase' objects}
+    50953    2.434    0.000    2.434    0.000 {method 'sqrt' of 'torch._C._TensorBase' objects}
+      157    1.801    0.011    1.801    0.011 {method 'normal_' of 'torch._C._TensorBase' objects}
+     6450    1.508    0.000    1.508    0.000 {built-in method layer_norm}
+    52394    1.458    0.000    1.458    0.000 {method 'zero_' of 'torch._C._TensorBase' objects}
+   569193    1.380    0.000    1.380    0.000 {method 'type' of 'torch._C._TensorBase' objects}
+     6192    1.293    0.000    1.293    0.000 {built-in method matmul}
+     3226    1.178    0.000    1.778    0.001 <frozen importlib._bootstrap_external>:914(get_data)
+
+
+--------------------------------------------------------------------------------
+  autograd profiler output (CPU mode)
+--------------------------------------------------------------------------------
+        top 15 events sorted by cpu_time_total
+
+----------------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  -----------------------------------
+Name                          Self CPU total %  Self CPU total   CPU total %      CPU total        CPU time avg     CUDA total %     CUDA total       CUDA time avg    Number of Calls  Input Shapes
+----------------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  -----------------------------------
+EmbeddingBackward             15.30%           1.268s           15.30%           1.268s           1.268s           NaN              0.000us          0.000us          1                []
+embedding_backward            15.30%           1.268s           15.30%           1.268s           1.268s           NaN              0.000us          0.000us          1                []
+embedding_dense_backward      15.30%           1.268s           15.30%           1.268s           1.268s           NaN              0.000us          0.000us          1                []
+EmbeddingBackward             4.52%            374.162ms        4.52%            374.162ms        374.162ms        NaN              0.000us          0.000us          1                []
+embedding_backward            4.52%            374.157ms        4.52%            374.157ms        374.157ms        NaN              0.000us          0.000us          1                []
+embedding_dense_backward      4.52%            374.146ms        4.52%            374.146ms        374.146ms        NaN              0.000us          0.000us          1                []
+EmbeddingBackward             4.51%            373.957ms        4.51%            373.957ms        373.957ms        NaN              0.000us          0.000us          1                []
+embedding_backward            4.51%            373.952ms        4.51%            373.952ms        373.952ms        NaN              0.000us          0.000us          1                []
+embedding_dense_backward      4.51%            373.944ms        4.51%            373.944ms        373.944ms        NaN              0.000us          0.000us          1                []
+EmbeddingBackward             4.51%            373.561ms        4.51%            373.561ms        373.561ms        NaN              0.000us          0.000us          1                []
+embedding_backward            4.51%            373.556ms        4.51%            373.556ms        373.556ms        NaN              0.000us          0.000us          1                []
+embedding_dense_backward      4.51%            373.545ms        4.51%            373.545ms        373.545ms        NaN              0.000us          0.000us          1                []
+EmbeddingBackward             4.50%            372.689ms        4.50%            372.689ms        372.689ms        NaN              0.000us          0.000us          1                []
+embedding_backward            4.50%            372.684ms        4.50%            372.684ms        372.684ms        NaN              0.000us          0.000us          1                []
+embedding_dense_backward      4.50%            372.676ms        4.50%            372.676ms        372.676ms        NaN              0.000us          0.000us          1                []
+----------------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  -----------------------------------
+Self CPU time total: 8.286s
+CUDA time total: 0.000us
+
+--------------------------------------------------------------------------------
+  autograd profiler output (CUDA mode)
+--------------------------------------------------------------------------------
+        top 15 events sorted by cpu_time_total
+
+        Because the autograd profiler uses the CUDA event API,
+        the CUDA time column reports approximately max(cuda_time, cpu_time).
+        Please ignore this output if your code does not use CUDA.
+
+----------------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  -----------------------------------
+Name                          Self CPU total %  Self CPU total   CPU total %      CPU total        CPU time avg     CUDA total %     CUDA total       CUDA time avg    Number of Calls  Input Shapes
+----------------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  -----------------------------------
+to                            12.48%           462.576ms        12.48%           462.576ms        462.576ms        1.26%            272.000us        272.000us        1                []
+EmbeddingBackward             6.27%            232.439ms        6.27%            232.439ms        232.439ms        8.87%            1.910ms          1.910ms          1                []
+embedding_backward            6.27%            232.430ms        6.27%            232.430ms        232.430ms        8.82%            1.900ms          1.900ms          1                []
+embedding_dense_backward      6.27%            232.395ms        6.27%            232.395ms        232.395ms        8.45%            1.820ms          1.820ms          1                []
+EmbeddingBackward             6.25%            231.766ms        6.25%            231.766ms        231.766ms        6.68%            1.439ms          1.439ms          1                []
+embedding_backward            6.25%            231.760ms        6.25%            231.760ms        231.760ms        6.62%            1.427ms          1.427ms          1                []
+EmbeddingBackward             6.25%            231.752ms        6.25%            231.752ms        231.752ms        7.41%            1.596ms          1.596ms          1                []
+embedding_dense_backward      6.25%            231.739ms        6.25%            231.739ms        231.739ms        6.29%            1.355ms          1.355ms          1                []
+embedding_backward            6.25%            231.729ms        6.25%            231.729ms        231.729ms        7.36%            1.585ms          1.585ms          1                []
+embedding_dense_backward      6.25%            231.660ms        6.25%            231.660ms        231.660ms        6.96%            1.499ms          1.499ms          1                []
+EmbeddingBackward             6.24%            231.480ms        6.24%            231.480ms        231.480ms        6.22%            1.340ms          1.340ms          1                []
+embedding_backward            6.24%            231.472ms        6.24%            231.472ms        231.472ms        6.15%            1.324ms          1.324ms          1                []
+EmbeddingBackward             6.24%            231.437ms        6.24%            231.437ms        231.437ms        6.59%            1.420ms          1.420ms          1                []
+embedding_dense_backward      6.24%            231.422ms        6.24%            231.422ms        231.422ms        5.83%            1.256ms          1.256ms          1                []
+embedding_backward            6.24%            231.411ms        6.24%            231.411ms        231.411ms        6.50%            1.400ms          1.400ms          1                []
+----------------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  -----------------------------------
+Self CPU time total: 3.707s
+CUDA time total: 21.543ms

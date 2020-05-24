@@ -18,7 +18,10 @@ import re
 import json
 from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, BertConfig, get_linear_schedule_with_warmup
 
-import wandb
+#import wandb
+import gc
+import sys
+#from torch.utils.tensorboard import SummaryWriter
 
 
 def get_class_accuracy(logits, labels):
@@ -252,6 +255,21 @@ def stat_cuda(msg):
     ))
 
 
+def memReport():
+    for obj in gc.get_objects():
+        if torch.is_tensor(obj):
+            print(type(obj), obj.size())
+
+
+#def cpuStats():
+#    print(sys.version)
+#    print(psutil.cpu_percent())
+#    print(psutil.virtual_memory())  # physical memory usage
+#    pid = os.getpid()
+#    py = psutil.Process(pid)
+#    memoryUse = py.memory_info()[0] / 2. ** 30  # memory use in GB...I think
+#    print('memory GB:', memoryUse)
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -283,10 +301,10 @@ def main():
     data_dict = {}
     #with open(json_dir, encoding='utf-16') as f:
     #with open(json_dir) as f:
-    try:
-        f = open(json_dir)
-    except:
-        f = open(json_dir, encoding='utf-16')
+    #try:
+    #    f = open(json_dir)
+    #except:
+    f = open(json_dir, encoding='utf-16')
 
     for n, line in tqdm(enumerate(f)):
         if n > max_data:
@@ -349,26 +367,29 @@ def main():
     max_seq_len = 384
     max_question_len = 64
     learning_rate = 0.00002
-    #batch_size = 1
-    batch_size = 4
+    batch_size = 2
+    #batch_size = 4 # original
     ep = 0
 
     # For wandb
-    config = dict (
-        max_seq_len=384,
-        max_question_len = 64,
-        learning_rate = 0.00002,
-        # batch_size = 1,
-        batch_size = 4,
-        ep = 0
-    )
-    wandb.init(
-        project = 'kaggle-winner',
-        notes = 'epoch0',
-        tags = ['baseline', 'epoch0'],
-        config = config,
-        entity= 'alfredwechselberger'
-    )
+    #config = dict (
+    #    max_seq_len=384,
+    #    max_question_len = 64,
+    #    learning_rate = 0.00002,
+    #    batch_size = batch_size,
+    #    ep = 0
+    #)
+    #wandb.init(
+    #    project = 'kaggle-winner',
+    #    notes = 'epoch0',
+    #    tags = ['baseline', 'epoch0'],
+    #    config = config,
+    #    entity= 'alfredwechselberger'
+    #)
+    #wandb.login()
+
+
+    #writer = SummaryWriter()
 
     print('build model')
 
@@ -394,7 +415,7 @@ def main():
     #model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
     #wandb
-    wandb.watch(model, log='all')
+    #.watch(model, log='all')
 
     print('training')
 
@@ -413,7 +434,7 @@ def main():
                                  collate_fn=train_collate,
                                  batch_size=batch_size,
                                  #num_workers=1,
-                                 num_workers=3,
+                                 #num_workers=3,
                                  #pin_memory=False)
                                  pin_memory=True)
 
@@ -429,6 +450,7 @@ def main():
     model.train()
 
     #stat_cuda('line number ' + str(n))
+    stat_cuda('before training')
 
     for j,(batch_input_ids, batch_attention_mask, batch_token_type_ids, batch_y_start, batch_y_end, batch_y) in enumerate(train_generator):
         batch_input_ids = batch_input_ids.cuda()
@@ -447,7 +469,7 @@ def main():
         acc2, n_position2 = get_position_accuracy(logits2, labels2)
         acc3, n_position3 = get_position_accuracy(logits3, labels3)
 
-        wandb.log({'batch percent': j / total_generator * 100, 'loss1': loss1, 'loss2': loss2, 'loss3': loss3, 'loss_sum': loss, 'accuracy1': acc1, 'accuracy2': acc2, 'accuracy3': acc3})
+        #wandb.log({'batch percent': j / total_generator * 100, 'loss1': loss1, 'loss2': loss2, 'loss3': loss3, 'loss_sum': loss, 'accuracy1': acc1, 'accuracy2': acc2, 'accuracy3': acc3})
 
         losses1.update(loss1.item(), n_position1)
         losses2.update(loss2.item(), n_position2)
@@ -477,6 +499,17 @@ def main():
         except:
             os.system('dvc remove ' + out_dir + 'pytorch_model.bin' + '.dvc')   # Alfred need to remove file from DVC linking otherwise get error when trying to overwrite
             torch.save(model.state_dict(), out_dir + 'pytorch_model.bin')
+
+
+    stat_cuda('before empty cache')
+    #memReport()
+
+    del model
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    stat_cuda('after empty cache')
+    #memReport()
 
 if __name__ == "__main__":
     main()
