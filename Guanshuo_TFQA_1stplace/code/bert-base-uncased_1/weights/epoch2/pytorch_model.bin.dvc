@@ -1,0 +1,7 @@
+md5: f5c6cc02da5f5dbd297b544b52304aac
+outs:
+- md5: fc3cbd79d40bed9d32db53ea66f0b23f
+  path: pytorch_model.bin
+  cache: true
+  metric: false
+  persist: false
