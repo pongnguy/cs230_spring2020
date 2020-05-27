@@ -10,3 +10,5 @@
     url = http://dvc-remote.s3.amazonaws.com
 ['remote "aws_s3_2"']
     url = s3://dvc-remote/cs230
+['remote "sharefolder"']
+    url = //10.0.0.245/DVC/
