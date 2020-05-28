@@ -1,4 +1,4 @@
-from transformers import DistilBertTokenizer, DistilBertModel
+from transformers import DistilBertTokenizer, DistilBertModel, DistilBertConfig
 from collections import defaultdict
 from dataclasses import dataclass
 import functools
@@ -62,7 +62,7 @@ num_labels = 5
 n_epochs = 2
 lr = 2e-5
 warmup = 0.05
-batch_size = 64
+batch_size = 16
 accumulation_steps = 4
 
 bert_model = 'bert-base-uncased'
@@ -313,57 +313,6 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
 
     return [inputs, labels]
 
-
-# In[ ]:
-
-
-class BertForQuestionAnswering(BertPreTrainedModel):
-    """BERT model for QA and classification tasks.
-
-    Parameters
-    ----------
-    config : transformers.BertConfig. Configuration class for BERT.
-
-    Returns
-    -------
-    start_logits : torch.Tensor with shape (batch_size, sequence_size).
-        Starting scores of each tokens.
-    end_logits : torch.Tensor with shape (batch_size, sequence_size).
-        Ending scores of each tokens.
-    classifier_logits : torch.Tensor with shape (batch_size, num_classes).
-        Classification scores of each labels.
-    """
-
-    def __init__(self, config):
-        super(BertForQuestionAnswering, self).__init__(config)
-        self.bert = BertModel(config)
-        self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
-        self.init_weights()
-
-    def forward(self, input_ids, attention_mask=None, token_type_ids=None, position_ids=None, head_mask=None):
-        outputs = self.bert(input_ids,
-                            attention_mask=attention_mask,
-                            token_type_ids=token_type_ids,
-                            position_ids=position_ids,
-                            head_mask=head_mask)
-
-        sequence_output = outputs[0]
-        pooled_output = outputs[1]
-
-        # predict start & end position
-        qa_logits = self.qa_outputs(sequence_output)
-        start_logits, end_logits = qa_logits.split(1, dim=-1)
-        start_logits = start_logits.squeeze(-1)
-        end_logits = end_logits.squeeze(-1)
-
-        # classification
-        pooled_output = self.dropout(pooled_output)
-        classifier_logits = self.classifier(pooled_output)
-
-        return start_logits, end_logits, classifier_logits
-
 class DistilBertForQuestionAnswering(DistilBertModel):
     """BERT model for QA and classification tasks.
 
@@ -382,7 +331,6 @@ class DistilBertForQuestionAnswering(DistilBertModel):
     """
 
     def __init__(self, config):
-        config.num_labels = 5
         super(DistilBertForQuestionAnswering, self).__init__(config)
         self.bert = DistilBertModel(config)
         self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
@@ -404,17 +352,14 @@ class DistilBertForQuestionAnswering(DistilBertModel):
         pooled_output = sequence_output[:,0,:] #Rekha hack check
 
 
-        # predict start & end position
-        qa_logits = self.qa_outputs(sequence_output)
-        start_logits, end_logits = qa_logits.split(1, dim=-1)
-        start_logits = start_logits.squeeze(-1)
-        end_logits = end_logits.squeeze(-1)
 
         # classification
         pooled_output = self.dropout(pooled_output)
         classifier_logits = self.classifier(pooled_output)
 
-        return start_logits, end_logits, classifier_logits
+        start_dummy = torch.randn(batch_size, max_seq_len)
+        end_dummy = torch.randn(batch_size, max_seq_len)
+        return start_dummy, end_dummy, classifier_logits
 
 
 # In[ ]:
@@ -432,17 +377,18 @@ def loss_fn(preds, labels):
 #['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
 
 def loss_fn_classifier(preds, labels):
-    _,_, class_preds = preds
-    _, _,class_labels = labels
+    _, _, class_preds = preds
+    _, _, class_labels = labels
 
-    class_weights = [1.0, 1.0, 1.0, 0.8, 1.0]
+    class_weights = [1.0, 1.0, 1.0, 0.3, 1.0]
     class_weights = torch.FloatTensor(class_weights).cuda()
     class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
     return class_loss
-model = BertForQuestionAnswering.from_pretrained(bert_model, num_labels=5)
 # RekhaDist
-model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', num_labels=5)
+config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+config.num_labels = 5
+model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)
 
 model = model.to(device)
 
@@ -583,6 +529,7 @@ def eval_model(
         `overall_score`: score of the competition metric
     """
     model.to(device)
+    #model.half()
     model.eval()
     with torch.no_grad():
         result = Result()
@@ -592,18 +539,20 @@ def eval_model(
                             attention_mask.to(device),
                             token_type_ids.to(device))
 
-            start_preds, end_preds, class_preds = (p.detach().cpu() for p in y_preds)
-            start_logits, start_index = torch.max(start_preds, dim=1)
-            end_logits, end_index = torch.max(end_preds, dim=1)
+            _, _, class_preds = (p.detach().cpu() for p in y_preds)
+            # start_logits, start_index = torch.max(start_preds, dim=1)
+            # end_logits, end_index = torch.max(end_preds, dim=1)
 
             # span logits minus the cls logits seems to be close to the best
-            cls_logits = start_preds[:, 0] + end_preds[:, 0]  # '[CLS]' logits
-            logits = start_logits + end_logits - cls_logits  # (batch_size,)
-            indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
-            result.update(examples, logits.numpy(), indices.numpy(), class_preds.numpy())
+            # cls_logits = start_preds[:, 0] + end_preds[:, 0]  # '[CLS]' logits
+            #logits = start_logits + end_logits - cls_logits  # (batch_size,)
+            #indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
+            #result.update(examples, np.array(list(class_preds)))
+            #result.update(examples, class_preds.numpy())
+
+            result.update(examples, class_preds.numpy())
 
     return result.score()
-
 
 class Result(object):
     """Stores results of all test data.
@@ -629,8 +578,8 @@ class Result(object):
     def update(
             self,
             examples: List[Example],
-            logits: torch.Tensor,
-            indices: torch.Tensor,
+            # logits: torch.Tensor,
+            # indices: torch.Tensor,
             class_preds: torch.Tensor
     ):
         """Update batch objects.
@@ -646,17 +595,18 @@ class Result(object):
             Class predicition scores of each examples.
         """
         for i, example in enumerate(examples):
-            if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] < logits[i]:
-                self.best_scores[example.example_id] = logits[i]
+            # if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] < logits[i]:
+            if True:
+                #self.best_scores[example.example_id] = logits[i]
                 self.examples[example.example_id] = example
                 self.results[example.example_id] = [
-                    example.doc_start, indices[i], class_preds[i]]
+                    example.doc_start, class_preds[i]]
 
     def _generate_predictions(self) -> Generator[Dict, None, None]:
         """Generate predictions of each examples.
         """
         for example_id in self.results.keys():
-            doc_start, index, class_pred = self.results[example_id]
+            doc_start, class_pred = self.results[example_id]
             example = self.examples[example_id]
             tokenized_to_original_index = example.tokenized_to_original_index
 
@@ -706,12 +656,43 @@ class Result(object):
             else:
                 return x / y
 
-        def _compute_f1(answer_stats: List[List[bool]]) -> float:
+        def _compute_f1_old(answer_stats: List[List[bool]]) -> float:
             """Computes F1, precision, recall for a list of answer scores.
             """
             has_answer, has_pred, is_correct = list(zip(*answer_stats))
             precision = _safe_divide(sum(is_correct), sum(has_pred))
             recall = _safe_divide(sum(is_correct), sum(has_answer))
+            print('sum(is_correct)=',sum(is_correct)) #Confusion matrix
+            print('sum(has_pred)=' , sum(has_pred)) # has_pred = TP + FP ==>
+
+            print('sum(has_answer)=', sum(has_answer)) # has_answer = TP + FN ==>
+            print('precision=', precision)
+            print('recall=', recall)
+            f1 = _safe_divide(2 * precision * recall, precision + recall)
+            return f1
+
+        def _compute_f1(answer_stats: List[List[bool]]) -> float:
+            """Computes F1, precision, recall for a list of answer scores.
+            """
+            has_answer, has_pred, is_correct = list(zip(*answer_stats))
+            tp = 0
+            tn = 0
+            fp = 0
+            fn = 0
+            for ha, hp in zip(has_answer, has_pred):
+                if(ha and hp):
+                    tp = tp + 1
+                elif(not ha and not hp):
+                    tn = tn + 1
+                elif(hp and not ha):
+                    fp = fp + 1
+                elif(ha and not hp):
+                    fn = fn + 1
+
+            precision = _safe_divide(tp, tp + fp)
+            recall = _safe_divide(tp, tp + fn)
+            print('tp=',tp, '  fp=',fp)    #    Confusion matrix
+            print('fn=', fn, '  tn=', tn)  # Confusion matrix
             print('precision=', precision)
             print('recall=', recall)
             f1 = _safe_divide(2 * precision * recall, precision + recall)
@@ -738,37 +719,48 @@ class Result(object):
                 #logging.info("%s", answer)
                 print(answer)
             # long score
+
+
+
+
+
+            # Actual ans
             long_label = example.annotations['long_answer']
-            has_answer = long_label['candidate_index'] != -1
-            has_pred = long_pred[0] != -1 and long_pred[1] != -1
+            has_answer = long_label['candidate_index'] != -1        # input labels true or false for long ans part
+
+            # predicted output
+            has_pred = yes_no_label != 'UNKNOWN'
+
+
+
             is_correct = False
             if long_label['start_token'] == long_pred[0] and long_label['end_token'] == long_pred[1]:
                 is_correct = True
             long_scores.append([has_answer, has_pred, is_correct])
 
             # short score
-            short_labels = example.annotations['short_answers']
-            class_pred = example.annotations['yes_no_answer']
-            has_answer = yes_no_label != 'NONE' or len(short_labels) != 0
-            has_pred = class_pred != 'NONE' or (short_pred[0] != -1 and short_pred[1] != -1)
-            is_correct = False
-            if class_pred in ['YES', 'NO']:
-                is_correct = yes_no_label == class_pred
-            else:
-                for short_label in short_labels:
-                    if short_label['start_token'] == short_pred[0] and short_label['end_token'] == short_pred[1]:
-                        is_correct = True
-                        break
-            short_scores.append([has_answer, has_pred, is_correct])
+            # short_labels = example.annotations['short_answers']
+            # class_pred = example.annotations['yes_no_answer']
+            # has_answer = yes_no_label != 'NONE' or len(short_labels) != 0
+            # has_pred = class_pred != 'NONE' or (short_pred[0] != -1 and short_pred[1] != -1)
+            # is_correct = False
+            # if class_pred in ['YES', 'NO']:
+            #     is_correct = yes_no_label == class_pred
+            # else:
+            #     for short_label in short_labels:
+            #         if short_label['start_token'] == short_pred[0] and short_label['end_token'] == short_pred[1]:
+            #             is_correct = True
+            #             break
+            # short_scores.append([has_answer, has_pred, is_correct])
 
         print('Long Answer')
         long_score = _compute_f1(long_scores)
-        print('Short Answer')
-        short_score = _compute_f1(short_scores)
+        # print('Short Answer')
+        # short_score = _compute_f1(short_scores)
         return {
             'long_score': long_score,
-            'short_score': short_score,
-            'overall_score': (long_score + short_score) / 2
+            # 'short_score': short_score,
+            #'overall_score': (long_score + short_score) / 2
         }
 
 
@@ -776,7 +768,8 @@ class Result(object):
 
 
 # Rekha added
-# EVAL STARTING
+# EVAL STARTING]
+print('EVAL STARTING')
 data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
 
 # In[ ]:
@@ -795,11 +788,11 @@ print(f'calculate validation score done in {(time.time() - eval_start_time) / 60
 
 
 long_score = valid_scores['long_score']
-short_score = valid_scores['short_score']
+#short_score = valid_scores['short_score']
 overall_score = valid_scores['overall_score']
 print('validation scores:')
 print(f'\tlong score    : {long_score:.4f}')
-print(f'\tshort score   : {short_score:.4f}')
+#print(f'\tshort score   : {short_score:.4f}')
 print(f'\toverall score : {overall_score:.4f}')
 print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 
@@ -812,10 +805,8 @@ print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 # In[ ]:
 
 print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+print(f'End of file: {(time.time() - start_time) / 3600:.1f} hours')
 
 # In[ ]:
-
-
 
 

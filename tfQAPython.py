@@ -1,6 +1,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 import functools
+import logging
 import gc
 import itertools
 import json
@@ -26,10 +27,12 @@ from torch.utils.data import Dataset, Subset, DataLoader
 
 from apex import amp
 from transformers import BertTokenizer, AdamW, WarmupLinearSchedule, BertModel, BertPreTrainedModel,BertConfig
+logging.basicConfig(filename='/data/sv/example.log',level=logging.DEBUG)
 TRAIN_SIZE = 10000
 DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
 VALID_SIZE = 100
 EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
+DO_TRAIN=False
 
 DEBUG = True
 
@@ -49,7 +52,7 @@ doc_stride = 128
 
 num_labels = 5
 n_epochs = 1
-lr = 2e-4
+lr = 2e-5
 warmup = 0.05
 batch_size = 16
 accumulation_steps = 4
@@ -315,7 +318,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         super(BertForQuestionAnswering, self).__init__(config)
         self.bert = BertModel(config)
 
-        self.dropout = nn.Dropout(0.7)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
         #self.rnn = nn.LSTM(config.hidden_size, 1000, num_layers=1,bidirectional=true,dropout=config.hidden_dropout_prob)
         self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
@@ -362,44 +365,48 @@ def loss_fn_classifier(preds, labels):
 
     return class_loss
 
-config = BertConfig.from_pretrained(bert_model)
-config.num_labels = 5
 tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=True)
-model = BertForQuestionAnswering.from_pretrained('/data/sv/CS230_Spring-2020/Guanshuo_TFQA_1stplace/code', config)
-model = model.to(device)
-
-param_optimizer = list(model.named_parameters())
-no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grouped_parameters = [
-    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-    {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-print('num_train_optimization_steps=', num_train_optimization_steps)
-num_warmup_steps = int(num_train_optimization_steps * warmup)
-print('num_warmup_steps', num_warmup_steps)
-
-optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-
-model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-model.zero_grad()
-model = model.train()
-
-tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
 convert_func = functools.partial(convert_data,
                                  tokenizer=tokenizer,
                                  max_seq_len=max_seq_len,
                                  max_question_len=max_question_len,
                                  doc_stride=doc_stride)
-data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+if not DO_TRAIN:
+    config = BertConfig.from_pretrained(bert_model)
+    config.num_labels = 5
+    model = BertForQuestionAnswering.from_pretrained('/data/sv/CS230_Spring-2020/Guanshuo_TFQA_1stplace/code', config=config)
+else:
+    model = BertForQuestionAnswering.from_pretrained(bert_model, num_labels=5)
 
-global_step = 0
-print('Rekha Classifier train_size=', train_size)
-print('Rekha Classifier total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-print('Rekha DATA_PATH', DATA_PATH)
-# print('len(data_reader)',len(data_reader))
-for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-    train_dataset = TextDataset(examples)
+model = model.to(device)
+
+if DO_TRAIN:
+    param_optimizer = list(model.named_parameters())
+    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+    optimizer_grouped_parameters = [
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
+    print('num_train_optimization_steps=', num_train_optimization_steps)
+    num_warmup_steps = int(num_train_optimization_steps * warmup)
+    print('num_warmup_steps', num_warmup_steps)
+
+    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
+
+    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+    model.zero_grad()
+    model = model.train()
+
+    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+
+    global_step = 0
+    print('Rekha Classifier train_size=', train_size)
+    print('Rekha Classifier total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
+    print('Rekha DATA_PATH', DATA_PATH)
+    # print('len(data_reader)',len(data_reader))
+    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+        train_dataset = TextDataset(examples)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
     for x_batch, y_batch in train_loader:
         x_batch, attention_mask, token_type_ids = x_batch
@@ -408,7 +415,7 @@ for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
         y_pred = model(x_batch.to(device),
                        attention_mask=attention_mask.to(device),
                        token_type_ids=token_type_ids.to(device))
-        loss = loss_fn_classifier(y_pred, y_batch)
+        loss = loss_fn(y_pred, y_batch)
         with amp.scale_loss(loss, optimizer) as scaled_loss:
             scaled_loss.backward()
         if (global_step + 1) % accumulation_steps == 0:
@@ -418,35 +425,36 @@ for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
 
         global_step += 1
 
-    if (time.time() - start_time) / 3600 > 7:
-        break
-print("Training loss:", loss)
+        if (time.time() - start_time) / 3600 > 7:
+            break
+        print("Training loss:", loss)
 
-del examples, train_dataset, train_loader
-gc.collect()
+        del examples, train_dataset, train_loader
+        gc.collect()
 
-torch.save(model.state_dict(), output_model_file)
-torch.save(optimizer.state_dict(), output_optimizer_file)
-torch.save(amp.state_dict(), output_amp_file)
+    torch.save(model.state_dict(), output_model_file)
+    torch.save(optimizer.state_dict(), output_optimizer_file)
+    torch.save(amp.state_dict(), output_amp_file)
 
-print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+    print(f'trained {global_step * batch_size} samples')
+    print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
 
-'''
-model1 = BertForQuestionAnswering.from_pretrained(bert_model, num_labels=5)
-model1 = model1.to(device)
-
-param_optimizer1 = list(model1.named_parameters())
-no_decay1 = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grouped_parameters = [
-    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-    {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-
-optimizer1 = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler1 = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-
-model1, optimizer1 = amp.initialize(model1, optimizer1, opt_level='O1', verbosity=0)
-model1.zero_grad()
+'''    
+# shreyas new     stuff
+model1 = BertF    orQuestionAnswering.from_pretrained(bert_model, num_labels=5)
+model1 = model    1.to(device)
+    
+param_optimize    r1 = list(model1.named_parameters())
+no_decay1 = ['    bias', 'LayerNorm.bias', 'LayerNorm.weight']
+optimizer_grou    ped_parameters = [
+    {'params':     [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+    {'params':     [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+    
+optimizer1 = A    damW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+scheduler1 = W    armupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
+    
+model1, optimi    zer1 = amp.initialize(model1, optimizer1, opt_level='O1', verbosity=0)
+model1.zero_gr    ad()
 model1 = model1.train()
 
 data_reader1 = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
@@ -606,6 +614,10 @@ class Result(object):
             doc_start, index, class_pred = self.results[example_id]
             example = self.examples[example_id]
             tokenized_to_original_index = example.tokenized_to_original_index
+            #print('index[0]:'+str(index[0]))
+            #print('doc_start,index[1]:'+str(doc_start)+","+str(index[1]))
+            if doc_start + index[1] >= len(tokenized_to_original_index):
+                continue
             short_start_index = tokenized_to_original_index[doc_start + index[0]]
             short_end_index = tokenized_to_original_index[doc_start + index[1]]
             long_start_index = -1
@@ -674,14 +686,17 @@ class Result(object):
             yes_no_label = self.class_labels[class_pred.argmax()]
 
             if (DEBUG):
+                #logging.info("%s",example)
                 print(example)
                 print('long_pred=', long_pred)
                 print('short_pred=', short_pred)
-                print(example.question_text)
-                print("answer:")
+                #logging.info('long_pred=%d',long_pred)
+                #logging.info("%s",example.question_text)
+                answer="answer:"
                 for i in range(long_pred[0], long_pred[1]):
-                    print(example.doc_tokens[i], end = " ")
-                print("")
+                    answer += example.doc_tokens[i]
+                #logging.info("%s", answer)
+                print(answer)
             # long score
             long_label = example.annotations['long_answer']
             has_answer = long_label['candidate_index'] != -1

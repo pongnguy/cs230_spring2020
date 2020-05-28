@@ -61,6 +61,7 @@ lr = 2e-5
 warmup = 0.05
 batch_size = 16
 accumulation_steps = 4
+DROPOUT=0.2
 
 qa_model_name = 'bert-base-uncased'
 classifier_model_name = 'distilbert-base-uncased-distilled-squad'
@@ -445,6 +446,7 @@ qa_model = BertForQuestionAnswering.from_pretrained('/data/sv/bert_trained', con
 
 config = DistilBertConfig.from_pretrained(classifier_model_name)
 config.num_labels = 5
+config.dropout = DROPOUT
 classifier_model = DistilBertForQuestionAnswering.from_pretrained('/data/sv/distilbert', config=config)
 
 def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
