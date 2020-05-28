@@ -362,17 +362,43 @@ def compute_statistics(datasetKaggle):
 
     yesNoAnswer = 0
     annotationsMax = 0
-    averageLength = 0
-    totalExamples = len(datasetKaggle)
+    document_averageLength = 0
+    candidate_averageLength = 0
+    candidate_total = 0
+    candidate_minLength = 99999999
+    candidate_maxLength = 0
+    totalExamples = len(datasetKaggle['lines'])
 
-    for example in datasetKaggle:
+    for example in datasetKaggle['lines']:
         annotationsMax = max(len(example['annotations']), annotationsMax)  # check for the maximum number of annotations
         if example['annotations'][0]['yes_no_answer'] != 'NONE':
             yesNoAnswer += 1
 
-        averageLength += len(example['document_text']) / totalExamples
-    output = {'annotationsMax': annotationsMax, 'num_yesNo': yesNoAnswer, 'text_avgLength': averageLength}
+        document_averageLength += len(example['document_text']) / totalExamples
+
+        for long_answer_candidate in example['long_answer_candidates']:
+            tokenDifference = long_answer_candidate['end_token'] - long_answer_candidate['start_token']
+            candidate_averageLength += tokenDifference
+            candidate_total += 1
+            candidate_maxLength = max(candidate_maxLength, tokenDifference)
+            candidate_minLength = min(candidate_minLength, tokenDifference)
+
+
+    candidate_averageLength /= candidate_total
+    output = {'annotationsMax': annotationsMax, 'num_yesNo': yesNoAnswer, 'document_avgLength': document_averageLength, 'candidate_avgLength': candidate_averageLength, 'candidate_minLength': candidate_minLength, 'candidate_maxLength': candidate_maxLength, 'candidate_total': candidate_total}
     return output
 
 
 
+
+
+json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
+#json_dir = '../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
+
+#num_entries = 1000
+
+dataset_kaggle = jsonlToJson(json_dir) #, num_entries)
+#dataset_squad = format_KaggleToSquad(dataset_kaggle)
+
+dataset_kaggle_statistics = compute_statistics(dataset_kaggle)
+print(dataset_kaggle_statistics )

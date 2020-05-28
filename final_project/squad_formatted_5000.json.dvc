@@ -1,0 +1,7 @@
+md5: 9f52f98abffa41630710c4153c3000fd
+outs:
+- md5: ce9da203a96d580ef5f869baa8d6d848
+  path: squad_formatted_5000.json
+  cache: true
+  metric: false
+  persist: false
