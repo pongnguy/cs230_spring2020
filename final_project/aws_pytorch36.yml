@@ -1,0 +1,5 @@
+name: pytorch_36
+channels:
+  - defaults
+prefix: /home/ec2-user/anaconda3/envs/pytorch_36
+
