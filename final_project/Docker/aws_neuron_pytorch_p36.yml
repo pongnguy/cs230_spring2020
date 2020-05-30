@@ -325,7 +325,7 @@ dependencies:
   - pip:
     - amp==1.1.4
     - anykeystore==0.2
-    - apex==0.1
+    #- apex==0.1
     - argparse==1.4.0
     - asgiref==3.2.7
     - autovizwidget==0.15.0
@@ -336,9 +336,9 @@ dependencies:
     - cryptacular==1.5.5
     - dataclasses==0.7
     - django==3.0.6
-    - dmlc-nnvm==1.0.1826.0+6004211132
-    - dmlc-topi==1.0.1826.0+6004211132
-    - dmlc-tvm==1.0.1826.0+6004211132
+    - dmlc-nnvm #==1.0.1826.0+6004211132
+    - dmlc-topi #==1.0.1826.0+6004211132
+    - dmlc-tvm #==1.0.1826.0+6004211132
     - docutils==0.15.2
     - enum34==1.1.6
     - environment-kernels==1.1.1

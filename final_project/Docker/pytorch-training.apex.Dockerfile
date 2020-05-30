@@ -9,7 +9,7 @@
 # Use the run configuration
 # this will create new image with tag vastai/pytorch:alfred
 # this is Ubuntu 16.04
-FROM vastai/pytorch:latest
+FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.5.0-gpu-py36-cu101-ubuntu16.04
 
 
 # Setting up the ssh server for remote debugging (how does vast.ai do their ssh server??)
@@ -31,31 +31,27 @@ RUN /bin/bash -c "sed -i 's/UsePrivilegeSeparation yes/UsePrivilegeSeparation no
 
 # indicates ports where container listens for connections
 EXPOSE 22
+WORKDIR /tmp_workspace/
+
 
 # installs in conda base environment (even without activate/source or calling pip from the specific directory)
-WORKDIR /tmp_workspace/
-RUN git clone https://github.com/NVIDIA/apex &&\
+#RUN git clone https://github.com/NVIDIA/apex &&\
 # execute git as if inside apex
-git -C ./apex checkout f3a960f80244cf9e80558ab30f7f7e8cbf03c0a0
+#git -C ./apex checkout f3a960f80244cf9e80558ab30f7f7e8cbf03c0a0
 #RUN /bin/bash -c "source activate base && pip install -v --no-cache-dir --global-option='--cpp_ext' --global-option='--cuda_ext' ./apex"
-RUN pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./apex
+#RUN pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./apex
 
 # upgrade anaconda (adds conda run)
 # downgrade python back to original version (causes apex to show up again)
-RUN conda update conda &&\
-conda install python=3.7.1
+#RUN conda update conda &&\
+#conda install python=3.7.1
 
-RUN pip install -U transformers==2.1.1 &&\
+RUN pip install transformers==2.1.1 &&\
 conda install pandas &&\
 pip install sklearn
 
-RUN apt install pciutils &&\
-#apt install module-init-tools
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.1.85-1_amd64.deb &&\
-dpkg --install cuda-repo-ubuntu1604_9.1.85-1_amd64.deb &&\
-apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
-RUN apt install cuda &&\
-conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
+RUN pip install ipywidgets
+
 
 # looks like this only works at build time, not if you run the container later
 # note: if the attached console does not show anything it because another call never detached (i.e. like the one below)

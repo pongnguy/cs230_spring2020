@@ -45,17 +45,10 @@ RUN pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="-
 RUN conda update conda &&\
 conda install python=3.7.1
 
-RUN pip install -U transformers==2.1.1 &&\
+RUN pip install transformers==2.1.1 &&\
 conda install pandas &&\
 pip install sklearn
 
-RUN apt install pciutils &&\
-#apt install module-init-tools
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.1.85-1_amd64.deb &&\
-dpkg --install cuda-repo-ubuntu1604_9.1.85-1_amd64.deb &&\
-apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
-RUN apt install cuda &&\
-conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
 
 # looks like this only works at build time, not if you run the container later
 # note: if the attached console does not show anything it because another call never detached (i.e. like the one below)

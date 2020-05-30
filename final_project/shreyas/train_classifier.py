@@ -42,10 +42,12 @@ from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, W
 
 # In[ ]:
 
-TRAIN_SIZE = 10 #10000
-VALID_SIZE = 100
-DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
-EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
+#TRAIN_SIZE = 10 #10000
+#VALID_SIZE = 100
+#DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
+DATA_PATH = '../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
+#EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
+EVAL_DATA_PATH = '../../Guanshuo_TFQA_1stplace/input/natural_questions/simplified-nq-valid.jsonl'
 
 chunksize = 1000
 
@@ -476,7 +478,7 @@ for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
         global_step += 1
     print("Training loss:", loss)
 
-    if (time.time() - start_time) / 3600 > 7:
+    if (time.time() - start_time) / 3600 > 0.5: #7:  # alfred puts a maximum time limit on the execution
         break
 
 del examples, train_dataset, train_loader

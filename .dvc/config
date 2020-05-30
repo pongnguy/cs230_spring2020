@@ -1,10 +1,11 @@
 [core]
-    remote = local_dataset
+    remote = dropbox
 [cache]
     type = "reflink,symlink,hardlink,copy"
-['remote "local_dataset"']
-    url = C:/Users/alfre/Datasets/dvc_remote
 ['remote "aws_s3"']
     url = s3://dvc-remote
 ['remote "sharefolder"']
     url = //10.0.0.245/DVC/
+['remote "gdrive_stanford"']
+    url = gdrive://1yWItrd7irGZyZIQYc7WzV_MmdRRIIypz
+

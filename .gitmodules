@@ -13,6 +13,9 @@
 [submodule "Extend_BERT_as_QA_Chatbot"]
 	path = Extend_BERT_as_QA_Chatbot
 	url = https://github.com/pongnguy/Extend_BERT_as_QA_Chatbot
+[submodule "google-api-python-client"]
+    path = google-api-python-client
+    url = https://github.com/googleapis/google-api-python-client
 [submodule "knowledge_distillation"]
 	path = knowledge_distillation
 	url = https://github.com/pongnguy/knowledge_distillation
