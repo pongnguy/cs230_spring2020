@@ -32,6 +32,9 @@ from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, W
     #get_linear_schedule_with_warmup
 
 import pdb
+import json
+import pickle
+from os import path
 
 # WarmupLinearSchedule should be changed to get_linear_schedule_with_warmup
 #
@@ -53,7 +56,7 @@ DATA_PATH = '../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 #EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
 EVAL_DATA_PATH = '../../Guanshuo_TFQA_1stplace/input/natural_questions/simplified-nq-valid.jsonl'
 
-chunksize = 10 #1000
+chunksize = 1000
 
 #
 # get_ipython().system('wc -l $DATA_PATH')
@@ -443,12 +446,57 @@ model = model.train() # alfred initialize the model for training
 # RekhaDist
 tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)  # alfred does this mean that all the long candidates are split up and therefore the long candidates are not treated together?
 
+
+#check the file json lines
+def validateJSON(jsonData):
+    try:
+        json.loads(jsonData)
+    except ValueError as err:
+        return False
+    return True
+
+
+#with open(DATA_PATH, 'r') as f:
+#    line_number = 1
+#    for line in tqdm(f):
+#        if not validateJSON(line):
+#            print("error in JSON line number", line_number)
+#
+#        line_number += 1
+
+
 convert_func = functools.partial(convert_data,   # how does this operate on Kaggle dataset?
                                  tokenizer=tokenizer,
                                  max_seq_len=max_seq_len,
                                  max_question_len=max_question_len,
                                  doc_stride=doc_stride)
+
+
+print('starting JSONChunkReader', time.time())
 data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+print('ended JSONChunkReader', time.time())
+
+def right(value, count):
+    # To get right part of string, use negative first index in slice.
+    return value[-count:]
+
+# saves all the examples if they do not already exist
+seq = 0
+# just check for the first one
+if not path.exists(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle'):
+    print('start reading training set from json file', time.time())
+    for examples in data_reader:
+        print('end reading', time.time())
+        with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle', 'wb') as f:  # save variable to binary file
+            pickle.dump(examples, f)
+        seq += 1
+        print('start reading training set from json file', time.time())
+else:
+    #TODO get highest seq number starting from 0
+    if path.exists(f'pickles/examples_chunk={chunksize}_seq={"%03d" % (seq + 1)}.pickle'):
+        seq += 1
+    else:
+        examples_idx_max = seq
 
 global_step = 0
 print('Rekha train_size=', train_size)
@@ -456,7 +504,12 @@ print('chunksize=', chunksize)
 print('Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
 print('Rekha DATA_PATH', DATA_PATH, time.time())
 # print('len(data_reader)',len(data_reader))
-for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+#for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+for i in range(examples_idx_max + 1):  # since this is the max id, not the number
+    # load in the pickle
+    with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle', 'rb') as f:  # save variable to binary file
+        examples = pickle.load(f)
+
     print('start outer iteration', time.time())
     train_dataset = TextDataset(examples)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)

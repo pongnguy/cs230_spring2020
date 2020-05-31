@@ -1,0 +1,16 @@
+f = open('../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl', 'r')
+lines =0
+words=0
+characters=0
+for line in f:
+   ...:     wordslist = line.split()
+   ...:     lines += 1 
+   ...:     words = words + len(wordslist)
+   ...:     characters += len(line)
+   ...: 
+print(lines)
+3381
+print(words)
+33562076
+print(characters)
+194036736
