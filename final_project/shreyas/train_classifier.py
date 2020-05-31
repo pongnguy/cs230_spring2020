@@ -20,7 +20,8 @@ import pandas as pd
 #from pandas.io.json.json import JsonReader
 from pandas.io.json._json import JsonReader
 from sklearn.preprocessing import LabelEncoder
-from tqdm._tqdm_notebook import tqdm_notebook as tqdm
+#from tqdm._tqdm_notebook import tqdm_notebook as tqdm
+from tqdm import tqdm
 
 import torch
 from torch import nn, optim
@@ -29,6 +30,8 @@ from torch.utils.data import Dataset, Subset, DataLoader
 from apex import amp
 from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, WarmupLinearSchedule
     #get_linear_schedule_with_warmup
+
+import pdb
 
 # WarmupLinearSchedule should be changed to get_linear_schedule_with_warmup
 #
@@ -42,14 +45,15 @@ from transformers import BertTokenizer, AdamW, BertModel, BertPreTrainedModel, W
 
 # In[ ]:
 
-#TRAIN_SIZE = 10 #10000
+# affects the loop counter, and the warmup learning rate scheduler
+TRAIN_SIZE = 300000 #10 #10000
 #VALID_SIZE = 100
 #DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
 DATA_PATH = '../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 #EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
 EVAL_DATA_PATH = '../../Guanshuo_TFQA_1stplace/input/natural_questions/simplified-nq-valid.jsonl'
 
-chunksize = 1000
+chunksize = 10 #1000
 
 #
 # get_ipython().system('wc -l $DATA_PATH')
@@ -65,7 +69,7 @@ DEBUG = True
 start_time = time.time()
 
 seed = 1029
-valid_size = VALID_SIZE
+#valid_size = VALID_SIZE
 train_size = TRAIN_SIZE
 
 max_seq_len = 384
@@ -81,7 +85,13 @@ accumulation_steps = 4
 
 bert_model = 'bert-base-uncased'
 do_lower_case = 'uncased' in bert_model
-device = torch.device('cuda')
+# use GPU if it is available
+if torch.cuda.is_available():
+    print('use cuda device')
+    device = torch.device('cuda')
+else:
+    print('use cpu device')
+    device = torch.device('cpu')
 
 output_model_file = 'distil_bert_pytorch_weighted_loss.bin'
 output_optimizer_file = 'bert_pytorch_optimizer_weighted_loss.bin'
@@ -112,7 +122,7 @@ class Example(object):
 
 
 def convert_data(
-        line: str,
+        line: str,   # alfred operates on each line, however each line has question, answer, etc.
         tokenizer: BertTokenizer,
         max_seq_len: int,
         max_question_len: int,
@@ -142,7 +152,7 @@ def convert_data(
 
     # model input
     data = json.loads(line)
-    doc_words = data['document_text'].split()
+    doc_words = data['document_text'].split() # alfred extracts just the document text
     question_tokens = tokenizer.tokenize(data['question_text'])[:max_question_len]
 
     # tokenized index of i-th original token corresponds to original_to_tokenized_index[i]
@@ -241,7 +251,7 @@ class JsonChunkReader(JsonReader):
             date_unit: str = None,
             encoding: str = None,
             lines: bool = True,
-            chunksize: int = 2000,
+            chunksize: int = 2000,  # alfred this puts a chunksize if non is specified
             compression: str = None,
     ):
         super(JsonChunkReader, self).__init__(
@@ -258,13 +268,16 @@ class JsonChunkReader(JsonReader):
         self.convert_data = convert_data
 
     def __next__(self):
-        lines = list(itertools.islice(self.data, self.chunksize))
+        lines = list(itertools.islice(self.data, self.chunksize))  # alfred lines is an iterable based on passing it to p.map??
         # for line in lines:
         # print(line)
         # print('Length of lines',len(lines), 'chunksize', self.chunksize)
         if lines:
             with Pool(2) as p:
-                obj = p.map(self.convert_data, lines)
+                #try:       # alfred catch a read error from the JSON file
+                obj = p.map(self.convert_data, lines)  # convert data for each line
+                #except json.decoder.JSONDecodeError as err:
+                #    print("Probably something wrong decoding the file. Error is: \"", err, "\"")
                 # print('Length of obj', len(obj))
             return obj
 
@@ -397,6 +410,8 @@ def loss_fn_classifier(preds, labels):
     class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
     return class_loss
+
+
 # RekhaDist
 config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
 config.num_labels = 5
@@ -407,7 +422,7 @@ model = model.to(device)
 param_optimizer = list(model.named_parameters())
 no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
 optimizer_grouped_parameters = [
-    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},  # alfred sets weights decay according to model.named_parameters()
     {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
 num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
 print('num_train_optimization_steps=', num_train_optimization_steps)
@@ -415,18 +430,20 @@ num_warmup_steps = int(num_train_optimization_steps * warmup)
 print('num_warmup_steps', num_warmup_steps)
 
 optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
+scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps) # alfred implements learning rate warmup
 #scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=num_warmup_steps, num_training_steps = num_train_optimization_steps)
 
-model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-model.zero_grad()
-model = model.train() # alfred what is this training?
+if torch.cuda.is_available():
+    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+    model.zero_grad()
+
+model = model.train() # alfred initialize the model for training
 
 # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
 # RekhaDist
 tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)  # alfred does this mean that all the long candidates are split up and therefore the long candidates are not treated together?
 
-convert_func = functools.partial(convert_data,
+convert_func = functools.partial(convert_data,   # how does this operate on Kaggle dataset?
                                  tokenizer=tokenizer,
                                  max_seq_len=max_seq_len,
                                  max_question_len=max_question_len,
@@ -435,13 +452,16 @@ data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
 
 global_step = 0
 print('Rekha train_size=', train_size)
+print('chunksize=', chunksize)
 print('Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-print('Rekha DATA_PATH', DATA_PATH)
+print('Rekha DATA_PATH', DATA_PATH, time.time())
 # print('len(data_reader)',len(data_reader))
 for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+    print('start outer iteration', time.time())
     train_dataset = TextDataset(examples)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
     for x_batch, y_batch in train_loader:  # alfred where does y_batch get formatted?
+        print('start inner iteration', time.time())
         x_batch, attention_mask, token_type_ids = x_batch
         y_batch = (y.to(device) for y in y_batch)
 
@@ -468,17 +488,25 @@ for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
         #                attention_mask=attention_mask.to(device),
         #                token_type_ids=token_type_ids.to(device))
         loss = loss_fn_classifier(y_pred, y_batch)  # alfred what is the structure of y_pred?
-        with amp.scale_loss(loss, optimizer) as scaled_loss:
-            scaled_loss.backward()
+        if torch.cuda.is_available():
+            with amp.scale_loss(loss, optimizer) as scaled_loss:
+                scaled_loss.backward()
         if (global_step + 1) % accumulation_steps == 0:
             optimizer.step()
             scheduler.step()
-            model.zero_grad()
+
+            if torch.cuda.is_available():
+                model.zero_grad()
 
         global_step += 1
-    print("Training loss:", loss)
+        print('end inner iteration', time.time())
+
+    print('end outer iteration', time.time())
+    print({"Training_loss": loss, "Learning_rate": optimizer.param_groups[0]['lr']})
 
     if (time.time() - start_time) / 3600 > 0.5: #7:  # alfred puts a maximum time limit on the execution
+        print(f'trained {global_step * batch_size} samples')
+        print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
         break
 
 del examples, train_dataset, train_loader
@@ -489,10 +517,6 @@ torch.save(optimizer.state_dict(), output_optimizer_file)
 torch.save(amp.state_dict(), output_amp_file)   # alfred saving amp file
 
 # In[ ]:
-
-
-print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
 
 
 # In[ ]:

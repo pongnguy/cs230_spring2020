@@ -1,0 +1,80 @@
+ssh://root@54.166.120.242:32768/opt/conda/bin/python -u /home/ec2-user/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py
+use cuda device
+num_train_optimization_steps= 11718
+num_warmup_steps 585
+Rekha train_size= 300000
+chunksize= 1000
+Rekha total=int(np.ceil(train_size / chunksize))= 300
+Rekha DATA_PATH ../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl 1590899449.700608
+  0%|                                                   | 0/300 [00:00<?, ?it/s]start outer iteration 1590899770.698108
+start inner iteration 1590899770.7060795
+end inner iteration 1590899774.8142798
+start inner iteration 1590899774.821489
+end inner iteration 1590899778.358684
+start inner iteration 1590899778.3655345
+end inner iteration 1590899781.9310899
+start inner iteration 1590899781.93849
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:114: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+end inner iteration 1590899785.4970703
+start inner iteration 1590899785.504152
+end inner iteration 1590899789.0821388
+start inner iteration 1590899789.0897596
+end inner iteration 1590899792.6676881
+start inner iteration 1590899792.6751673
+end inner iteration 1590899796.2353172
+start inner iteration 1590899796.2421918
+end inner iteration 1590899799.8222325
+start inner iteration 1590899799.829706
+end inner iteration 1590899803.415545
+start inner iteration 1590899803.4229221
+end inner iteration 1590899807.0320246
+start inner iteration 1590899807.0398507
+end inner iteration 1590899810.627219
+start inner iteration 1590899810.6350133
+/codebuild/output/src735777818/src/torch/csrc/utils/python_arg_parser.cpp:756: UserWarning: This overload of add_ is deprecated:
+	add_(Number alpha, Tensor other)
+Consider using one of the following signatures instead:
+	add_(Tensor other, *, Number alpha)
+end inner iteration 1590899814.2245185
+start inner iteration 1590899814.232069
+end inner iteration 1590899817.8489337
+start inner iteration 1590899817.8565364
+end inner iteration 1590899821.4508147
+start inner iteration 1590899821.4586244
+end inner iteration 1590899825.0924478
+start inner iteration 1590899825.0996885
+end inner iteration 1590899828.720399
+start inner iteration 1590899828.7278464
+end inner iteration 1590899832.343481
+start inner iteration 1590899832.3503163
+end inner iteration 1590899835.9598029
+start inner iteration 1590899835.9669874
+end inner iteration 1590899839.5785081
+start inner iteration 1590899839.586123
+end inner iteration 1590899843.23303
+start inner iteration 1590899843.24043
+end inner iteration 1590899846.8841662
+start inner iteration 1590899846.8915298
+end inner iteration 1590899850.5084536
+start inner iteration 1590899850.516108
+end inner iteration 1590899854.1345763
+start inner iteration 1590899854.1422434
+end inner iteration 1590899857.7814453
+start inner iteration 1590899857.788756
+end inner iteration 1590899861.445185
+start inner iteration 1590899861.452672
+end inner iteration 1590899865.0754092
+start inner iteration 1590899865.0825942
+end inner iteration 1590899868.7352476
+start inner iteration 1590899868.7425442
+end inner iteration 1590899872.413612
+start inner iteration 1590899872.4209683
+end inner iteration 1590899876.0927048
+start inner iteration 1590899876.0999134
+end inner iteration 1590899879.7289534
+start inner iteration 1590899879.7367454
+end inner iteration 1590899883.3841515
+start inner iteration 1590899883.386297
+end inner iteration 1590899884.3074005
+end outer iteration 1590899884.3074536

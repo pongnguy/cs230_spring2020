@@ -1,5 +1,5 @@
 # for running docker with GPU support
-docker run -it --gpus all -v /home/ec2-user/jupyter:/root/jupyter 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.5.0-gpu-py36-cu101-ubuntu16.04 /bin/bash
+docker run -it --gpus all -p 0.0.0.0:32768:22 -v /home/ec2-user/jupyter:/home/ec2-user/jupyter 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.5.0-gpu-py36-cu101-ubuntu16.04 /bin/bash
 
 
 

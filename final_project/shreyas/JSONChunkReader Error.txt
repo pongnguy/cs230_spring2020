@@ -1,0 +1,71 @@
+Executed on a docker image with GPU enabled
+
+Docker Image: 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.5.0-gpu-py36-cu101-ubuntu16.04
+
+Code set to run for half an hour and then break.  Appears to have encountered an error first.
+
+
+
+
+root@47234b68a5b9:~/jupyter/cs230_spring2020/final_project/shreyas# python train_classifier.py
+num_train_optimization_steps= 0
+num_warmup_steps 0
+Rekha train_size= 10
+Rekha total=int(np.ceil(train_size / chunksize))= 1
+Rekha DATA_PATH ../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl
+HBox(children=(FloatProgress(value=0.0, max=1.0), HTML(value='')))
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:114: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/codebuild/output/src735777818/src/torch/csrc/utils/python_arg_parser.cpp:756: UserWarning: This overload of add_ is deprecated:
+        add_(Number alpha, Tensor other)
+Consider using one of the following signatures instead:
+        add_(Tensor other, *, Number alpha)
+Training loss: tensor(1.9689, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(2.4543, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(2.6924, device='cuda:0', grad_fn=<NllLossBackward>)
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 44, in mapstar
+    return list(map(*args))
+  File "train_classifier.py", line 144, in convert_data
+    data = json.loads(line)
+  File "/opt/conda/lib/python3.6/json/__init__.py", line 354, in loads
+    return _default_decoder.decode(s)
+  File "/opt/conda/lib/python3.6/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/opt/conda/lib/python3.6/json/decoder.py", line 357, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 51867 (char 51866)
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "train_classifier.py", line 441, in <module>
+    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+  File "/opt/conda/lib/python3.6/site-packages/tqdm/notebook.py", line 217, in __iter__
+    for obj in super(tqdm_notebook, self).__iter__(*args, **kwargs):
+  File "/opt/conda/lib/python3.6/site-packages/tqdm/std.py", line 1107, in __iter__
+    for obj in iterable:
+  File "train_classifier.py", line 267, in __next__
+    obj = p.map(self.convert_data, lines)
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 266, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 644, in get
+    raise self._value
+json.decoder.JSONDecodeError: Expecting value: line 1 column 51867 (char 51866)   # alfred means that self._success is false (the reading was not successful)
+
+
+
+# ----------------------------
+# second run same error
+
+Training loss: tensor(1.5993, device='cuda:0', grad_fn=<NllLossBackward>)
+1it [07:22, 442.80s/it]Training loss: tensor(1.4449, device='cuda:0', grad_fn=<NllLossBackward>)
+2it [15:10, 450.34s/it]Training loss: tensor(0.9433, device='cuda:0', grad_fn=<NllLossBackward>)
+3it [22:37, 449.36s/it]multiprocessing.pool.RemoteTraceback: 
+
+

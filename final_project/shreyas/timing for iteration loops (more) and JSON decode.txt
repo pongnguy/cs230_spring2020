@@ -1,0 +1,250 @@
+ssh://root@54.166.120.242:32768/opt/conda/bin/python -u /home/ec2-user/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py
+use cuda device
+num_train_optimization_steps= 11718
+num_warmup_steps 585
+Rekha train_size= 300000
+chunksize= 1000
+Rekha total=int(np.ceil(train_size / chunksize))= 300
+Rekha DATA_PATH ../../Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl 1590899959.7908573
+  0%|                                                   | 0/300 [00:00<?, ?it/s]start outer iteration 1590900279.858113
+start inner iteration 1590900279.866149
+end inner iteration 1590900283.9616773
+start inner iteration 1590900283.9689362
+end inner iteration 1590900287.5183372
+start inner iteration 1590900287.525204
+end inner iteration 1590900291.0602722
+start inner iteration 1590900291.0675757
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:114: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+end inner iteration 1590900294.6477733
+start inner iteration 1590900294.654805
+end inner iteration 1590900298.2166457
+start inner iteration 1590900298.2242706
+end inner iteration 1590900301.790381
+start inner iteration 1590900301.7978392
+end inner iteration 1590900305.3950036
+start inner iteration 1590900305.4019752
+end inner iteration 1590900308.992988
+start inner iteration 1590900309.0004308
+end inner iteration 1590900312.577017
+start inner iteration 1590900312.5842087
+end inner iteration 1590900316.1540325
+start inner iteration 1590900316.1618183
+end inner iteration 1590900319.7516649
+start inner iteration 1590900319.759406
+/codebuild/output/src735777818/src/torch/csrc/utils/python_arg_parser.cpp:756: UserWarning: This overload of add_ is deprecated:
+	add_(Number alpha, Tensor other)
+Consider using one of the following signatures instead:
+	add_(Tensor other, *, Number alpha)
+end inner iteration 1590900323.3924453
+start inner iteration 1590900323.399945
+end inner iteration 1590900327.0027287
+start inner iteration 1590900327.0102737
+end inner iteration 1590900330.6169958
+start inner iteration 1590900330.6248648
+end inner iteration 1590900334.231933
+start inner iteration 1590900334.2390003
+end inner iteration 1590900337.863827
+start inner iteration 1590900337.8712823
+end inner iteration 1590900341.5017967
+start inner iteration 1590900341.508612
+end inner iteration 1590900345.1145585
+start inner iteration 1590900345.1218307
+end inner iteration 1590900348.7319398
+start inner iteration 1590900348.739674
+end inner iteration 1590900352.3854387
+start inner iteration 1590900352.3928626
+end inner iteration 1590900356.024207
+start inner iteration 1590900356.0315037
+end inner iteration 1590900359.6893098
+start inner iteration 1590900359.6970575
+end inner iteration 1590900363.3142412
+start inner iteration 1590900363.3218846
+end inner iteration 1590900366.9607596
+start inner iteration 1590900366.968053
+end inner iteration 1590900370.5953116
+start inner iteration 1590900370.6028616
+end inner iteration 1590900374.2492616
+start inner iteration 1590900374.2565958
+end inner iteration 1590900377.880471
+start inner iteration 1590900377.8879063
+end inner iteration 1590900381.5597324
+start inner iteration 1590900381.5671632
+end inner iteration 1590900385.2018178
+start inner iteration 1590900385.2091393
+end inner iteration 1590900388.8292618
+start inner iteration 1590900388.8370767
+end inner iteration 1590900392.506279
+start inner iteration 1590900392.5084085
+end inner iteration 1590900393.4418685
+end outer iteration 1590900393.4419222
+{'Training_loss': tensor(1.5993, device='cuda:0', grad_fn=<NllLossBackward>), 'Learning_rate': 1.0940170940170942e-06}
+  0%|▏                                      | 1/300 [07:13<36:01:07, 433.67s/it]start outer iteration 1590900741.2209902
+start inner iteration 1590900741.9489746
+end inner iteration 1590900745.720416
+start inner iteration 1590900745.7280269
+end inner iteration 1590900749.2764754
+start inner iteration 1590900749.283972
+end inner iteration 1590900752.8590817
+start inner iteration 1590900752.866648
+end inner iteration 1590900756.4520748
+start inner iteration 1590900756.460086
+end inner iteration 1590900760.0375266
+start inner iteration 1590900760.0449157
+end inner iteration 1590900763.6149793
+start inner iteration 1590900763.6225119
+end inner iteration 1590900767.2129807
+start inner iteration 1590900767.2209263
+end inner iteration 1590900770.8356955
+start inner iteration 1590900770.8431327
+end inner iteration 1590900774.4455464
+start inner iteration 1590900774.4533088
+end inner iteration 1590900778.0473473
+start inner iteration 1590900778.0548208
+end inner iteration 1590900781.653344
+start inner iteration 1590900781.6606176
+end inner iteration 1590900785.2904596
+start inner iteration 1590900785.298098
+end inner iteration 1590900788.9127352
+start inner iteration 1590900788.9202495
+end inner iteration 1590900792.5243134
+start inner iteration 1590900792.5316305
+end inner iteration 1590900796.1228828
+start inner iteration 1590900796.1304965
+end inner iteration 1590900799.7588568
+start inner iteration 1590900799.7662055
+end inner iteration 1590900803.3779967
+start inner iteration 1590900803.385651
+end inner iteration 1590900806.994424
+start inner iteration 1590900807.0018942
+end inner iteration 1590900810.601596
+start inner iteration 1590900810.6092918
+end inner iteration 1590900814.2451026
+start inner iteration 1590900814.2526677
+end inner iteration 1590900817.870596
+start inner iteration 1590900817.8784006
+end inner iteration 1590900821.5226758
+start inner iteration 1590900821.5299435
+end inner iteration 1590900825.1371307
+start inner iteration 1590900825.1443472
+end inner iteration 1590900828.7768066
+start inner iteration 1590900828.7841172
+end inner iteration 1590900832.4261074
+start inner iteration 1590900832.43363
+end inner iteration 1590900836.0694225
+start inner iteration 1590900836.077104
+end inner iteration 1590900839.7051733
+start inner iteration 1590900839.7125196
+end inner iteration 1590900843.3640513
+start inner iteration 1590900843.3714743
+end inner iteration 1590900847.01423
+start inner iteration 1590900847.021649
+end inner iteration 1590900850.6469343
+start inner iteration 1590900850.6545393
+end inner iteration 1590900854.3192084
+start inner iteration 1590900854.3213093
+end inner iteration 1590900855.2540789
+end outer iteration 1590900855.254133
+{'Training_loss': tensor(1.4449, device='cuda:0', grad_fn=<NllLossBackward>), 'Learning_rate': 2.1880341880341884e-06}
+  1%|▎                                      | 2/300 [14:55<36:35:49, 442.11s/it]start outer iteration 1590901180.0135972
+start inner iteration 1590901180.8384435
+end inner iteration 1590901184.617993
+start inner iteration 1590901184.625464
+end inner iteration 1590901188.1838136
+start inner iteration 1590901188.1912441
+end inner iteration 1590901191.7305014
+start inner iteration 1590901191.7382019
+end inner iteration 1590901195.3406467
+start inner iteration 1590901195.3482223
+end inner iteration 1590901198.9347146
+start inner iteration 1590901198.9422567
+end inner iteration 1590901202.5276256
+start inner iteration 1590901202.5349755
+end inner iteration 1590901206.1075685
+start inner iteration 1590901206.1148095
+end inner iteration 1590901209.7145364
+start inner iteration 1590901209.7218502
+end inner iteration 1590901213.3141766
+start inner iteration 1590901213.3216856
+end inner iteration 1590901216.905528
+start inner iteration 1590901216.9129398
+end inner iteration 1590901220.5060508
+start inner iteration 1590901220.5133388
+end inner iteration 1590901224.1337109
+start inner iteration 1590901224.1413448
+end inner iteration 1590901227.755602
+start inner iteration 1590901227.7629433
+end inner iteration 1590901231.3683474
+start inner iteration 1590901231.3755705
+end inner iteration 1590901234.976904
+start inner iteration 1590901234.9846137
+end inner iteration 1590901238.6204145
+start inner iteration 1590901238.628157
+end inner iteration 1590901242.2667968
+start inner iteration 1590901242.2746198
+end inner iteration 1590901245.8931963
+start inner iteration 1590901245.9010296
+end inner iteration 1590901249.521637
+start inner iteration 1590901249.5295844
+end inner iteration 1590901253.168325
+start inner iteration 1590901253.176591
+end inner iteration 1590901256.806003
+start inner iteration 1590901256.8135467
+end inner iteration 1590901260.4352965
+start inner iteration 1590901260.442816
+end inner iteration 1590901264.0894217
+start inner iteration 1590901264.097484
+end inner iteration 1590901267.7296243
+start inner iteration 1590901267.7368402
+end inner iteration 1590901271.3849576
+start inner iteration 1590901271.392282
+end inner iteration 1590901275.0250049
+start inner iteration 1590901275.0324657
+end inner iteration 1590901278.6769383
+start inner iteration 1590901278.6843157
+end inner iteration 1590901282.372389
+start inner iteration 1590901282.3799255
+end inner iteration 1590901286.03935
+start inner iteration 1590901286.0469363
+end inner iteration 1590901289.6794107
+start inner iteration 1590901289.6870923
+end inner iteration 1590901293.3276613
+start inner iteration 1590901293.3300319
+end inner iteration 1590901294.2525249
+end outer iteration 1590901294.2525764
+{'Training_loss': tensor(0.9433, device='cuda:0', grad_fn=<NllLossBackward>), 'Learning_rate': 3.2820512820512823e-06}
+  1%|▍                                      | 3/300 [22:14<36:23:49, 441.18s/it]multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 44, in mapstar
+    return list(map(*args))
+  File "/home/ec2-user/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py", line 154, in convert_data
+    data = json.loads(line)
+  File "/opt/conda/lib/python3.6/json/__init__.py", line 354, in loads
+    return _default_decoder.decode(s)
+  File "/opt/conda/lib/python3.6/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/opt/conda/lib/python3.6/json/decoder.py", line 357, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 51867 (char 51866)
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ec2-user/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py", line 459, in <module>
+    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+  File "/opt/conda/lib/python3.6/site-packages/tqdm/std.py", line 1107, in __iter__
+    for obj in iterable:
+  File "/home/ec2-user/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py", line 278, in __next__
+    obj = p.map(self.convert_data, lines)  # convert data for each line
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 266, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+  File "/opt/conda/lib/python3.6/multiprocessing/pool.py", line 644, in get
+    raise self._value
+json.decoder.JSONDecodeError: Expecting value: line 1 column 51867 (char 51866)
+  1%|▍                                      | 3/300 [24:31<40:27:54, 490.49s/it]
+
+Process finished with exit code 1
