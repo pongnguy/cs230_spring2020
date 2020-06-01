@@ -276,7 +276,8 @@ class JsonChunkReader(JsonReader):
         # print(line)
         # print('Length of lines',len(lines), 'chunksize', self.chunksize)
         if lines:
-            with Pool(2) as p:
+            #with Pool(2) as p:
+            with Pool(5) as p: # alfred adding more processes
                 #try:       # alfred catch a read error from the JSON file
                 obj = p.map(self.convert_data, lines)  # convert data for each line
                 #except json.decoder.JSONDecodeError as err:
@@ -414,39 +415,6 @@ def loss_fn_classifier(preds, labels):
 
     return class_loss
 
-
-# RekhaDist
-config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
-config.num_labels = 5
-model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)  # alfred this is the model
-
-model = model.to(device)
-
-param_optimizer = list(model.named_parameters())
-no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grouped_parameters = [
-    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},  # alfred sets weights decay according to model.named_parameters()
-    {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-print('num_train_optimization_steps=', num_train_optimization_steps)
-num_warmup_steps = int(num_train_optimization_steps * warmup)
-print('num_warmup_steps', num_warmup_steps)
-
-optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps) # alfred implements learning rate warmup
-#scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=num_warmup_steps, num_training_steps = num_train_optimization_steps)
-
-if torch.cuda.is_available():
-    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-    model.zero_grad()
-
-model = model.train() # alfred initialize the model for training
-
-# tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
-# RekhaDist
-tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)  # alfred does this mean that all the long candidates are split up and therefore the long candidates are not treated together?
-
-
 #check the file json lines
 def validateJSON(jsonData):
     try:
@@ -454,125 +422,6 @@ def validateJSON(jsonData):
     except ValueError as err:
         return False
     return True
-
-
-#with open(DATA_PATH, 'r') as f:
-#    line_number = 1
-#    for line in tqdm(f):
-#        if not validateJSON(line):
-#            print("error in JSON line number", line_number)
-#
-#        line_number += 1
-
-
-convert_func = functools.partial(convert_data,   # how does this operate on Kaggle dataset?
-                                 tokenizer=tokenizer,
-                                 max_seq_len=max_seq_len,
-                                 max_question_len=max_question_len,
-                                 doc_stride=doc_stride)
-
-
-print('starting JSONChunkReader', time.time())
-data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-print('ended JSONChunkReader', time.time())
-
-def right(value, count):
-    # To get right part of string, use negative first index in slice.
-    return value[-count:]
-
-# saves all the examples if they do not already exist
-seq = 0
-# just check for the first one
-if not path.exists(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle'):
-    print('start reading training set from json file', time.time())
-    for examples in data_reader:
-        print('end reading', time.time())
-        with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle', 'wb') as f:  # save variable to binary file
-            pickle.dump(examples, f)
-        seq += 1
-        print('start reading training set from json file', time.time())
-else:
-    #TODO get highest seq number starting from 0
-    if path.exists(f'pickles/examples_chunk={chunksize}_seq={"%03d" % (seq + 1)}.pickle'):
-        seq += 1
-    else:
-        examples_idx_max = seq
-
-global_step = 0
-print('Rekha train_size=', train_size)
-print('chunksize=', chunksize)
-print('Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-print('Rekha DATA_PATH', DATA_PATH, time.time())
-# print('len(data_reader)',len(data_reader))
-#for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-for i in range(examples_idx_max + 1):  # since this is the max id, not the number
-    # load in the pickle
-    with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle', 'rb') as f:  # save variable to binary file
-        examples = pickle.load(f)
-
-    print('start outer iteration', time.time())
-    train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:  # alfred where does y_batch get formatted?
-        print('start inner iteration', time.time())
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
-
-        # RekhaDist
-        # context = "The US has passed the peak on new coronavirus cases, " \
-        #           "President Donald Trump said and predicted that some states would reopen this month." \
-        #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
-        #           "the highest for any country in the world."
-        # questions = ["What was President Donald Trump's prediction?",
-        #              "How many deaths have been reported from the virus?",
-        #              "How many cases have been reported in the United States?"]
-        # question_context_for_batch = []
-        #
-        # for question in questions:
-        #     question_context_for_batch.append((question, context))
-        # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
-        # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
-        # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device))  # alfred from an x_batch get a y_pred
-
-        #Rekha old
-        # y_pred = model(x_batch.to(device),
-        #                attention_mask=attention_mask.to(device),
-        #                token_type_ids=token_type_ids.to(device))
-        loss = loss_fn_classifier(y_pred, y_batch)  # alfred what is the structure of y_pred?
-        if torch.cuda.is_available():
-            with amp.scale_loss(loss, optimizer) as scaled_loss:
-                scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer.step()
-            scheduler.step()
-
-            if torch.cuda.is_available():
-                model.zero_grad()
-
-        global_step += 1
-        print('end inner iteration', time.time())
-
-    print('end outer iteration', time.time())
-    print({"Training_loss": loss, "Learning_rate": optimizer.param_groups[0]['lr']})
-
-    if (time.time() - start_time) / 3600 > 0.5: #7:  # alfred puts a maximum time limit on the execution
-        print(f'trained {global_step * batch_size} samples')
-        print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
-        break
-
-del examples, train_dataset, train_loader
-gc.collect()
-
-torch.save(model.state_dict(), output_model_file)
-torch.save(optimizer.state_dict(), output_optimizer_file)
-torch.save(amp.state_dict(), output_amp_file)   # alfred saving amp file
-
-# In[ ]:
-
-
-# In[ ]:
 
 
 def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
@@ -808,50 +657,210 @@ class Result(object):
             'overall_score': (long_score + short_score) / 2
         }
 
+# Put everything inside this if statement to prevent multiprocessing error on windows
+if __name__ == '__main__':
 
-# In[ ]:
+    # RekhaDist
+    config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+    config.num_labels = 5
+    model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)  # alfred this is the model
+
+    model = model.to(device)
+
+    param_optimizer = list(model.named_parameters())
+    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+    optimizer_grouped_parameters = [
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},  # alfred sets weights decay according to model.named_parameters()
+        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
+    print('num_train_optimization_steps=', num_train_optimization_steps)
+    num_warmup_steps = int(num_train_optimization_steps * warmup)
+    print('num_warmup_steps', num_warmup_steps)
+
+    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps) # alfred implements learning rate warmup
+    #scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=num_warmup_steps, num_training_steps = num_train_optimization_steps)
+
+    if torch.cuda.is_available():
+        model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+        model.zero_grad()
+
+    model = model.train() # alfred initialize the model for training
+
+    # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
+    # RekhaDist
+    tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)  # alfred does this mean that all the long candidates are split up and therefore the long candidates are not treated together?
 
 
-# Rekha added
-# EVAL STARTING
-data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
 
-# In[ ]:
-
-
-eval_start_time = time.time()
-valid_data = next(data_reader)
-valid_data = list(itertools.chain.from_iterable(valid_data))
-valid_dataset = Subset(valid_data, range(len(valid_data)))
-valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
-valid_scores = eval_model(model, valid_loader, device=device)
-
-print(f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
-
-# In[ ]:
+    #with open(DATA_PATH, 'r') as f:
+    #    line_number = 1
+    #    for line in tqdm(f):
+    #        if not validateJSON(line):
+    #            print("error in JSON line number", line_number)
+    #
+    #        line_number += 1
 
 
-long_score = valid_scores['long_score']
-short_score = valid_scores['short_score']
-overall_score = valid_scores['overall_score']
-print('validation scores:')
-print(f'\tlong score    : {long_score:.4f}')
-print(f'\tshort score   : {short_score:.4f}')
-print(f'\toverall score : {overall_score:.4f}')
-print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
-
-# In[ ]:
+    convert_func = functools.partial(convert_data,   # how does this operate on Kaggle dataset?
+                                     tokenizer=tokenizer,
+                                     max_seq_len=max_seq_len,
+                                     max_question_len=max_question_len,
+                                     doc_stride=doc_stride)
 
 
-#get_ipython().system('wc -l $DATA_PATH')
-#get_ipython().system('wc -l $EVAL_DATA_PATH')
+    print('starting JSONChunkReader', time.time())
+    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+    print('ended JSONChunkReader', time.time())
 
-# In[ ]:
+    def right(value, count):
+        # To get right part of string, use negative first index in slice.
+        return value[-count:]
 
-print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+    # saves all the examples if they do not already exist
+    seq = 0
+    # TODO check there exist pickles up to the requested training size (i.e. seq = training / chunksize)
+    if not path.exists(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle'):
+        print('start reading training set from json file', time.time())
+        for examples in data_reader:
+            print('end reading', time.time())
+            with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle', 'wb') as f:  # save variable to binary file
+                pickle.dump(examples, f)
+            seq += 1
+            print('start reading training set from json file', time.time())
+    else:
+        #TODO get highest seq number starting from 0
+        print('pickle files exist', time.time())
+        while path.exists(f'pickles/examples_chunk={chunksize}_seq={"%03d" % (seq + 1)}.pickle'):
+            seq += 1
 
-# In[ ]:
+        examples_idx_max = seq
+
+    global_step = 0
+    print('Rekha train_size=', train_size)
+    print('chunksize=', chunksize)
+    print('Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
+    print('Rekha DATA_PATH', DATA_PATH, time.time())
+    # print('len(data_reader)',len(data_reader))
+    #for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+    for i in range(examples_idx_max + 1):  # since this is the max id, not the number
+        # load in the pickle
+        with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle', 'rb') as f:  # save variable to binary file
+            print('start load pickle file', time.time())
+            examples = pickle.load(f)
+            print('end load pickle file', time.time())
+
+        print('start outer iteration', time.time())
+        train_dataset = TextDataset(examples)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+        for x_batch, y_batch in train_loader:  # alfred where does y_batch get formatted?
+            print('start inner iteration', time.time())
+            x_batch, attention_mask, token_type_ids = x_batch
+            y_batch = (y.to(device) for y in y_batch)
+
+            # RekhaDist
+            # context = "The US has passed the peak on new coronavirus cases, " \
+            #           "President Donald Trump said and predicted that some states would reopen this month." \
+            #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
+            #           "the highest for any country in the world."
+            # questions = ["What was President Donald Trump's prediction?",
+            #              "How many deaths have been reported from the virus?",
+            #              "How many cases have been reported in the United States?"]
+            # question_context_for_batch = []
+            #
+            # for question in questions:
+            #     question_context_for_batch.append((question, context))
+            # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
+            # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
+            # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
+            y_pred = model(x_batch.to(device),
+                           attention_mask=attention_mask.to(device))  # alfred from an x_batch get a y_pred
+
+            #Rekha old
+            # y_pred = model(x_batch.to(device),
+            #                attention_mask=attention_mask.to(device),
+            #                token_type_ids=token_type_ids.to(device))
+            loss = loss_fn_classifier(y_pred, y_batch)  # alfred what is the structure of y_pred?
+            if torch.cuda.is_available():
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+            if (global_step + 1) % accumulation_steps == 0:
+                optimizer.step()
+                scheduler.step()
+
+                if torch.cuda.is_available():
+                    model.zero_grad()
+
+            global_step += 1
+            print('end inner iteration', time.time())
+
+        print('end outer iteration', time.time())
+        print({"Training_loss": loss, "Learning_rate": optimizer.param_groups[0]['lr']})
+
+        if (time.time() - start_time) / 3600 > 0.5: #7:  # alfred puts a maximum time limit on the execution
+            print(f'trained {global_step * batch_size} samples')
+            print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+            break
+
+    del examples, train_dataset, train_loader
+    gc.collect()
+
+    torch.save(model.state_dict(), output_model_file)
+    torch.save(optimizer.state_dict(), output_optimizer_file)
+    torch.save(amp.state_dict(), output_amp_file)   # alfred saving amp file
+
+    # In[ ]:
+
+
+    # In[ ]:
+
+
+
+
+
+    # In[ ]:
+
+
+    # Rekha added
+    # EVAL STARTING
+    data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
+
+    # In[ ]:
+
+
+    eval_start_time = time.time()
+    valid_data = next(data_reader)
+    valid_data = list(itertools.chain.from_iterable(valid_data))
+    valid_dataset = Subset(valid_data, range(len(valid_data)))
+    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
+    valid_scores = eval_model(model, valid_loader, device=device)
+
+    print(f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
+
+    # In[ ]:
+
+
+    long_score = valid_scores['long_score']
+    short_score = valid_scores['short_score']
+    overall_score = valid_scores['overall_score']
+    print('validation scores:')
+    print(f'\tlong score    : {long_score:.4f}')
+    print(f'\tshort score   : {short_score:.4f}')
+    print(f'\toverall score : {overall_score:.4f}')
+    print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
+
+    # In[ ]:
+
+
+    #get_ipython().system('wc -l $DATA_PATH')
+    #get_ipython().system('wc -l $EVAL_DATA_PATH')
+
+    # In[ ]:
+
+    print(f'trained {global_step * batch_size} samples')
+    print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+
+    # In[ ]:
 
 
 

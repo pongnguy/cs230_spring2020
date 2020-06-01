@@ -1,0 +1,7 @@
+md5: 00347fb54aa7ae2915f39cc55ed396df
+outs:
+- md5: 23f6c26540a88e864aca131b9244e67c
+  path: simplified-nq-train.200000.jsonl
+  cache: true
+  metric: false
+  persist: false

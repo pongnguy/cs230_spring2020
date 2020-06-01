@@ -147,3 +147,7 @@ dmypy.json
 
 deployment.xml
 /kaggle_winner_nvidia_profiling.nvvp
+
+
+# pickle files
+.pickle

@@ -1,0 +1,7 @@
+md5: 6dccff0b054b3fdeb40bf9100ccce061
+outs:
+- md5: 157d80e1f65f88cc3cb59db9b8a86eb8.dir
+  path: pickles
+  cache: true
+  metric: false
+  persist: false

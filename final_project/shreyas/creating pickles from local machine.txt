@@ -1,0 +1,92 @@
+ssh://root@localhost:32768/opt/conda/bin/python -u /home/ec2-user/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py
+use cpu device
+num_train_optimization_steps= 11718
+num_warmup_steps 585
+chunksize = 1000
+starting JSONChunkReader 1590914865.8993003
+ended JSONChunkReader 1590914865.902788
+start reading training set from json file 1590914865.9045157
+end reading 1590915754.6267772
+start reading training set from json file 1590915757.9417126
+end reading 1590916355.274994
+start reading training set from json file 1590916358.7633371
+end reading 1590916905.0923436
+start reading training set from json file 1590916908.6944501
+end reading 1590917500.1424875
+start reading training set from json file 1590917503.4151447
+end reading 1590918072.9615438
+start reading training set from json file 1590918076.3118653
+end reading 1590918652.1348023
+start reading training set from json file 1590918655.5009706
+end reading 1590919216.8652034
+start reading training set from json file 1590919220.2358694
+end reading 1590919791.2206357
+start reading training set from json file 1590919794.871554
+end reading 1590920373.1123667
+start reading training set from json file 1590920376.5079453
+end reading 1590920924.9890258
+start reading training set from json file 1590920928.2749584
+end reading 1590921490.2133384
+start reading training set from json file 1590921494.8143897
+end reading 1590922057.6673043
+start reading training set from json file 1590922061.2507684
+end reading 1590922620.660439
+start reading training set from json file 1590922625.1546211
+end reading 1590923176.7959864
+start reading training set from json file 1590923179.9804196
+end reading 1590923757.245265
+start reading training set from json file 1590923760.6226006
+end reading 1590924317.4362042
+start reading training set from json file 1590924320.8630831
+end reading 1590924905.9414563
+start reading training set from json file 1590924909.2872727
+end reading 1590925445.916044
+start reading training set from json file 1590925450.243978
+end reading 1590926038.1910956
+start reading training set from json file 1590926041.8009875
+end reading 1590926611.371188
+start reading training set from json file 1590926614.9265792
+end reading 1590927219.7937653
+start reading training set from json file 1590927223.2879484
+end reading 1590927788.6856763
+start reading training set from json file 1590927792.098208
+end reading 1590928360.4906416
+start reading training set from json file 1590928365.417194
+end reading 1590928946.2690976
+start reading training set from json file 1590928950.1032684
+end reading 1590929514.7784488
+start reading training set from json file 1590929519.1614013
+end reading 1590930096.7184525
+start reading training set from json file 1590930100.1777318
+end reading 1590930694.3267176
+start reading training set from json file 1590930697.6501524
+end reading 1590931296.8889925
+start reading training set from json file 1590931300.6429794
+end reading 1590931875.0122697
+start reading training set from json file 1590931878.7258694
+end reading 1590932498.237499
+start reading training set from json file 1590932502.5318022
+end reading 1590933041.328266
+start reading training set from json file 1590933044.9960167
+end reading 1590933615.5135891
+start reading training set from json file 1590933620.1508906
+end reading 1590934178.7890818
+start reading training set from json file 1590934182.4532576
+end reading 1590934747.9623017
+start reading training set from json file 1590934753.2587223
+end reading 1590935324.3953233
+start reading training set from json file 1590935328.0893207
+end reading 1590935905.7044306
+start reading training set from json file 1590935910.4166849
+end reading 1590936486.4079447
+start reading training set from json file 1590936493.0106885
+end reading 1590937051.7256308
+start reading training set from json file 1590937055.196352
+end reading 1590937619.3091526
+start reading training set from json file 1590937624.825353
+end reading 1590938218.977924
+start reading training set from json file 1590938222.841735
+end reading 1590938849.0935428
+start reading training set from json file 1590938852.9184988
+end reading 1590939472.044552
+start reading training set from json file 1590939476.705564

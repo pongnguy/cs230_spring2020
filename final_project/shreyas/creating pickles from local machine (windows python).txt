@@ -1,0 +1,1770 @@
+C:\Users\alfre\.conda\envs\jupyter\python.exe C:/Users/alfre/Code/jupyter/cs230_spring2020/final_project/shreyas/train_classifier.py
+2020-05-31 12:38:57.655620: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:39:01.624623: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:39:01.649947: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:01.650209: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:01.650863: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:01.651539: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:39:01.653780: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:01.654031: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:01.654668: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:02.403545: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:39:02.403774: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:39:02.403931: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:39:02.404891: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+num_train_optimization_steps= 11718
+num_warmup_steps 585
+starting JSONChunkReader 1590943148.6919353
+ended JSONChunkReader 1590943148.6929357
+start reading training set from json file 1590943148.6929357
+20202020--0055--331 121: 12:39:1390:1.01.678167880: 8I 0: I ttenesnsorfloowr/floswtr/stream_eexaecum_tor/platforme/default/xdsecou_tloroader/pl.acc:tf4o4] Succesrsm/fuldly opened dynefault/amidsoc_ lloaibderary r.cccudart:64_4100.dll
+4] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:39:10.204375: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-052020--0351- 31 121:23:39:109.257388:: 1I tensorflow/s0t.ream_executor/platform/de2f5ault/dso_loader7.0cc:44] Successfully o75:p ened dynamic library cuId atensorflrow/stret64_a100.dll
+m_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:39:17.511449: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:39:17.550679: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.551060: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.552449: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.553606: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:39:17.558826: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.559212: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.560226: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.588623: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:39:17.642754: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.643154: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.644347: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.645328: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:39:17.648983: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.649381: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.650493: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.720615: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:39:17.766180: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.766496: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.767653: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.768838: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:39:17.773199: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.773603: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.774997: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.895465: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:39:17.943840: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.945455: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.946730: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.948305: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:39:17.956490: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:17.956876: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:17.958052: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:17.975279: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:39:18.070390: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:18.070889: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:18.077888: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:18.079531: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:39:18.087216: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:39:18.087740: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:39:18.089213: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:39:18.953563: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:39:18.953937: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:39:18.954118: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:39:18.955483: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:39:19.032922: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:39:19.033218: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:39:19.033399: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:39:19.034968: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:39:19.083126: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:39:19.083418: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:39:19.083599: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:39:19.085149: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:39:19.258372: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:39:19.258810: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:39:19.258983: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:39:19.260662: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:39:19.352315: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:39:19.352629: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:39:19.353032: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:39:19.354843: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590943357.8945868
+start reading training set from json file 1590943359.5105572
+2020-05-31 12:42:40.606514: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:42:40.607067: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:42:40.607446: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:42:40.610122: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:42:40.611900: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:42:45.985713: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:42:46.023104: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.023504: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.024532: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.025518: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:42:46.028947: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.029379: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.030477: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.080314: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:42:46.134749: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.135135: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.136206: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.137288: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:42:46.140863: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.141529: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.142787: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.149985: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:42:46.204160: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.204638: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.207581: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.208374: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:42:46.212084: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.212372: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.216916: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.227489: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:42:46.289239: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.289729: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.291224: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.292179: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:42:46.295930: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.296269: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.297568: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.305449: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:42:46.353234: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.353689: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.354640: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:46.355771: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:42:46.361823: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:42:46.362304: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:42:46.365036: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:42:47.360637: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:42:47.360913: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:42:47.361087: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:42:47.362445: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:42:47.411464: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:42:47.411796: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:42:47.412058: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:42:47.414346: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 12:42:47.521061: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:42:47.521341: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:42:47.521512: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:42:47.523302: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:42:47.525934: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:42:47.526243: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:42:47.526477: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:42:47.528036: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 12:42:47.579715: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:42:47.580073: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:42:47.580325: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:42:47.582171: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590943593.7753954
+start reading training set from json file 1590943595.5443609
+2020-05-31 12:46:36.626070: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:46:36.628569: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:46:36.630347: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:46:36.637900: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:46:36.642408: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:46:41.847220: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:426:41.853330: I0 te20-05-31 n12:46:41.853354: I tensorsorffllow/streaom_executor/platfworm/d/streaefaum_exelt/dsoc_lutor/platform/doeadefault/dso_loader.cc:44] Succr.ccessfully opened dynamic l:44] Succibraessfurylly opened dyna nvmicuc lida.dll
+brary nvcuda.dll
+2020-05-31 12:46:41.923056: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:41.924211: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:46:41.927155: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:41.930878: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was2020- 05-31 12not:46 :41.931c215: I tenompilesorflow/corde/co mmotn_rounti me/gupu/sgpue_de:v AVice.cc:X A161V8] Found deviceX 0 with prope2
+rties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:41.932414: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:46:41.934044: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:41.936062: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:46:41.940137: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:41.940958: I tensorflow/stream_executor/platform/de2020f-05-31 12:46:41.941107: I tensorflow/core/common_runtiamult/dlope/gpu/en_checgpu_device.cc:k1618] Feround device 0_ witsh protpertiesu: 
+name: Quadrbo M4000 .majorcc:: 52 5] GPminUor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00. 0
+l2020-0i5-31 12b:46:41.r942161: I teanrisorflow/stream_executor/pla2tes are statically linke020-0d, skip 5form/-31 ddefault/d12:llopen_ope4n 6check:41.c942648: .h
+ecker_stub.cc:25] GPU liIbr tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] aFound devirce 0 wities ahre  staticpally liroperties: nk
+ed,na skipm2e:  0Quadd20-05-rlopen checo M4k31 12:46:41.0
+00 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:.469:4441.979545955: :I tensor flow/strea2020I tensorflow/core/common_runm-0_ext5i-31 1me/gpu/2ecutor/pl:gpu_devi4a6tform/def:41cault/dlope.946752: I tensorflow./core/common_runticcmee/gp:n174u_checker_stub.cc:25] GPU librarie/6gps] Adding visib ule are _gpu devidsteviceca.teicalsc:cl:17 y0 
+link4ed, ski6] Addipng visi dlopen chbeck.
+le gpu devices: 0
+2020-05-31 12:46:41.949175: I tensorflow/core/platform/cpu_feature_gua2020-05-31 1rd.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2:46:41.949348: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:41.960993: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:41.961775: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip d2020-05-3l1 12:46:41.962333: I optenens check.o
+rflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:46:41.970092: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:42.098656: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:42.099244: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:46:42.101717: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:42.104230: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:46:42.141014: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:42.141671: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:46:42.147555: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:42.181481: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:46:42.268070: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:42.268544: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:46:42.270962: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:42.272315: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:46:42.282811: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:46:42.283496: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:46:42.287011: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:46:43.554522: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:46:43.554789: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:46:43.554948: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:46:43.556362: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:46:43.565019: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:46:43.565297: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:46:43.565479: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:46:43.567147: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 12:46:43.600478: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:46:43.600748: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:46:43.600911: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:46:43.602384: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:46:43.633918: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:46:43.634367: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:46:43.634598: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:46:43.636128: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 12:46:43.690203: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:46:43.690415: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:46:43.690542: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:46:43.691766: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590943807.5412178
+start reading training set from json file 1590943809.3717327
+2020-05-31 12:50:10.498353: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:50:10.503325: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:50:10.509509: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:50:10.511021: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:50:10.522253: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:50:15.890363: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:50:15.899409: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:50:15.940001: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:15.940343: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:15.942661: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:15.943712: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:50:15.947528: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:15.948055: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statica202l0l-05-y3 1 12:5l0i:15.n948k2e5d, skip1 dlo:p I etnen scohrefclko.w
+/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:15.948805: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:15.949824: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:15.950818: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:15.952022: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:50:15.955828: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:15.956207: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:15.958156: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:16.045369: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:50:16.053119: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:50:16.109616: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:16.110299: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:16.112402: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:16.113821: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:50:16.118144: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:16.118530: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:16.119490: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:16.122591: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:16.123211: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:16.124724: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:16.125593: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:50:16.129194: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:16.129571: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:16.131212: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:16.138049: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:50:16.204322: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:16.204780: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:16.206248: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:16.207835: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:50:16.210679: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:50:16.211210: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:50:16.214021: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:50:17.111786: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:50:17.112131: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:50:17.112332: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:50:17.114120: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:50:17.144012: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:50:17.144292: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:50:17.144464: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:50:17.145971: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 12:50:17.305435: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:50:17.305686: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:50:17.305840: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:50:17.307442: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:50:17.338936: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:50:17.339187: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:50:17.339343: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:50:17.340566: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:50:17.374173: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:50:17.374448: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:50:17.374620: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:50:17.376237: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+end reading 1590944029.3257535
+start reading training set from json file 1590944030.9387498
+2020-05-31 12:53:52.084024: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:53:52.086437: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:53:52.086999: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:53:52.088000: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:53:52.098098: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:53:57.664545: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:53:57.666747: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:53:57.722610: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Success2020-05-31 12:53:57.723309: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 wifth properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+ully2 0o2p0e-n0e5d- 3d1y n1ami2c :53:li57.b72r3709ar: I tensorflyow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+ nvcuda.dll
+2020-05-31 12:53:57.725683: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.726661: I tensorflow/core/common_runtime/gpu/gpu_device.cc:16182020-] Found 0device 5-310  12wi:5th3:57. pr72oper68ties00: 
+: naI tmeens: Quoradro M4flow00/cor0e/ majorpl: atf5orm /mincpuor: 2_feat umemorreyClo_guckRataer(GHdz): 0.cc.:71725
+pci4B2usI]D :Y 00o00ur CPU: 0su7:p0p0o.r0t
+s instruction2s02 0tha-t05 th-i3s1  1Te2:5ns3orF:low 57.727734: I tensorflow/stream_executobrinary was not compiled to use/platform/default/dlopen_checker_stub.cc:25] GPU libraries are s: AVX AVtatically linked, skXip dlopen2
+ check.
+2020-05-31 12:53:57.731024: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.732217: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:53:57.734326: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.734700: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.737927: I t20e2n0s-o05r-31 12:f5lo3:57w./7c3o7986r:e /Ic tenosmormfonl_runtimeo/wg/pu/corgep/uco_mdmeovni_creunt.icmec/:g161p8]u/gp uF_dounde dvevicie 0ce. cwicth prop:1e7rties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRat4e6(]G Hz): 0.7725
+pciBusID: 0000:07:00.0
+A20ddin20g-05-31 1 2:53:57.v738918:i siI btlenes orfglpuow/ sdtreevaimc_ees: x0ec
+utor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.742322: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.755236: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:53:57.772018: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:53:57.796477: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.796836: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.805331: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.806285: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:53:57.813332: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.813627: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.823037: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.851898: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.852265: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.858264: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.859056: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:53:57.864393: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.864677: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.871560: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.875783: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.876186: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.882263: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:57.883018: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:53:57.896166: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:53:57.896455: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:53:57.903577: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:53:58.943212: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:53:58.943467: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:53:58.943619: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:53:58.946417: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:53:58.989565: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:53:58.989823: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:53:58.990079: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:53:58.991520: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:53:59.005623: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:53:59.005889: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:53:59.006071: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:53:59.007335: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:53:59.025975: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:53:59.026301: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:53:59.026469: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:53:59.027800: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+use cuda device
+2020-05-31 12:53:59.088620: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:53:59.088897: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:53:59.089066: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:53:59.090560: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590944243.021434
+start reading training set from json file 1590944244.705008
+2020-05-31 12:57:25.821932: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:57:25.824229: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:57:25.832142: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:57:25.835416: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:57:25.835976: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 12:57:31.141639: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:57:31.186509: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.187139: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.189074: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.190127: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:57:31.197483: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.197974: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.199713: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.246228: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:57:31.268652: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:57:31.325723: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.326112: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.327166: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.328347: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:57:31.330849: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.331249: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.332549: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.333615: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:57:31.335445: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.335899: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.337010: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.337963: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.338350: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.339588: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.374637: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:57:31.446292: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.446703: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.450577: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.451406: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:57:31.456082: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.456523: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.458059: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.467895: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 12:57:31.516766: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.517615: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.518959: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:31.520666: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 12:57:31.525704: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 12:57:31.526115: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 12:57:31.530365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 12:57:32.626758: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:57:32.627040: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:57:32.627197: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:57:32.628628: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 12:57:32.762946: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:57:32.763189: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:57:32.763340: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:57:32.764971: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:57:32.788218: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:57:32.788488: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:57:32.788656: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:57:32.790114: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 12:57:32.798043: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:57:32.798254: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:57:32.798379: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:57:32.799785: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+use cuda device
+2020-05-31 12:57:32.915512: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 12:57:32.915781: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 12:57:32.915941: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 12:57:32.917252: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590944457.063781
+start reading training set from json file 1590944458.6849873
+2020-05-31 13:00:59.848644: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully o20p2en0-e0d5 -d3y1n a1mi3c: l0i0:59.848823: I tebrary cudart64_100.dll
+nsorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:00:59.855751: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:00:59.858653: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:00:59.869593: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:01:05.477203: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:01:05.519516: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:01:05.519894: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.521250: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.522263: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:01:05.525990: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:01:05.526374: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.527910: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.544071: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:01:05.553805: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:01:05.559806: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:01:05.592708: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:01:05.642536: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+20220200-05-3-105 -1331: 013:01:10:05.564291.764291: I6: I t etnsensoorflorwfl/coorw/stream_executor/platform/defae/uclomt/mdolno_perunnt_icmheeck/egr_stubp.u/gcpu_cdevice.:2c5c:]1 6GPU lib18rari]es a rFoune statically linked, skip dlopen chedc dk.
+evice 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:01:05.643859: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.647498: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.647800: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.648052: I tensorflow/core/common_runtime/gpu/gpu_2020-d0e5-vice.3c1c :113:01:05.648216: I tensorflow/cor6e18] Fou/npdl adtefvorm/cpu_feature_guard.cc:142] Yoiucer CP 0 with prop20e2rtUi0 e-05-31 s1: 3:0
+s1upn:05.648541a:mpor tIe: Qu atensdrso  oMrfl4ino0w0s0t/ ruccmotraiejons t/plhat thor: 5 minaistfo orTer:nsomr/cpF lo2u m_fwe beatmoinarrure_guaryd w.cc:1a4s2 yn]Cot  coYolmpileuocdkRr  CPU saupttpoor tus eisn(e:GHsz): 0.7725 t
+rpciucABtVuiXsons ItD:hat this  0AV Ten0sX02o
+0r:F0l7o:w00 binary .w0a
+s not com2p0i2l0-e0d 5-31 13t:o0 1:u0s5e.:6 AVX AVX2
+49715: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.651945: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.652861: I tensorflow/core/platform/cpu_feature_202g0ua-rd.cc:0154-32] Your CPU supports instructions that this Tenso1r 1Flo3w: 0b1i:n0a5r.y w6a5s3 n02003:ot com2 I tpensoirflleodw /core/0cotmmoo n-u05-se31 :1 3_AruntV:X 0A1VX2i
+:me/g0p5u/gpu_.d6e5v3230: ice.Ic ct:e1618] nFsoourfnd dleovw/coriec/e 0 withcom mpon_runtirmope/gpeur/gpu_tdiesevic: 
+en.acc:m1e: 6Qua18d]ro F oMund device 0 with properties: 
+name: 4000Q major: 5u adminro Mor: 2 memoryClockRate(GHz): 0.77254
+00pciBu0 major: 5 minor: 2 memoryClockRate(GHz): 0sID.: 77200005
+p:07ciB:u0s0I.D: 00
+000:07:00.0
+2020-05-31 13:01:05.654430: I tensorflow/strea2m_execu0t2o0r-/pla0tform/def5ault-31 1/3d:l0o1pe:n05_.ch6ecker_5444s5t:u bI tensorflow/s.cctrea:m2_5] eGPU lxiebcruaries are staticaltor/pllyatf lorm/defaulitn/dlopenk_ecdh,e ckerskip dlopen check.
+_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.656911: I tensorflow/20c20-05-3o1 1re/common_ru3:01:ntime/gpu/gp2020u-050._655device.c6-319c :1746173:01:60] A5dd.:6i I ntg viseiblneso rgpu5fl7 ode0vicwe/7s:c8:  ore/common_runtime/gpu/gpu_dev0i
+ce.cc:16I1 tenso8r]f Foulnowd d/corevice 0 with properties: 
+en/caommem:o nQ_uraudnrtoi mM40e0/gpu0/ gpmauj_odre:v i5c em.incco:1746] Adding visible gpu devices: 0r
+: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:01:05.657835: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.658806: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:01:05.659221: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:252020-05]-3 1G 1P3:U0 1:0li5b.rari659350e:s  aIr e sttensatiocrfallloyw/c linked, osrkei/p dlopecn cohmemck.o
+n_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.660381: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:05.661160: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:01:05.664089: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:01:05.664370: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:01:05.665064: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:01:06.901137: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:01:06.901397: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:01:06.901550: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:01:06.903024: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:01:07.005470: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:01:07.005757: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:01:07.005958: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:01:07.007558: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:01:07.038860: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:01:07.039259: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:01:07.039534: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:01:07.041318: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:01:07.091791: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:01:07.092208: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:01:07.092474: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:01:07.094572: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:01:07.096847: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:01:07.097352: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:01:07.097671: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:01:07.099835: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+use cuda device
+end reading 1590944667.656443
+start reading training set from json file 1590944669.2774868
+2020-05-31 13:04:30.509995: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:04:30.525258: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:04:30.539289: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+202020-0205-31 -1305-31 :0134:30.:04:543930.04: 5I tensorflo4390w/str4:ea mI_ex tecensoutorflowr/pla/streamtform_exec/dutoefaulrt//pladso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+tform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:04:36.422553: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:04:36.451759: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:04:36.461364: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:04:36.465304: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.465645: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.470356: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.471754: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:04:36.477594: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.477950: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.485565: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.503813: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.504400: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.507867: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.508808: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:04:36.510061: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:04:36.514380: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.514895: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.518771: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.521291: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.521642: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.529311: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.530026: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:04:36.534372: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.534711: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.539211: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.557786: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:04:36.607009: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.607377: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.612657: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.613478: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:04:36.619447: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.619790: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.626585: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.649768: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.650038: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.651612: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:36.652308: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:04:36.655790: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:04:36.656076: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:04:36.661512: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:04:37.713038: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:04:37.713482: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:04:37.713693: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:04:37.715099: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:04:37.774457: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:04:37.774793: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:04:37.774953: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:04:37.776754: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:04:37.828363: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:04:37.828623: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:04:37.829316: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:04:37.830660: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:04:37.837040: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:04:37.837309: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:04:37.837473: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:04:37.838938: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:04:37.871785: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:04:37.871996: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:04:37.872171: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:04:37.873563: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590944882.661478
+start reading training set from json file 1590944884.3444834
+2020-05-31 13:08:05.494771: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:08:05.498565: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:08:05.506817: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:08:05.510750: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:08:05.520875: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:08:11.021749: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:08:11.068995: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.069984: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.071500: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.072792: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:08:11.076564: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:08:11.078731: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.079226: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.083046: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.145688: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.146281: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.151923: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.153503: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:08:11.165195: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.165821: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.169057: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.224679: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:08:11.230111: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:08:11.307609: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.308098: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.311516: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.313044: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:08:11.325648: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.326119: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.327715: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.337108: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.337549: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.339039: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.340113: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:08:11.345463: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.345884: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.349321: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.543370: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:08:11.583778: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.584285: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.585480: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:11.586552: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:08:11.590063: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:08:11.590524: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:08:11.591546: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:08:12.448923: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:08:12.449242: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:08:12.449415: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:08:12.451079: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:08:12.511671: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:08:12.512044: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:08:12.512415: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:08:12.514070: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:08:12.601880: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:08:12.602176: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:08:12.602348: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:08:12.603706: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:08:12.619946: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:08:12.620232: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:08:12.620400: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:08:12.621828: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:08:12.764050: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:08:12.764277: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:08:12.764507: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:08:12.765919: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590945124.5353026
+start reading training set from json file 1590945126.18795
+2020-05-31 13:12:07.261068: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:12:07.2020-05-31 13272:12:07.272532: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+268: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:12:07.282151: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:12:07.283050: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:12:13.013024: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:12:13.055263: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.055649: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.057816: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.059138: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:12:13.060184: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:12:13.067944: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.068330: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.070341: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.115963: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.116358: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.121140: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.122166: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:12:13.126975: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.127449: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.129340: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.148534: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:12:13.229613: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:12:13.243593: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.244010: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.245498: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.246767: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:12:13.250806: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.251366: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.252883: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.278491: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.278888: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.280216: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.281152: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:12:13.281801: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:12:13.291224: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.291617: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.296861: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.374477: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.375033: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.376722: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:13.377938: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:12:13.381948: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:12:13.382418: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:12:13.383435: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:12:14.296119: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:12:14.296396: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:12:14.296549: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:12:14.297979: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:12:14.396949: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:12:14.397227: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:12:14.397401: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:12:14.398822: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:12:14.561967: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:12:14.562319: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:12:14.562593: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:12:14.564218: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:12:14.603141: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-2020-05-3311  1133:1:21:2:1144..660303392386::  I It tenesonrsofrlfolwo/wc/ocroer/ec/ocmommomno_nrun_truinmtei/mgep/ug/pgup/ug_devpiu_ce.cdcev:11i6ce5] . c c:1159]   De vic0e  
+interconnec20t S2tr0e-05-31 a13:12m:1E4x.ec6037u9to5r: wit hI s tterengntsoh 1 refdgel ow/cmoare/trix:c
+ommon_r20unti2m0e/g-p0u/gp5u-_3d1e v1i3c:e1.2c:c1:4.604091: I tensorflow/c1ore178/] com0mon_r:u n  N t
+ime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:12:14.604490: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:12:14.606057: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device2020 -(05-31 1/3j:o1b:l2:1o4ca.l60h6o267st/:r eIpli ctae:n0sor/tafslko:w0//cdoervei/ccome:GPmoUn:_0r uwnittih 6m4e/g4p5u /MgBp um_deemovriy) ->ce ph.ccy:s1ica3l0 4G]P CreatUed T e(ndseviorceFlow device :( 0/, njaombe: :Qlouadcralo M400h0os, tpci /bruesplica:0 id:/ task:00/00de0v:0ice7::0G0.PU:0 wi0t, h 6445 cMomBpu tme ceampabiloiry) -ty: >5 .2p)h
+ysical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+end reading 1590945333.7992635
+start reading training set from json file 1590945335.3902633
+2020-05-31 13:15:36.468024: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+20202-005-230-1 0135:1-53:1 13:15:3366..470202:4 702I te02: nI sortenflosworf/stlroewa/ms_tereaxecmuto_re/xplaetcutfor/polramt/deforfma/deuflt/aduslot_/ldosaod_leorader.cc:4.cc:44]4]  SucceSucscsefuslslyf openuelld dyy onampiened c ldynibraarmiyc  cluidbarratr6y cu4d_art61040_1.dl0l0
+.dll
+2020-05-31 13:15:36.472864: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:15:36.483652: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:15:42.194641: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:15:42.244531: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.244916: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.246924: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.248089: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:15:42.249233: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:15:42.254526: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.254905: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.256473: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.274061: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:15:42.313996: I tensorflow/stream_executor/platform/default/dso_loader.cc:2020-05-31 413:15:424.314326: I te]n sSouccressfflowu/colly re/copeonmmon_red untime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 medynamomiryc liClbraryoc nvcukRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+da2020-05-.3dll1 13:15:42.315175: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip d
+lopen check.
+2020-05-31 13:15:42.316850: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:15:42.322171: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.323361: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:15:42.333685: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.334680: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.340184: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.373976: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.374349: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.383193: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.383963: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:15:42.388192: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.388540: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.404215: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.423196: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.423684: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.427706: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.427861: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.428360: I tensorflow/stream_executor/platform/default/dlope2020n_-c05he-c31k e1r3:15_:st42u.b.c4c28:525] 1G9P:U I  tleibnsorrarieflso war/coer es/tpaticlaaltfoly rml/inked,cpu _sfkeiapt dlopen checku.r
+e_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:15:42.430354: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.431962: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:15:42.434482: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.434951: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.437263: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:15:42.437624: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:15:42.437964: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:42.438921: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:15:43.567093: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:15:43.567417: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:15:43.567613: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:15:43.569262: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:15:43.603138: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:15:43.603484: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:15:43.603650: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:15:43.605200: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:15:43.686096: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:15:43.686414: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:15:43.686581: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:15:43.688007: I tensorflow/core/co20m2m0-o05n-_3r1u n1t3i:me/g1p5u:4/g3.p688u091:_device. cIc tensorflow/:core/common_runtime/gpu/gpu_device.cc1304:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:15:43] Created .688570: I tTensorflow/coeren/cosmmon_ruorFnltoiwm e/gdpeviu/gpu_device.cc:1165]ce   ( /j o b 0:lo 
+2020-05-31 13:15:43.689020:calhost/replica :0I tensorflow/c/taosk:re/com0mon_runtime/gpu/gpu/_device.cc:1de178] 0:   N 
+vice:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:15:43.690580: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:15:43.741281: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:15:43.741622: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:15:43.741840: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:15:43.743355: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590945551.862831
+start reading training set from json file 1590945553.5128553
+2020-05-31 13:19:14.603301: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:19:14.606774: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:19:14.609173: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:19:14.618394: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:19:14.630363: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:19:19.963296: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:19:20.006136: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.006517: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.008064: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.009221: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:19:20.013798: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusI2020D-05-31: 13:1 0009:20.0:07:00.0
+014128: I2020-05 -t31 13:19:e20.ns0142o72: I tensorrflow/stream_executorf/platform/defalult/dlopen_checker_sotub.cc:w25/] GPUstrea libraries are stamt_icallye lixecutnked, oskip rd/platlofpoen check.r
+m/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:19:20.016215: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.089713: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.090227: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.092327: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.093771: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:19:20.099405: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.099866: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.101816: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.130225: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:19:20.208526: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.208904: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.209884: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.210812: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:19:20.235583: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.235981: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.237256: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.305480: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:19:20.363026: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.363421: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.364742: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.366086: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:19:20.381197: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.381565: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.382664: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.512603: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:19:20.551394: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.551787: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.552795: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:20.553881: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:19:20.566276: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:19:20.566654: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:19:20.567587: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:19:21.500624: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:19:21.501213: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:19:21.501483: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:19:21.503168: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:19:21.587378: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:19:21.587691: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:19:21.587947: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:19:21.589474: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:19:21.616122: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:19:21.616381: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:19:21.616512: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:19:21.617885: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:19:21.751904: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:19:21.752124: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:19:21.752255: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:19:21.753483: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:19:21.842938: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:19:21.843162: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:19:21.843290: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:19:21.844337: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590945766.1977696
+start reading training set from json file 1590945767.8468385
+2020-05-31 13:22:48.915069: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:22:48.919069: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:22:48.925134: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:22:48.925871: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:22:48.947775: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:22:54.141853: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:22:54.185075: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.185459: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.187023: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding20 20-05-31 v13:22:54.187187: I tensorflow/strieasm_executor/ipblatform/default/dso_le gloader.cc:4p4]u dev Successfully openied dcynamic liberary nvcuda.dll
+s: 0
+2020-05-31 13:22:54.189195: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:22:54.195411: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.196214: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.199047: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.213674: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:22:54.247025: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.248255: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.254112: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.255220: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:22:54.259849: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.260221: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.264590: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.274147: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:22:54.278214: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.280169: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.284814: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.286676: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:22:54.291937: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:22:54.295090: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.295545: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.301487: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.378465: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.378736: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.383053: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.383908: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:22:54.387295: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.387648: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.389495: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.389851: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.391522: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:54.392080: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1720240-60] A5-3dd1i 13:2n2g:54. 3923v2is3: Ii btleensor gflpu odwevi/cocrees: /p0l
+atform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:22:54.396691: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:22:54.397153: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:22:54.398537: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:22:55.579904: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:220220-0:555-.31 2025802007:- 10I53 te:n-223:51 513s:.or580f229: 2I 2:l5tens5owo./r580flocwo3/co11re:re//c coI teomnsmoornm_frumnloow/nc_orrtue/coime/mngmpountim_/gpruu_enti/dgmeveic/eg.puc/pcu:g11pu65_d] ev  ic / gpu _0de v
+ice.cc20:2e0-1.1505c9] cD-3:evi1ce115 13 :22:in9te]55. 58r1Dco1nev46:icnee c It tens orfintleSorcow/trneancmoreE/xceoectmmocu toSnrt rewiath mE_xsecutrtror uweitnhnti mgth e/sg1p eu/tdge regpumatrngithx _1: ed
+dege ma2v0ti2crei0-x.:c
+05-31 c2:012311:022:5-05-75831 13:22:.]555 .85802027:0  0 0N:  1:I 
+ tIe tennssoorrffllooww//ccoore/rcommoen_r/ucnommon_runtime/gpu/gpu_devicet.cic:1165]      0 
+me/gpu2020-0/5-3g1pu_ d13:evi2c2e:.5c5c.5:811652]   7   0 
+07: I te2020-n0sor5f-lo31 w1/3:22:5c5.o582r9e7/0co:m mIo nt_ernusnotrifmleo/w/cgopur/eg/pcuo_mdevmiocn_reu.cnticm:e1178] 0:  /g pNu /
+gpu_device.cc:1178] 0:   N 
+2020-05-31 13:22:55.584097: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:22:55.585253: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 644250 MB memo20-0r5-31 13:22:55.585y6)0 3-: > physIi catensorlf lowG/cPoUr (devicee: 0, name: Quadr/ocom mon_ruM4ntime/0g0pu/gpu0_devi, pci bus id: 00c0e.0cc:1304] :Created T07enso:00.0, rFlocomwpute capabili ty:dev i5.2)ce 
+(/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+use cuda device
+2020-05-31 13:22:55.626854: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:22:55.627146: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:22:55.627315: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:22:55.628521: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:22:55.701502: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:22:55.701775: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:22:55.701948: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:22:55.703280: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590945988.3545725
+start reading training set from json file 1590945989.9885707
+2020-05-23020-1200205- -301 113:352202-:36120 -:236610200-3:3055--3311  611.:31:234285:668.2:6148:433:665:. 14I te8n63s7o.05:6r19.: 48 16I4 8te8n6sf090l:o:orIw /f strel Ia mttoIw/e _etxsentseorneansorfmsrflow/lescotuorflrwetoowa_exr/ms/e_ceuxt/rpelasecmt_outtrore/xre/palma_eplcatfortautftemfoorm/oxe/ddceefafulauturtmr//ltd/sdos_ol_oloopalard/ed/defareur.lt/.atfdcc:4oplatsco_lo4f]o rm/adScudermer.:4cc/:4dfc4cef4] Sault/dso_load]ucceesr seasusl.fcfSulucully cotl:p/edcessfully opened dynamic liso_loan44] Successfully opender.cc:44] Successfully oeded  dyy dynaminc opplebarmiic bnrliaaerd ernyy b crudecdudarat6ydna4ry  cdarmty6iuc4_1d nliabm0raa_1ir00.d0l.rctdlyl
+ l6
+4_1 librcu0da0r.ta6rdyll 
+cudart46_14_10000..ddllll
+
+2220200022202200-2-0005-0-0-0035515- 3-1-3311-:0 21351-361 13: 4: 42131:2336.:4461::2446:4.26:4.11746846.76:444.51:816478 5:6I482 t en099soI:14 :Ir t eIn f: I slotensorfo ttew/strelnrenafsomslorofw/sr_loewx/eofwlow/streamcstuttr/ear_easotre/mxmr_eep_ecluatoxrtxf/eecaumt_oepelcro/rpmxaet/duecflauutofrtaotolrt//f/ormdr/mppslo_lla/tfdadtoeefoauadferralumf/to/rm/lddd.seot_l/dsofaul_tecfacl:/o4uadoda4ds]l eSrero.cc:t./_4luoa4cddcsoecc:4esr4_] s]. lSScuocfuuclcesccel:ssa4sdfe4fyu op] elSluucclelsysyr n.edf duyclcloy on :oppep4e4] nSenunceede dd  daydmndcessfuliclyanaymna mimicyliic cl biopbern  erdaralryi yl in vnbcrduadya.nvbacrmuiddrllca a.
+dllrly 
+nyvi brnavryc udacnuvd.cdludal.dlal.
+dll
+
+2020-05-31 13:26:44.279545: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.279792: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.287016: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:26:44.287862: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:26:44.292554: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.292838: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.294191: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.294880: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.298542: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:26:44.298979: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:26:44.299785: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:26:44.303624: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.304006: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.304803: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.305144: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.307612: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Q2020-0uad5r-o3 1M 134:00206 :m4a4j.30811or1: 5 : I tensominrfor: 2low /comreemor/coyClmmon_ockRate(GHz):runt i0m.e7/gpu/72gpu5_
+pcdieBusID: v00ic00:e.cc:1607:18]00 Fo.0
+2020-05-31und device 0 with  1pro3:2p6e:r4t4i.e3s: 
+name: Quadro0 87M4450:0 0I  mtaejnosro:rflow/stre2 5a mmi_0en2or:0 -x2ec umto0r/5-epmlat31 13o:r2form/def6:a44u.3l0t9/1d7l2o:pe nI_ ctheencker_sorflyCsloockRw/coatutrbe.cce:25/] c(GGPHoz)Umm: 0.77 olin_brra2ri5
+upnticim2e/gB0uesIpsu /garp2uDe_:0 -s0t5 -301a00dt0evic: 0713::26:440ei.c0.c.0ac3:0l1
+7496l]8 3Ad8y2 ld0i:nk2i0ne-d ,I  skgip0 5vi stibeldelo-nsp3o1 r13fen: check.
+26:44.l3o1w0/0c95o: I tensorflow/stream_executor/pl agprte/form/default/dlopenc_ommcu hdeveicocn_res:unkt eir_mset/ugbp.uc/c:25] GPU libra0g
+pu_device.cc:1746] Addries are statically linkeingd,  vskiisiblep  gpdlu deviceosp:en  0c
+heck.
+2020-05-31 13:26:44.312454: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports ins20t2r0-u0c5-31 13t:i26on:44.312596: I tesn thsorfat tlhowi/sc ore/common_runtime/gpu/gTensporuF_dlow binareyvice. was noctc comp:1iled to us7e46] Ad:d iAVX ng visible gpu deviceAsVX2
+: 0
+2020-05-31 13:26:44.313872: I tensorflow/core/platfor20m20-05/-3c1 1pu_3:26f:e4atu4.r313992: I tenseor_guarflow/core/common_runtid.cme/gpuc:14/2gpu_de] Yourv iceCP.Ucc s:1746u] Appdodrints g visible gpu devices: 0
+instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:26:44.315544: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:26:44.316953: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.317246: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.320034: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.320293: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.321552: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:26:44.321835: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:26:44.323477: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:26:44.327813: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:26:44.329296: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:26:45.461452: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:26:45.461742: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:26:45.461920: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:26:45.463502: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:26:45.498026: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:26:45.498285: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:26:45.498435: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:26:45.499861: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:26:45.503270: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:26:45.503534: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:26:45.503727: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:26:45.505007: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:26:45.523365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:26:45.523615: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:26:45.523776: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:26:45.525055: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:26:45.541588: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:26:45.541769: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:26:45.541914: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:26:45.542980: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+end reading 1590946206.9621758
+start reading training set from json file 1590946208.5791843
+2020-05-31 13:30:09.723513: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:30:09.723774: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:30:09.726795: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:30:09.727832: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:30:09.733099: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:30:14.724066: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:30:14.766599: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.766979: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.768471: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.769594: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions 2020-05-31 13:30:14.7t70084: I thensorflaotw /tshis tTreeanmsorFlow bina_ry waesx enocutotr/pl acompiled ttfo uosrem/d:e fAault/VdXs oA_VlX2
+oader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:30:14.774496: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.774876: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.775221: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:30:14.776399: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.802165: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:30:14.833670: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:30:14.853833: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.854190: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.857154: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.858648: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:30:14.861692: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.862046: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.864510: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.864868: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.868093: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.868916: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:30:14.869472: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.875358: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.875684: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.882095: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.888152: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.888451: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.893070: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.893893: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:30:14.903831: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.904122: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.906515: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.915168: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.915456: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.921383: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:14.922209: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:30:14.928390: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:30:14.928769: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:30:14.934165: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:30:16.039469: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:30:16.039879: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:30:16.040137: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:30:16.041969: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:30:16.054125: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:30:16.054490: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:30:16.054737: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:30:16.056224: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:30:16.103001: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:30:16.103284: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:30:16.103460: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:30:16.104924: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:30:16.175257: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:30:16.175545: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:30:16.175724: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:30:16.177455: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:30:16.215566: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:30:16.215851: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:30:16.216022: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:30:16.217509: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590946418.1817513
+start reading training set from json file 1590946419.7707212
+2020-05-31 13:33:40.850505: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:33:40.856470: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:33:40.859901: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:33:40.867994: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:33:40.883587: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:33:46.210596: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:33:46.248850: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:33:46.252990: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.253370: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.254945: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.256257: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:33:46.265754: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.266234: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.269870: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.297334: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.297722: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.300418: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.301465: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:33:46.310994: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.311523: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.316373: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.324427: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:33:46.432896: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.433259: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.434735: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.436593: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:33:46.445334: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.445718: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.446641: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.505787: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:33:46.544607: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.544994: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.545815: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.546581: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:33:46.549693: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.550080: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.551030: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.590670: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:33:46.633183: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.633470: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.634245: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:46.635014: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:33:46.638473: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:33:46.638854: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:33:46.639866: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:33:47.509919: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:33:47.510225: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:33:47.510544: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:33:47.512107: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:33:47.597075: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:33:47.597359: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:33:47.597606: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:33:47.599031: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:33:47.640249: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:33:47.640635: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:33:47.640928: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:33:47.646252: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:33:47.796598: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:33:47.796899: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:33:47.797070: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:33:47.798368: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:33:47.892485: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:33:47.892701: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:33:47.892832: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:33:47.893923: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590946628.1623027
+start reading training set from json file 1590946629.7560205
+2020-05-31 13:37:10.842010: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_1020200-.dll0
+5-31 13:37:10.842240: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:37:10.843483: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:37:10.849755: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:37:10.849974: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:37:16.143912: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:37:16.169339: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:37:16.180894: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:37:16.195143: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.195563: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.200833: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.202110: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:37:16.208067: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.208368: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.213611: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.230049: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.230640: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.233862: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.235003: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:37:16.240855: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.241399: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.244985: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.251941: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.252401: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.258163: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.259128: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:37:16.264714: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.265354: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.268187: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.296001: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:37:16.339127: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:37:16.393893: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.394187: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.395781: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.396589: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:37:16.399892: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.400278: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.401631: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.404827: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.405225: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.406522: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:16.407543: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:37:16.414091: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:37:16.414361: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:37:16.415063: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:37:17.475706: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:37:17.475993: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:37:17.476343: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:37:17.477896: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:37:17.491365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:37:17.491672: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:37:17.491862: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:37:17.493401: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:37:17.553868: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:37:17.554220: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:37:17.554432: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:37:17.556005: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:37:17.583185: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:37:17.583458: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:37:17.583620: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:37:17.585023: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+2020-05-31 13:37:17.639706: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:37:17.640009: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:37:17.640300: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:37:17.641696: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+end reading 1590946847.127621
+start reading training set from json file 1590946848.700261
+202202020--020-0505-31- 1031 13:403:5:440:94.9.-9019313 10921:33 :4079I:  teIn: s4orflte9.n9s0o1r3f7l9o:wo w/I tenso/srflstreaotmwream/s_2_te0x2re0ea-exe0cu5m-c3ut1 _oert/pxla1oret/3:4f0pcorlatfm:utor/orm//4pldd9eaeffaauull.tft9t0o/d1rm//879:dsdso oe__loalIoade r.cftce:44]adn usSeulotcrfrc/.cdcs:oleo_wl4ssfoul4al] ydSue rc/.coc:cps4e4]s sStrfeaeum_euxenledcl cycessu todrynamf/uiplloclap enlitbrfy oopenerd dyaery nd dmynaa/midmcecif udlarct i6b4_rla1i0abrrualry tcud0/.ddaslrylot_ l
+6c4_uoadde1a0rrt.64_100.dlc0c:.dll44]l
+ 
+Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:40:49.912232: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:40:55.428395: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:40:55.440321: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:40:55.445541: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:40:55.460723: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-052020-05-3-31 131 1:340::5450.:5459.06479606: I 6ten6:s oI rtfelnow/streams_exorfleow/ccutoror/ep/latcommonf_orrm/untimdee/gfapuult//gpdso_loader.cc:44] uS_deviuccce.cce:ssf1618]ully o Found devpenicee 0 with pd rdyopenratmiesi: c l
+inbamrarye : nvcQuuda.dlladr
+o M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.491860: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.499513: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.500840: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:40:55.508655: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.509033: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.515879: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.517580: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.517941: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.521904: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.522697: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:40:55.528113: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.528513: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.531257: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.536767: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.537057: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.542530: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.542990: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.543483: 202I0 -0t5e-31n s1or3:40:55f.low54/stre3a546:m _I etensoxrefcluotowr/c/pore/plalattffoorrmm//dcpuefa_feultatu/dlopreen__guachercdk.ercc_:stu1b4.c2] cY:o25] uGPU rl CPiUb raries sarue spptoartst iincastrluctiolns thay lit nked,th iss Tkeinpso dlopen checkr.F
+low binary was not compiled to use: AVX AVX2
+2020-05-31 13:40:55.546581: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.547485: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:40:55.549642: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.549936: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.551648: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.551934: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.554979: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.556115: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.572157: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.572590: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.580683: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:55.581559: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:40:55.587341: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:40:55.587655: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:40:55.594809: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:40:56.753304: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:40:56.753601: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:40:56.753729: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:40:56.755017: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:40:56.814609: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:40:56.814919: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:40:56.815094: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:40:56.816649: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:40:56.837171: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:40:56.837447: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:40:56.837611: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:40:56.838965: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/202job0-:l05-o3c1a lh13o:st40/r:5epl6i.ca:0/task:0/device:GPU:0 with 6445 MB mem8391ory) -> phy73: I tensorflosicalw/core/common_run GPU time/g(pu/gpdu_deviceve.cc:1i159c]e :D 0, naeme:v Quadricoe interc oM4nnect Str000,e apmExeci cbuutors  with streindg: t00h0 10 :e0d7g:e0 0m.0, compute capability: 5.2)
+atrix:
+2020-05-31 13:40:56.840916: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:40:56.841162: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:40:56.842903: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:40:56.844937: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:40:56.845225: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:40:56.845446: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:40:56.846830: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+use cuda device
+use cuda device
+end reading 1590947049.4414384
+start reading training set from json file 1590947051.0174313
+2020-05-31 13:44:12.324703: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:44:12.325573: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:44:12.348626: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:44:12.354683: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:44:12.369862: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library cudart64_100.dll
+2020-05-31 13:44:17.819733: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:44:17.824498: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:44:17.834916: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:44:17.873720: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:17.874045: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:17.878487: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:17.880050: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:44:17.885216: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:17.885622: I t202e0-nsor0f5-low3/1s 1tream_3:e4xe4cut:or17/.pla885t6f6or0m: I/ tdeenfasorfult/dlopenlo_w/checckeorr_setub./ccoc:25]m GmPonU libraries_ rarue statnitimcalley/gp liun/kgepd,u_ deskivpic dloep.cen cche:c16k18.]
+ Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:17.886726: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:17.888757: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:17.889693: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:17.890842: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:44:17.893152: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:17.893607: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:17.895034: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:17.895381: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen20 20-c0h5e-31c 1k.
+3:44:17.895616: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:17.896520: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:44:17.897387: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:17.899906: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:17.900280: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:17.902939: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:17.964162: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:44:17.973351: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library nvcuda.dll
+2020-05-31 13:44:18.077424: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:18.077789: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:18.078623: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 2020-05-31 13:44:18.079033: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:118.080143: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+3:44:18.079018: I tensorflow/stream_executor/platform/default/dlopen_checker_stub.cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:18.084133: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:18.085157: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2
+2020-05-31 13:44:18.088025: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+2020-05-31 13:44:18.088355: I tensorflow/stream_executor/platform/default/202dlope0n_-05-31 13ch:44:18.eck0884er6_st0ub.:cc:25] I  GPU tenlibsorflow/rcore/aricommon_es arerun statiticallme/y linkgpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: Quadro M4000 major: 5 minor: 2 memoryClockRate(GHz): 0.7725
+pciBusID: 0000:07:00.0
+ed, sk2020-05-31 13:44:18.089233: I tensorflow/stream_executor/platform/default/dlopenip _chdloecpen chkere_stub.ck.
+cc:25] GPU libraries are statically linked, skip dlopen check.
+2020-05-31 13:44:18.090711: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:18.092357: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-05-31 13:44:19.100151: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:44:19.100414: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:44:19.100615: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:44:19.102644: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+2020-05-31 13:44:19.239814: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:44:19.240102: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:44:19.240295: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:44:19.241736: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:44:19.272172: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:44:19.272428: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:44:19.272585: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:44:19.273992: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+2020-05-31 13:44:19.274632: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:44:19.274914: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:44:19.275086: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:44:19.276484: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
+use cuda device
+use cuda device
+2020-05-31 13:44:19.421260: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-31 13:44:19.422662: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-05-31 13:44:19.423606: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-05-31 13:44:19.426887: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6445 MB memory) -> physical GPU (device: 0, name: Quadro M4000, pci bus id: 0000:07:00.0, compute capability: 5.2)
+use cuda device
