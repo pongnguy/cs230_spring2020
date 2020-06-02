@@ -809,7 +809,7 @@ if __name__ == '__main__':
         #    print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
         #    break
 
-    YH\ + = pri31nt('starting to delete variables')
+    print('starting to delete variables')
     del examples, train_dataset, train_loader
     gc.collect()
     print('finished deleting variables')
