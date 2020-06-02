@@ -1,0 +1,7 @@
+md5: 66499195bc12751f8039ff708d0b89b7
+outs:
+- md5: 7f275a99fa57c1dd271c7466f408963a.dir
+  path: saved models (chunk = 1000, all training data, batch = 16, 2 class labels)
+  cache: true
+  metric: false
+  persist: false

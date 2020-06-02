@@ -1,0 +1,8 @@
+root@C.541104:~/cs230_spring2020/final_project/shreyas$ python train_classifier.py
+use cuda device
+num_train_optimization_steps= 11718
+num_warmup_steps 585
+starting JSONChunkReader 1590984652.9142628
+ended JSONChunkReader 1590984652.914761
+start reading training set from json file 1590984652.9147887
+end reading 1590984770.601893

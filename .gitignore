@@ -106,9 +106,9 @@ ipython_config.py
 __pypackages__/
 
 # Data files
-*.json
-*.jsonl
-*.bin
+#*.json
+#*.jsonl
+#*.bin
 *.ckpt*
 
 # Celery stuff

@@ -1,1 +1,3 @@
 /pickles
+/saved models (chunk=1000, all training data, batch=16, 5 class labels)
+/saved models (chunk = 1000, all training data, batch = 16, 2 class labels)

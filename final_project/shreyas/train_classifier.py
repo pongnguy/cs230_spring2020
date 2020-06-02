@@ -79,11 +79,11 @@ max_seq_len = 384
 max_question_len = 32
 doc_stride = 128
 
-num_labels = 5
+num_labels = 2 #5
 n_epochs = 5
 lr = 8e-5
 warmup = 0.05
-batch_size = 32
+batch_size = 16 #32
 accumulation_steps = 4
 
 bert_model = 'bert-base-uncased'
@@ -121,7 +121,7 @@ class Example(object):
     input_ids: List[int]
     start_position: int
     end_position: int
-    class_label: str
+    class_label: str    # alfred see convert_data function
 
 
 def convert_data(
@@ -155,7 +155,7 @@ def convert_data(
 
     # model input
     data = json.loads(line)
-    doc_words = data['document_text'].split() # alfred extracts just the document text
+    doc_words = data['document_text'].split() # alfred extracts the document text in a line
     question_tokens = tokenizer.tokenize(data['question_text'])[:max_question_len]
 
     # tokenized index of i-th original token corresponds to original_to_tokenized_index[i]
@@ -175,18 +175,18 @@ def convert_data(
     # model output: (class_label, start_position, end_position)
     annotations = data['annotations'][0]
     if annotations['yes_no_answer'] in ['YES', 'NO']:
-        class_label = annotations['yes_no_answer'].lower()
+        class_label = 'hasAnswer' #annotations['yes_no_answer'].lower() # alfred class_label includes 'YES', 'NO'
         start_position = annotations['long_answer']['start_token']
         end_position = annotations['long_answer']['end_token']
     elif annotations['short_answers']:
-        class_label = 'short'
+        class_label = 'hasAnswer' #'short' # alfred class_label includes 'short'
         start_position, end_position = _find_short_range(annotations['short_answers'])
     elif annotations['long_answer']['candidate_index'] != -1:
-        class_label = 'long'
+        class_label = 'hasAnswer' #'long' # alfred class_label includes 'long'
         start_position = annotations['long_answer']['start_token']
         end_position = annotations['long_answer']['end_token']
     else:
-        class_label = 'unknown'
+        class_label = 'unknown' # alfred class_label includes 'unknown'
         start_position = -1
         end_position = -1
 
@@ -208,14 +208,14 @@ def convert_data(
         else:
             start = start_position - doc_start + len(question_tokens) + 2
             end = end_position - doc_start + len(question_tokens) + 2
-            label = class_label
+            label = class_label # assign label to chunk of text based on annotations in dataset
 
         assert -1 <= start < max_seq_len, f'start position is out of range: {start}'
         assert -1 <= end < max_seq_len, f'end position is out of range: {end}'
 
         doc_tokens = all_doc_tokens[doc_start:doc_end]
         input_tokens = ['[CLS]'] + question_tokens + ['[SEP]'] + doc_tokens + ['[SEP]']
-        examples.append(
+        examples.append(    # alfred creates an example class from the line and appends to the list of examples
             Example(
                 example_id=data['example_id'],
                 candidates=data['long_answer_candidates'],
@@ -226,7 +226,7 @@ def convert_data(
                 input_ids=tokenizer.convert_tokens_to_ids(input_tokens),
                 start_position=start,
                 end_position=end,
-                class_label=label
+                class_label=label  # alfred produced examples includes the class label
             ))
 
     return examples
@@ -242,7 +242,7 @@ class JsonChunkReader(JsonReader):
     def __init__(
             self,
             filepath_or_buffer: str,
-            convert_data: Callable[[str], List[Example]],
+            convert_data: Callable[[str], List[Example]],   # alfred callable function that accepts a string and returns a list of Example
             orient: str = None,
             typ: str = 'frame',
             dtype: bool = None,
@@ -271,7 +271,7 @@ class JsonChunkReader(JsonReader):
         self.convert_data = convert_data
 
     def __next__(self):
-        lines = list(itertools.islice(self.data, self.chunksize))  # alfred lines is an iterable based on passing it to p.map??
+        lines = list(itertools.islice(self.data, self.chunksize))  # alfred a specified number of lines is returned according to chunksize (implies all the data is already read and exists in self.data); lines is an iterable with a selected number of lines from the data
         # for line in lines:
         # print(line)
         # print('Length of lines',len(lines), 'chunksize', self.chunksize)
@@ -332,7 +332,7 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
               torch.from_numpy(token_type_ids)]
 
     # output labels
-    all_labels = ['long', 'no', 'short', 'unknown', 'yes']
+    all_labels = ['hasAnswer', 'unknown'] #['long', 'no', 'short', 'unknown', 'yes']
     start_positions = np.array([example.start_position for example in examples])
     end_positions = np.array([example.end_position for example in examples])
     class_labels = [all_labels.index(example.class_label) for example in examples]
@@ -405,11 +405,11 @@ def loss_fn(preds, labels):
 
 #['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
 
-def loss_fn_classifier(preds, labels):
+def loss_fn_classifier(preds, labels):  # alfred only looks at classification
     _,_, class_preds = preds
     _, _,class_labels = labels
 
-    class_weights = [1.0, 1.0, 1.0, 0.6, 1.0]  # alfred y_pred outputs five values (these are classes??)
+    class_weights = [1.0, 1.0] #, 1.0, 0.6, 1.0]  # alfred y_pred outputs five values (these are classes??)
     class_weights = torch.FloatTensor(class_weights).cuda()
     class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
@@ -662,7 +662,7 @@ if __name__ == '__main__':
 
     # RekhaDist
     config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
-    config.num_labels = 5
+    config.num_labels = num_labels
     model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)  # alfred this is the model
 
     model = model.to(device)
@@ -685,7 +685,7 @@ if __name__ == '__main__':
         model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
         model.zero_grad()
 
-    model = model.train() # alfred initialize the model for training
+    model = model.train()
 
     # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
     # RekhaDist
@@ -702,7 +702,7 @@ if __name__ == '__main__':
     #        line_number += 1
 
 
-    convert_func = functools.partial(convert_data,   # how does this operate on Kaggle dataset?
+    convert_func = functools.partial(convert_data,   # returns an Example class
                                      tokenizer=tokenizer,
                                      max_seq_len=max_seq_len,
                                      max_question_len=max_question_len,
@@ -710,6 +710,7 @@ if __name__ == '__main__':
 
 
     print('starting JSONChunkReader', time.time())
+    assert (path.exists(DATA_PATH)), 'DATA_PATH not found'
     data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
     print('ended JSONChunkReader', time.time())
 
@@ -726,6 +727,7 @@ if __name__ == '__main__':
             print('end reading', time.time())
             with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle', 'wb') as f:  # save variable to binary file
                 pickle.dump(examples, f)
+            examples_idx_max = seq
             seq += 1
             print('start reading training set from json file', time.time())
     else:
@@ -743,11 +745,16 @@ if __name__ == '__main__':
     print('Rekha DATA_PATH', DATA_PATH, time.time())
     # print('len(data_reader)',len(data_reader))
     #for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-    for i in range(examples_idx_max + 1):  # since this is the max id, not the number
+    for i in tqdm(range(examples_idx_max + 1)):  # since this is the max id, not the number
         # load in the pickle
         with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle', 'rb') as f:  # save variable to binary file
             print('start load pickle file', time.time())
             examples = pickle.load(f)
+            # TODO alfred change all non 'unknown' labels to 'hasAnswer' in y_batch
+            for example_list in examples:
+                for example in example_list:
+                    if example.class_label != 'unknown':
+                        example.class_label = 'hasAnswer'
             print('end load pickle file', time.time())
 
         print('start outer iteration', time.time())
@@ -755,7 +762,7 @@ if __name__ == '__main__':
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
         for x_batch, y_batch in train_loader:  # alfred where does y_batch get formatted?
             print('start inner iteration', time.time())
-            x_batch, attention_mask, token_type_ids = x_batch
+            x_batch, attention_mask, token_type_ids = x_batch # alfred attention mask provided by the encoding
             y_batch = (y.to(device) for y in y_batch)
 
             # RekhaDist
@@ -774,13 +781,13 @@ if __name__ == '__main__':
             # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
             # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
             y_pred = model(x_batch.to(device),
-                           attention_mask=attention_mask.to(device))  # alfred from an x_batch get a y_pred
+                           attention_mask=attention_mask.to(device))  # alfred can we input the last fixed layer activation instead??
 
             #Rekha old
             # y_pred = model(x_batch.to(device),
             #                attention_mask=attention_mask.to(device),
             #                token_type_ids=token_type_ids.to(device))
-            loss = loss_fn_classifier(y_pred, y_batch)  # alfred what is the structure of y_pred?
+            loss = loss_fn_classifier(y_pred, y_batch)
             if torch.cuda.is_available():
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
@@ -797,17 +804,22 @@ if __name__ == '__main__':
         print('end outer iteration', time.time())
         print({"Training_loss": loss, "Learning_rate": optimizer.param_groups[0]['lr']})
 
-        if (time.time() - start_time) / 3600 > 0.5: #7:  # alfred puts a maximum time limit on the execution
-            print(f'trained {global_step * batch_size} samples')
-            print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
-            break
+        #if (time.time() - start_time) / 3600 > 0.5: #7:  # alfred puts a maximum time limit on the execution
+        #    print(f'trained {global_step * batch_size} samples')
+        #    print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+        #    break
 
+    YH\ + = pri31nt('starting to delete variables')
     del examples, train_dataset, train_loader
     gc.collect()
+    print('finished deleting variables')
 
+    print('starting to s save models')
     torch.save(model.state_dict(), output_model_file)
     torch.save(optimizer.state_dict(), output_optimizer_file)
     torch.save(amp.state_dict(), output_amp_file)   # alfred saving amp file
+    # TODO alfred create json files which describe the model which is being saved
+    print('finished saving models')
 
     # In[ ]:
 
