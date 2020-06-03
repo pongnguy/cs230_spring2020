@@ -357,7 +357,7 @@ class DistilBertForQuestionAnswering(DistilBertModel):
         Starting scores of each tokens.
     end_logits : torch.Tensor with shape (batch_size, sequence_size).
         Ending scores of each tokens.
-    classifier_logits : torch.Tensor with shape (batch_size, num_classes).
+    classifier_logits : torch.Tensor with shape (batch_size, num_classes).  # alfred classifier layer added to DistilBERT model??
         Classification scores of each labels.
     """
 
@@ -375,10 +375,10 @@ class DistilBertForQuestionAnswering(DistilBertModel):
                             #token_type_ids=token_type_ids,
                             #position_ids=position_ids,
                             #head_mask=head_mask
-                            )
+                            )   # alfred get the output from the base DistilBERT model
 
         #print('Outputs shape=', outputs.shape)
-        sequence_output = outputs[0]
+        sequence_output = outputs[0]  # alfred sequence of hidden-states at the output of the last layer of the base model
         #print("sequence_output type",sequence_output.type())
         pooled_output = sequence_output[:,0,:] #Rekha hack check
 
@@ -386,7 +386,9 @@ class DistilBertForQuestionAnswering(DistilBertModel):
 
         # classification
         pooled_output = self.dropout(pooled_output)
-        classifier_logits = self.classifier(pooled_output)
+        classifier_logits = self.classifier(pooled_output)  # alfred classifier and dropout are added to base model, which was set to eval (i.e. the added layers would be trained)
+
+        # TODO alfred create a new function which separates out the layers added to the base model, so that I can cache the outputs from the fixed weight base model
 
         return None, None, classifier_logits
 
@@ -662,6 +664,7 @@ if __name__ == '__main__':
 
     # RekhaDist
     config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+    print('config file', config)
     config.num_labels = num_labels
     model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)  # alfred this is the model
 
@@ -832,6 +835,16 @@ if __name__ == '__main__':
 
     # In[ ]:
 
+    # load an existing model
+    # ------
+    # create model
+    config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+    print('config file', config)
+    config.num_labels = num_labels
+    model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad',
+                                                           config=config)
+    # load saved weights
+    model.load_state_dict(torch.load(output_model_file))
 
     # Rekha added
     # EVAL STARTING
