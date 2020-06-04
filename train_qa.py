@@ -31,8 +31,7 @@ logging.basicConfig(filename='/data/sv/example.log',level=logging.DEBUG)
 TRAIN_SIZE = 10000
 DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
 VALID_SIZE = 100
-EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
-DO_TRAIN=False
+DO_TRAIN=True
 
 DEBUG = True
 
@@ -407,21 +406,21 @@ if DO_TRAIN:
     # print('len(data_reader)',len(data_reader))
     for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
         train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+        for x_batch, y_batch in train_loader:
+            x_batch, attention_mask, token_type_ids = x_batch
+            y_batch = (y.to(device) for y in y_batch)
 
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device),
-                       token_type_ids=token_type_ids.to(device))
-        loss = loss_fn(y_pred, y_batch)
-        with amp.scale_loss(loss, optimizer) as scaled_loss:
-            scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer.step()
-            scheduler.step()
-            model.zero_grad()
+            y_pred = model(x_batch.to(device),
+                           attention_mask=attention_mask.to(device),
+                           token_type_ids=token_type_ids.to(device))
+            loss = loss_fn(y_pred, y_batch)
+            with amp.scale_loss(loss, optimizer) as scaled_loss:
+                scaled_loss.backward()
+            if (global_step + 1) % accumulation_steps == 0:
+                optimizer.step()
+                scheduler.step()
+                model.zero_grad()
 
         global_step += 1
 
@@ -438,62 +437,6 @@ if DO_TRAIN:
 
     print(f'trained {global_step * batch_size} samples')
     print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
-
-'''    
-# shreyas new     stuff
-model1 = BertF    orQuestionAnswering.from_pretrained(bert_model, num_labels=5)
-model1 = model    1.to(device)
-    
-param_optimize    r1 = list(model1.named_parameters())
-no_decay1 = ['    bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grou    ped_parameters = [
-    {'params':     [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-    {'params':     [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    
-optimizer1 = A    damW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler1 = W    armupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-    
-model1, optimi    zer1 = amp.initialize(model1, optimizer1, opt_level='O1', verbosity=0)
-model1.zero_gr    ad()
-model1 = model1.train()
-
-data_reader1 = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-
-global_step = 0
-print('Regression train_size=', train_size)
-print('Regression total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-# print('len(data_reader)',len(data_reader))
-for examples in tqdm(data_reader1, total=int(np.ceil(train_size / chunksize))):
-    train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
-
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device),
-                       token_type_ids=token_type_ids.to(device))
-        loss = loss_fn(y_pred, y_batch)
-        with amp.scale_loss(loss, optimizer1) as scaled_loss:
-            scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer1.step()
-            scheduler1.step()
-            model1.zero_grad()
-
-        global_step += 1
-
-    if (time.time() - start_time) / 3600 > 7:
-        break
-print("Training loss regression :", loss)
-
-del examples, train_dataset, train_loader
-gc.collect()
-
-torch.save(model1.state_dict(), output_model_file+"regression")
-torch.save(optimizer.state_dict(), output_optimizer_file+"regression")
-torch.save(amp.state_dict(), output_amp_file+"regression")
-'''
 
 def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
     # input tokens
@@ -735,7 +678,6 @@ class Result(object):
 
 #Rekha added
 #EVAL STARTING
-data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
 
 eval_start_time = time.time()
 valid_data = next(data_reader)

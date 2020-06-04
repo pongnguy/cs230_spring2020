@@ -1,7 +1,7 @@
+from transformers import DistilBertTokenizer, DistilBertModel, DistilBertConfig
 from collections import defaultdict
 from dataclasses import dataclass
 import functools
-import logging
 import gc
 import itertools
 import json
@@ -26,18 +26,27 @@ from torch import nn, optim
 from torch.utils.data import Dataset, Subset, DataLoader
 
 from apex import amp
-from transformers import BertTokenizer, AdamW, WarmupLinearSchedule, BertModel, BertPreTrainedModel,BertConfig
-logging.basicConfig(filename='/data/sv/example.log',level=logging.DEBUG)
-TRAIN_SIZE = 10000
-DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
-VALID_SIZE = 100
-EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
-DO_TRAIN=False
+from transformers import BertTokenizer, AdamW, WarmupLinearSchedule, BertModel, BertPreTrainedModel
 
+# In[ ]:
+
+TRAIN_SIZE = 5000
+VALID_SIZE = 100
+DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
+EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
+
+chunksize = 1000
+
+#
+# get_ipython().system('wc -l $DATA_PATH')
+# get_ipython().system('wc -l $EVAL_DATA_PATH')
 DEBUG = True
 
-#DATA_DIR = Path('../input/tensorflow2-question-answering/')
-#DATA_PATH = DATA_DIR / 'simplified-nq-train.jsonl'
+# In[ ]:
+
+
+# DATA_DIR = Path('../input/tensorflow2-question-answering/')
+# DATA_PATH = DATA_DIR / 'simplified-nq-train.jsonl'
 
 start_time = time.time()
 
@@ -45,13 +54,12 @@ seed = 1029
 valid_size = VALID_SIZE
 train_size = TRAIN_SIZE
 
-chunksize = 1000
 max_seq_len = 384
 max_question_len = 64
 doc_stride = 128
 
 num_labels = 5
-n_epochs = 1
+n_epochs = 2
 lr = 2e-5
 warmup = 0.05
 batch_size = 16
@@ -61,15 +69,18 @@ bert_model = 'bert-base-uncased'
 do_lower_case = 'uncased' in bert_model
 device = torch.device('cuda')
 
-output_model_file = 'bert_pytorch.bin'
-output_optimizer_file = 'bert_pytorch_optimizer.bin'
-output_amp_file = 'bert_pytorch_amp.bin'
+output_model_file = 'distil_bert_pytorch_weighted_loss.bin'
+output_optimizer_file = 'bert_pytorch_optimizer_weighted_loss.bin'
+output_amp_file = 'bert_pytorch_amp_weighted_loss.bin'
 
 random.seed(seed)
 np.random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 torch.backends.cudnn.deterministic = True
+
+
+# In[ ]:
 
 
 @dataclass
@@ -84,8 +95,7 @@ class Example(object):
     start_position: int
     end_position: int
     class_label: str
-    doc_tokens: List[str]
-    question_text: str
+
 
 def convert_data(
         line: str,
@@ -182,7 +192,6 @@ def convert_data(
             Example(
                 example_id=data['example_id'],
                 candidates=data['long_answer_candidates'],
-                doc_tokens=doc_words,
                 annotations=annotations,
                 doc_start=doc_start,
                 question_len=len(question_tokens),
@@ -190,11 +199,13 @@ def convert_data(
                 input_ids=tokenizer.convert_tokens_to_ids(input_tokens),
                 start_position=start,
                 end_position=end,
-                class_label=label,
-                question_text=data["question_text"]
+                class_label=label
             ))
 
     return examples
+
+
+# In[ ]:
 
 
 class JsonChunkReader(JsonReader):
@@ -246,6 +257,10 @@ class JsonChunkReader(JsonReader):
         self.close()
         raise StopIteration
 
+
+# In[ ]:
+
+
 class TextDataset(Dataset):
     """Dataset for [TensorFlow 2.0 Question Answering](https://www.kaggle.com/c/tensorflow2-question-answering).
 
@@ -267,6 +282,7 @@ class TextDataset(Dataset):
         if len(annotated) == 0:
             return random.choice(self.examples[index])
         return random.choice(annotated)
+
 
 def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
     # input tokens
@@ -297,7 +313,7 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
 
     return [inputs, labels]
 
-class BertForQuestionAnswering(BertPreTrainedModel):
+class DistilBertForQuestionAnswering(DistilBertModel):
     """BERT model for QA and classification tasks.
 
     Parameters
@@ -315,37 +331,39 @@ class BertForQuestionAnswering(BertPreTrainedModel):
     """
 
     def __init__(self, config):
-        super(BertForQuestionAnswering, self).__init__(config)
-        self.bert = BertModel(config)
-
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        #self.rnn = nn.LSTM(config.hidden_size, 1000, num_layers=1,bidirectional=true,dropout=config.hidden_dropout_prob)
+        super(DistilBertForQuestionAnswering, self).__init__(config)
+        self.bert = DistilBertModel(config)
         self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
+        self.dropout = nn.Dropout(0.2) #RekhaDist
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
         self.init_weights()
 
-    def forward(self, input_ids, attention_mask=None, token_type_ids=None, position_ids=None, head_mask=None):
+    def forward(self, input_ids, attention_mask=None, position_ids=None, head_mask=None):
         outputs = self.bert(input_ids,
                             attention_mask=attention_mask,
-                            token_type_ids=token_type_ids,
-                            position_ids=position_ids,
-                            head_mask=head_mask)
+                            #token_type_ids=token_type_ids,
+                            #position_ids=position_ids,
+                            #head_mask=head_mask
+                            )
 
+        #print('Outputs shape=', outputs.shape)
         sequence_output = outputs[0]
-        pooled_output = outputs[1]
+        #print("sequence_output type",sequence_output.type())
+        pooled_output = sequence_output[:,0,:] #Rekha hack check
 
-        # predict start & end position
-        #lstm_output = self.rnn(sequence_output)
-        qa_logits = self.qa_outputs(sequence_output)
-        start_logits, end_logits = qa_logits.split(1, dim=-1)
-        start_logits = start_logits.squeeze(-1)
-        end_logits = end_logits.squeeze(-1)
+
 
         # classification
         pooled_output = self.dropout(pooled_output)
         classifier_logits = self.classifier(pooled_output)
 
-        return start_logits, end_logits, classifier_logits
+        start_dummy = torch.randn(batch_size, max_seq_len)
+        end_dummy = torch.randn(batch_size, max_seq_len)
+        return start_dummy, end_dummy, classifier_logits
+
+
+# In[ ]:
+
 
 def loss_fn(preds, labels):
     start_preds, end_preds, class_preds = preds
@@ -356,66 +374,87 @@ def loss_fn(preds, labels):
     class_loss = nn.CrossEntropyLoss()(class_preds, class_labels)
     return start_loss + end_loss + class_loss
 
+#['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
 
 def loss_fn_classifier(preds, labels):
-    _,_, class_preds = preds
-    _, _,class_labels = labels
+    _, _, class_preds = preds
+    _, _, class_labels = labels
 
-    class_loss = nn.CrossEntropyLoss()(class_preds, class_labels)
+    class_weights = [1.0, 1.0, 1.0, 0.3, 1.0]
+    class_weights = torch.FloatTensor(class_weights).cuda()
+    class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
     return class_loss
+# RekhaDist
+config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+config.num_labels = 5
+model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)
 
-tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=True)
+model = model.to(device)
+
+param_optimizer = list(model.named_parameters())
+no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+optimizer_grouped_parameters = [
+    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+    {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
+print('num_train_optimization_steps=', num_train_optimization_steps)
+num_warmup_steps = int(num_train_optimization_steps * warmup)
+print('num_warmup_steps', num_warmup_steps)
+
+optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
+
+model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+model.zero_grad()
+model = model.train()
+
+# tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
+# RekhaDist
+tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
+
 convert_func = functools.partial(convert_data,
                                  tokenizer=tokenizer,
                                  max_seq_len=max_seq_len,
                                  max_question_len=max_question_len,
                                  doc_stride=doc_stride)
-if not DO_TRAIN:
-    config = BertConfig.from_pretrained(bert_model)
-    config.num_labels = 5
-    model = BertForQuestionAnswering.from_pretrained('/data/sv/CS230_Spring-2020/Guanshuo_TFQA_1stplace/code', config=config)
-else:
-    model = BertForQuestionAnswering.from_pretrained(bert_model, num_labels=5)
+data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
 
-model = model.to(device)
-
-if DO_TRAIN:
-    param_optimizer = list(model.named_parameters())
-    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-    print('num_train_optimization_steps=', num_train_optimization_steps)
-    num_warmup_steps = int(num_train_optimization_steps * warmup)
-    print('num_warmup_steps', num_warmup_steps)
-
-    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-
-    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-    model.zero_grad()
-    model = model.train()
-
-    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-
-    global_step = 0
-    print('Rekha Classifier train_size=', train_size)
-    print('Rekha Classifier total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-    print('Rekha DATA_PATH', DATA_PATH)
-    # print('len(data_reader)',len(data_reader))
-    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-        train_dataset = TextDataset(examples)
+global_step = 0
+print('Rekha train_size=', train_size)
+print('Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
+print('Rekha DATA_PATH', DATA_PATH)
+# print('len(data_reader)',len(data_reader))
+for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+    train_dataset = TextDataset(examples)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
     for x_batch, y_batch in train_loader:
         x_batch, attention_mask, token_type_ids = x_batch
         y_batch = (y.to(device) for y in y_batch)
 
+        # RekhaDist
+        # context = "The US has passed the peak on new coronavirus cases, " \
+        #           "President Donald Trump said and predicted that some states would reopen this month." \
+        #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
+        #           "the highest for any country in the world."
+        # questions = ["What was President Donald Trump's prediction?",
+        #              "How many deaths have been reported from the virus?",
+        #              "How many cases have been reported in the United States?"]
+        # question_context_for_batch = []
+        #
+        # for question in questions:
+        #     question_context_for_batch.append((question, context))
+        # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
+        # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
+        # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
         y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device),
-                       token_type_ids=token_type_ids.to(device))
-        loss = loss_fn(y_pred, y_batch)
+                       attention_mask=attention_mask.to(device))
+
+        #Rekha old
+        # y_pred = model(x_batch.to(device),
+        #                attention_mask=attention_mask.to(device),
+        #                token_type_ids=token_type_ids.to(device))
+        loss = loss_fn_classifier(y_pred, y_batch)
         with amp.scale_loss(loss, optimizer) as scaled_loss:
             scaled_loss.backward()
         if (global_step + 1) % accumulation_steps == 0:
@@ -424,76 +463,27 @@ if DO_TRAIN:
             model.zero_grad()
 
         global_step += 1
-
-        if (time.time() - start_time) / 3600 > 7:
-            break
-        print("Training loss:", loss)
-
-        del examples, train_dataset, train_loader
-        gc.collect()
-
-    torch.save(model.state_dict(), output_model_file)
-    torch.save(optimizer.state_dict(), output_optimizer_file)
-    torch.save(amp.state_dict(), output_amp_file)
-
-    print(f'trained {global_step * batch_size} samples')
-    print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
-
-'''    
-# shreyas new     stuff
-model1 = BertF    orQuestionAnswering.from_pretrained(bert_model, num_labels=5)
-model1 = model    1.to(device)
-    
-param_optimize    r1 = list(model1.named_parameters())
-no_decay1 = ['    bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grou    ped_parameters = [
-    {'params':     [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-    {'params':     [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    
-optimizer1 = A    damW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler1 = W    armupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-    
-model1, optimi    zer1 = amp.initialize(model1, optimizer1, opt_level='O1', verbosity=0)
-model1.zero_gr    ad()
-model1 = model1.train()
-
-data_reader1 = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-
-global_step = 0
-print('Regression train_size=', train_size)
-print('Regression total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-# print('len(data_reader)',len(data_reader))
-for examples in tqdm(data_reader1, total=int(np.ceil(train_size / chunksize))):
-    train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
-
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device),
-                       token_type_ids=token_type_ids.to(device))
-        loss = loss_fn(y_pred, y_batch)
-        with amp.scale_loss(loss, optimizer1) as scaled_loss:
-            scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer1.step()
-            scheduler1.step()
-            model1.zero_grad()
-
-        global_step += 1
+    print("Training loss:", loss)
 
     if (time.time() - start_time) / 3600 > 7:
         break
-print("Training loss regression :", loss)
 
 del examples, train_dataset, train_loader
 gc.collect()
 
-torch.save(model1.state_dict(), output_model_file+"regression")
-torch.save(optimizer.state_dict(), output_optimizer_file+"regression")
-torch.save(amp.state_dict(), output_amp_file+"regression")
-'''
+torch.save(model.state_dict(), output_model_file)
+torch.save(optimizer.state_dict(), output_optimizer_file)
+torch.save(amp.state_dict(), output_amp_file)
+
+# In[ ]:
+
+
+print(f'trained {global_step * batch_size} samples')
+print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+
+
+# In[ ]:
+
 
 def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
     # input tokens
@@ -512,6 +502,7 @@ def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[E
               torch.from_numpy(token_type_ids)]
 
     return inputs, examples
+
 
 def eval_model(
         model: nn.Module,
@@ -538,6 +529,7 @@ def eval_model(
         `overall_score`: score of the competition metric
     """
     model.to(device)
+    #model.half()
     model.eval()
     with torch.no_grad():
         result = Result()
@@ -547,15 +539,18 @@ def eval_model(
                             attention_mask.to(device),
                             token_type_ids.to(device))
 
-            start_preds, end_preds, class_preds = (p.detach().cpu() for p in y_preds)
-            start_logits, start_index = torch.max(start_preds, dim=1)
-            end_logits, end_index = torch.max(end_preds, dim=1)
+            _, _, class_preds = (p.detach().cpu() for p in y_preds)
+            # start_logits, start_index = torch.max(start_preds, dim=1)
+            # end_logits, end_index = torch.max(end_preds, dim=1)
 
             # span logits minus the cls logits seems to be close to the best
-            cls_logits = start_preds[:, 0] + end_preds[:, 0]  # '[CLS]' logits
-            logits = start_logits + end_logits - cls_logits  # (batch_size,)
-            indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
-            result.update(examples, logits.numpy(), indices.numpy(), class_preds.numpy())
+            # cls_logits = start_preds[:, 0] + end_preds[:, 0]  # '[CLS]' logits
+            #logits = start_logits + end_logits - cls_logits  # (batch_size,)
+            #indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
+            #result.update(examples, np.array(list(class_preds)))
+            #result.update(examples, class_preds.numpy())
+
+            result.update(examples, class_preds.numpy())
 
     return result.score()
 
@@ -583,8 +578,8 @@ class Result(object):
     def update(
             self,
             examples: List[Example],
-            logits: torch.Tensor,
-            indices: torch.Tensor,
+            # logits: torch.Tensor,
+            # indices: torch.Tensor,
             class_preds: torch.Tensor
     ):
         """Update batch objects.
@@ -600,38 +595,34 @@ class Result(object):
             Class predicition scores of each examples.
         """
         for i, example in enumerate(examples):
-            if self.is_valid_index(example, indices[i]) and \
-                    self.best_scores[example.example_id] < logits[i]:
-                self.best_scores[example.example_id] = logits[i]
+            # if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] < logits[i]:
+            if True:
+                #self.best_scores[example.example_id] = logits[i]
                 self.examples[example.example_id] = example
                 self.results[example.example_id] = [
-                    example.doc_start, indices[i], class_preds[i]]
+                    example.doc_start, class_preds[i]]
 
     def _generate_predictions(self) -> Generator[Dict, None, None]:
         """Generate predictions of each examples.
         """
         for example_id in self.results.keys():
-            doc_start, index, class_pred = self.results[example_id]
+            doc_start, class_pred = self.results[example_id]
             example = self.examples[example_id]
             tokenized_to_original_index = example.tokenized_to_original_index
-            #print('index[0]:'+str(index[0]))
-            #print('doc_start,index[1]:'+str(doc_start)+","+str(index[1]))
-            if doc_start + index[1] >= len(tokenized_to_original_index):
-                continue
-            short_start_index = tokenized_to_original_index[doc_start + index[0]]
-            short_end_index = tokenized_to_original_index[doc_start + index[1]]
-            long_start_index = -1
-            long_end_index = -1
-            for candidate in example.candidates:
-                if candidate['start_token'] <= short_start_index and \
-                        short_end_index <= candidate['end_token']:
-                    long_start_index = candidate['start_token']
-                    long_end_index = candidate['end_token']
-                    break
+
+            #short_start_index = tokenized_to_original_index[doc_start + index[0]]
+            #short_end_index = tokenized_to_original_index[doc_start + index[1]]
+            #long_start_index = -1
+            #long_end_index = -1
+            #for candidate in example.candidates:
+            #    if candidate['start_token'] <= short_start_index and short_end_index <= candidate['end_token']:
+            #        long_start_index = candidate['start_token']
+            #        long_end_index = candidate['end_token']
+            #       break
             yield {
                 'example': example,
-                'long_answer': [long_start_index, long_end_index],
-                'short_answer': [short_start_index, short_end_index],
+                'long_answer': [-1, -1],
+                'short_answer': [-1, -1],
                 'yes_no_answer': class_pred
             }
 
@@ -665,12 +656,43 @@ class Result(object):
             else:
                 return x / y
 
-        def _compute_f1(answer_stats: List[List[bool]]) -> float:
+        def _compute_f1_old(answer_stats: List[List[bool]]) -> float:
             """Computes F1, precision, recall for a list of answer scores.
             """
             has_answer, has_pred, is_correct = list(zip(*answer_stats))
             precision = _safe_divide(sum(is_correct), sum(has_pred))
             recall = _safe_divide(sum(is_correct), sum(has_answer))
+            print('sum(is_correct)=',sum(is_correct)) #Confusion matrix
+            print('sum(has_pred)=' , sum(has_pred)) # has_pred = TP + FP ==>
+
+            print('sum(has_answer)=', sum(has_answer)) # has_answer = TP + FN ==>
+            print('precision=', precision)
+            print('recall=', recall)
+            f1 = _safe_divide(2 * precision * recall, precision + recall)
+            return f1
+
+        def _compute_f1(answer_stats: List[List[bool]]) -> float:
+            """Computes F1, precision, recall for a list of answer scores.
+            """
+            has_answer, has_pred, is_correct = list(zip(*answer_stats))
+            tp = 0
+            tn = 0
+            fp = 0
+            fn = 0
+            for ha, hp in zip(has_answer, has_pred):
+                if(ha and hp):
+                    tp = tp + 1
+                elif(not ha and not hp):
+                    tn = tn + 1
+                elif(hp and not ha):
+                    fp = fp + 1
+                elif(ha and not hp):
+                    fn = fn + 1
+
+            precision = _safe_divide(tp, tp + fp)
+            recall = _safe_divide(tp, tp + fn)
+            print('tp=',tp, '  fp=',fp)    #    Confusion matrix
+            print('fn=', fn, '  tn=', tn)  # Confusion matrix
             print('precision=', precision)
             print('recall=', recall)
             f1 = _safe_divide(2 * precision * recall, precision + recall)
@@ -686,7 +708,6 @@ class Result(object):
             yes_no_label = self.class_labels[class_pred.argmax()]
 
             if (DEBUG):
-                #logging.info("%s",example)
                 print(example)
                 print('long_pred=', long_pred)
                 print('short_pred=', short_pred)
@@ -698,44 +719,61 @@ class Result(object):
                 #logging.info("%s", answer)
                 print(answer)
             # long score
+
+
+
+
+
+            # Actual ans
             long_label = example.annotations['long_answer']
-            has_answer = long_label['candidate_index'] != -1
-            has_pred = long_pred[0] != -1 and long_pred[1] != -1
+            has_answer = long_label['candidate_index'] != -1        # input labels true or false for long ans part
+
+            # predicted output
+            has_pred = yes_no_label != 'UNKNOWN'
+
+
+
             is_correct = False
-            if long_label['start_token'] == long_pred[0] and \
-                    long_label['end_token'] == long_pred[1]:
+            if long_label['start_token'] == long_pred[0] and long_label['end_token'] == long_pred[1]:
                 is_correct = True
             long_scores.append([has_answer, has_pred, is_correct])
 
             # short score
-            short_labels = example.annotations['short_answers']
-            class_pred = example.annotations['yes_no_answer']
-            has_answer = yes_no_label != 'NONE' or len(short_labels) != 0
-            has_pred = class_pred != 'NONE' or (short_pred[0] != -1 and short_pred[1] != -1)
-            is_correct = False
-            if class_pred in ['YES', 'NO']:
-                is_correct = yes_no_label == class_pred
-            else:
-                for short_label in short_labels:
-                    if short_label['start_token'] == short_pred[0] and \
-                            short_label['end_token'] == short_pred[1]:
-                        is_correct = True
-                        break
-            short_scores.append([has_answer, has_pred, is_correct])
+            # short_labels = example.annotations['short_answers']
+            # class_pred = example.annotations['yes_no_answer']
+            # has_answer = yes_no_label != 'NONE' or len(short_labels) != 0
+            # has_pred = class_pred != 'NONE' or (short_pred[0] != -1 and short_pred[1] != -1)
+            # is_correct = False
+            # if class_pred in ['YES', 'NO']:
+            #     is_correct = yes_no_label == class_pred
+            # else:
+            #     for short_label in short_labels:
+            #         if short_label['start_token'] == short_pred[0] and short_label['end_token'] == short_pred[1]:
+            #             is_correct = True
+            #             break
+            # short_scores.append([has_answer, has_pred, is_correct])
 
         print('Long Answer')
         long_score = _compute_f1(long_scores)
-        print('Short Answer')
-        short_score = _compute_f1(short_scores)
+        # print('Short Answer')
+        # short_score = _compute_f1(short_scores)
         return {
             'long_score': long_score,
-            'short_score': short_score,
-            'overall_score': (long_score + short_score) / 2
+            # 'short_score': short_score,
+            #'overall_score': (long_score + short_score) / 2
         }
 
-#Rekha added
-#EVAL STARTING
+
+# In[ ]:
+
+
+# Rekha added
+# EVAL STARTING]
+print('EVAL STARTING')
 data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
+
+# In[ ]:
+
 
 eval_start_time = time.time()
 valid_data = next(data_reader)
@@ -746,14 +784,29 @@ valid_scores = eval_model(model, valid_loader, device=device)
 
 print(f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
 
+# In[ ]:
+
+
 long_score = valid_scores['long_score']
-short_score = valid_scores['short_score']
+#short_score = valid_scores['short_score']
 overall_score = valid_scores['overall_score']
 print('validation scores:')
 print(f'\tlong score    : {long_score:.4f}')
-print(f'\tshort score   : {short_score:.4f}')
+#print(f'\tshort score   : {short_score:.4f}')
 print(f'\toverall score : {overall_score:.4f}')
 print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 
+# In[ ]:
+
+
+#get_ipython().system('wc -l $DATA_PATH')
+#get_ipython().system('wc -l $EVAL_DATA_PATH')
+
+# In[ ]:
+
 print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+print(f'End of file: {(time.time() - start_time) / 3600:.1f} hours')
+
+# In[ ]:
+
+

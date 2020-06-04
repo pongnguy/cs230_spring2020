@@ -1,7 +1,7 @@
+from transformers import DistilBertTokenizer, DistilBertModel
 from collections import defaultdict
 from dataclasses import dataclass
 import functools
-import logging
 import gc
 import itertools
 import json
@@ -26,26 +26,31 @@ from torch import nn, optim
 from torch.utils.data import Dataset, Subset, DataLoader
 
 from apex import amp
-from transformers import BertTokenizer, AdamW, WarmupLinearSchedule, BertModel, BertPreTrainedModel,BertConfig
-logging.basicConfig(filename='/data/sv/example.log',level=logging.DEBUG)
-TRAIN_SIZE = 10000
-DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
-VALID_SIZE = 100
+from transformers import BertTokenizer, BertConfig, BertModel, BertPreTrainedModel, DistilBertModel, DistilBertConfig
+
+# In[ ]:
+
+VALID_SIZE = 2000
 EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
-DO_TRAIN=False
 
-DEBUG = True
+chunksize = 1000
 
-#DATA_DIR = Path('../input/tensorflow2-question-answering/')
-#DATA_PATH = DATA_DIR / 'simplified-nq-train.jsonl'
+#
+# get_ipython().system('wc -l $DATA_PATH')
+# get_ipython().system('wc -l $EVAL_DATA_PATH')
+DEBUG = False
+
+# In[ ]:
+
+
+# DATA_DIR = Path('../input/tensorflow2-question-answering/')
+# DATA_PATH = DATA_DIR / 'simplified-nq-train.jsonl'
 
 start_time = time.time()
 
 seed = 1029
 valid_size = VALID_SIZE
-train_size = TRAIN_SIZE
 
-chunksize = 1000
 max_seq_len = 384
 max_question_len = 64
 doc_stride = 128
@@ -56,20 +61,22 @@ lr = 2e-5
 warmup = 0.05
 batch_size = 16
 accumulation_steps = 4
+DROPOUT=0.2
 
-bert_model = 'bert-base-uncased'
-do_lower_case = 'uncased' in bert_model
+qa_model_name = 'bert-base-uncased'
+classifier_model_name = 'distilbert-base-uncased-distilled-squad'
+
+do_lower_case = 'uncased' in qa_model_name
 device = torch.device('cuda')
-
-output_model_file = 'bert_pytorch.bin'
-output_optimizer_file = 'bert_pytorch_optimizer.bin'
-output_amp_file = 'bert_pytorch_amp.bin'
 
 random.seed(seed)
 np.random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 torch.backends.cudnn.deterministic = True
+
+
+# In[ ]:
 
 
 @dataclass
@@ -84,8 +91,7 @@ class Example(object):
     start_position: int
     end_position: int
     class_label: str
-    doc_tokens: List[str]
-    question_text: str
+
 
 def convert_data(
         line: str,
@@ -182,7 +188,6 @@ def convert_data(
             Example(
                 example_id=data['example_id'],
                 candidates=data['long_answer_candidates'],
-                doc_tokens=doc_words,
                 annotations=annotations,
                 doc_start=doc_start,
                 question_len=len(question_tokens),
@@ -190,11 +195,13 @@ def convert_data(
                 input_ids=tokenizer.convert_tokens_to_ids(input_tokens),
                 start_position=start,
                 end_position=end,
-                class_label=label,
-                question_text=data["question_text"]
+                class_label=label
             ))
 
     return examples
+
+
+# In[ ]:
 
 
 class JsonChunkReader(JsonReader):
@@ -246,6 +253,10 @@ class JsonChunkReader(JsonReader):
         self.close()
         raise StopIteration
 
+
+# In[ ]:
+
+
 class TextDataset(Dataset):
     """Dataset for [TensorFlow 2.0 Question Answering](https://www.kaggle.com/c/tensorflow2-question-answering).
 
@@ -267,6 +278,7 @@ class TextDataset(Dataset):
         if len(annotated) == 0:
             return random.choice(self.examples[index])
         return random.choice(annotated)
+
 
 def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
     # input tokens
@@ -297,6 +309,10 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
 
     return [inputs, labels]
 
+
+# In[ ]:
+
+
 class BertForQuestionAnswering(BertPreTrainedModel):
     """BERT model for QA and classification tasks.
 
@@ -317,10 +333,8 @@ class BertForQuestionAnswering(BertPreTrainedModel):
     def __init__(self, config):
         super(BertForQuestionAnswering, self).__init__(config)
         self.bert = BertModel(config)
-
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        #self.rnn = nn.LSTM(config.hidden_size, 1000, num_layers=1,bidirectional=true,dropout=config.hidden_dropout_prob)
         self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
         self.init_weights()
 
@@ -335,7 +349,6 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         pooled_output = outputs[1]
 
         # predict start & end position
-        #lstm_output = self.rnn(sequence_output)
         qa_logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = qa_logits.split(1, dim=-1)
         start_logits = start_logits.squeeze(-1)
@@ -346,6 +359,62 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         classifier_logits = self.classifier(pooled_output)
 
         return start_logits, end_logits, classifier_logits
+
+class DistilBertForQuestionAnswering(DistilBertModel):
+    """BERT model for QA and classification tasks.
+
+    Parameters
+    ----------
+    config : transformers.BertConfig. Configuration class for BERT.
+
+    Returns
+    -------
+    start_logits : torch.Tensor with shape (batch_size, sequence_size).
+        Starting scores of each tokens.
+    end_logits : torch.Tensor with shape (batch_size, sequence_size).
+        Ending scores of each tokens.
+    classifier_logits : torch.Tensor with shape (batch_size, num_classes).
+        Classification scores of each labels.
+    """
+
+    def __init__(self, config):
+        config.num_labels = 5
+        super(DistilBertForQuestionAnswering, self).__init__(config)
+        self.bert = DistilBertModel(config)
+        self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
+        self.dropout = nn.Dropout(config.dropout) #RekhaDist
+        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
+        self.init_weights()
+
+    def forward(self, input_ids, attention_mask=None, position_ids=None, head_mask=None):
+        outputs = self.bert(input_ids,
+                            attention_mask=attention_mask,
+                            #token_type_ids=token_type_ids,
+                            #position_ids=position_ids,
+                            #head_mask=head_mask
+                            )
+
+        #print('Outputs shape=', outputs.shape)
+        sequence_output = outputs[0]
+        #print("sequence_output type",sequence_output.type())
+        pooled_output = sequence_output[:,0,:] #Rekha hack check
+
+
+        # predict start & end position
+        qa_logits = self.qa_outputs(sequence_output)
+        start_logits, end_logits = qa_logits.split(1, dim=-1)
+        start_logits = start_logits.squeeze(-1)
+        end_logits = end_logits.squeeze(-1)
+
+        # classification
+        pooled_output = self.dropout(pooled_output)
+        classifier_logits = self.classifier(pooled_output)
+
+        return start_logits, end_logits, classifier_logits
+
+
+# In[ ]:
+
 
 def loss_fn(preds, labels):
     start_preds, end_preds, class_preds = preds
@@ -364,136 +433,21 @@ def loss_fn_classifier(preds, labels):
     class_loss = nn.CrossEntropyLoss()(class_preds, class_labels)
 
     return class_loss
-
-tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=True)
+tokenizer = BertTokenizer.from_pretrained(qa_model_name, do_lower_case=True)
 convert_func = functools.partial(convert_data,
                                  tokenizer=tokenizer,
                                  max_seq_len=max_seq_len,
                                  max_question_len=max_question_len,
                                  doc_stride=doc_stride)
-if not DO_TRAIN:
-    config = BertConfig.from_pretrained(bert_model)
-    config.num_labels = 5
-    model = BertForQuestionAnswering.from_pretrained('/data/sv/CS230_Spring-2020/Guanshuo_TFQA_1stplace/code', config=config)
-else:
-    model = BertForQuestionAnswering.from_pretrained(bert_model, num_labels=5)
 
-model = model.to(device)
+config = BertConfig.from_pretrained(qa_model_name)
+config.num_labels = 5
+qa_model = BertForQuestionAnswering.from_pretrained('/data/sv/bert_trained', config=config)
 
-if DO_TRAIN:
-    param_optimizer = list(model.named_parameters())
-    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-    print('num_train_optimization_steps=', num_train_optimization_steps)
-    num_warmup_steps = int(num_train_optimization_steps * warmup)
-    print('num_warmup_steps', num_warmup_steps)
-
-    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-
-    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-    model.zero_grad()
-    model = model.train()
-
-    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-
-    global_step = 0
-    print('Rekha Classifier train_size=', train_size)
-    print('Rekha Classifier total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-    print('Rekha DATA_PATH', DATA_PATH)
-    # print('len(data_reader)',len(data_reader))
-    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-        train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
-
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device),
-                       token_type_ids=token_type_ids.to(device))
-        loss = loss_fn(y_pred, y_batch)
-        with amp.scale_loss(loss, optimizer) as scaled_loss:
-            scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer.step()
-            scheduler.step()
-            model.zero_grad()
-
-        global_step += 1
-
-        if (time.time() - start_time) / 3600 > 7:
-            break
-        print("Training loss:", loss)
-
-        del examples, train_dataset, train_loader
-        gc.collect()
-
-    torch.save(model.state_dict(), output_model_file)
-    torch.save(optimizer.state_dict(), output_optimizer_file)
-    torch.save(amp.state_dict(), output_amp_file)
-
-    print(f'trained {global_step * batch_size} samples')
-    print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
-
-'''    
-# shreyas new     stuff
-model1 = BertF    orQuestionAnswering.from_pretrained(bert_model, num_labels=5)
-model1 = model    1.to(device)
-    
-param_optimize    r1 = list(model1.named_parameters())
-no_decay1 = ['    bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grou    ped_parameters = [
-    {'params':     [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-    {'params':     [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    
-optimizer1 = A    damW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler1 = W    armupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-    
-model1, optimi    zer1 = amp.initialize(model1, optimizer1, opt_level='O1', verbosity=0)
-model1.zero_gr    ad()
-model1 = model1.train()
-
-data_reader1 = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-
-global_step = 0
-print('Regression train_size=', train_size)
-print('Regression total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-# print('len(data_reader)',len(data_reader))
-for examples in tqdm(data_reader1, total=int(np.ceil(train_size / chunksize))):
-    train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
-
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device),
-                       token_type_ids=token_type_ids.to(device))
-        loss = loss_fn(y_pred, y_batch)
-        with amp.scale_loss(loss, optimizer1) as scaled_loss:
-            scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer1.step()
-            scheduler1.step()
-            model1.zero_grad()
-
-        global_step += 1
-
-    if (time.time() - start_time) / 3600 > 7:
-        break
-print("Training loss regression :", loss)
-
-del examples, train_dataset, train_loader
-gc.collect()
-
-torch.save(model1.state_dict(), output_model_file+"regression")
-torch.save(optimizer.state_dict(), output_optimizer_file+"regression")
-torch.save(amp.state_dict(), output_amp_file+"regression")
-'''
+config = DistilBertConfig.from_pretrained(classifier_model_name)
+config.num_labels = 5
+config.dropout = DROPOUT
+classifier_model = DistilBertForQuestionAnswering.from_pretrained('/data/sv/distilbert', config=config)
 
 def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
     # input tokens
@@ -513,8 +467,29 @@ def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[E
 
     return inputs, examples
 
+class ExampleBatch:
+    def __init__(self):
+        self.inputs = []
+        self.examples = []
+
+    def update(self,
+               inputs: List[torch.Tensor],
+               examples: List[Example]):
+        inputs = [element.unsqueeze(0) if element.dim() < 2 else element for element in inputs]
+        if not self.inputs:
+            self.inputs = inputs
+        else:
+            for i,element in enumerate(self.inputs):
+                self.inputs[i] = torch.cat((element, inputs[i]), 0)
+
+        self.examples = self.examples + examples
+    def clear(self):
+        self.inputs.clear()
+        self.examples.clear()
+
 def eval_model(
-        model: nn.Module,
+        qa_model: nn.Module,
+        classifier_model: nn.Module,
         valid_loader: DataLoader,
         device: torch.device = torch.device('cuda')
 ) -> Dict[str, float]:
@@ -537,15 +512,69 @@ def eval_model(
         `short_score`: score of short answers
         `overall_score`: score of the competition metric
     """
-    model.to(device)
-    model.eval()
+    qa_model.to(device)
+    #qa_model.half()
+    qa_model.eval()
+    classifier_model.to(device)
+    classifier_model.eval()
+    class_labels = ['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
+    unknown_label = class_labels.index('UNKNOWN')
     with torch.no_grad():
         result = Result()
+        classifier_rejects = ExampleBatch()
+        classifier_forwards = ExampleBatch()
         for inputs, examples in tqdm(valid_loader):
             input_ids, attention_mask, token_type_ids = inputs
-            y_preds = model(input_ids.to(device),
-                            attention_mask.to(device),
-                            token_type_ids.to(device))
+            y_preds1 = classifier_model(input_ids.to(device),
+                             attention_mask.to(device))
+            _,_,classifier_preds = (p.detach().cpu() for p in y_preds1)
+
+            has_pred = (torch.argmax(classifier_preds, dim=1)) != unknown_label
+            print(has_pred)
+            neg_pred = ~has_pred
+            qa_inputs = [element[(has_pred != 0).nonzero().squeeze()] for element in inputs]
+            qa_examples = (np.array(examples)[has_pred.numpy()]).tolist()
+            if qa_examples:
+                classifier_forwards.update(qa_inputs, qa_examples)
+            reject_inputs = [element[(neg_pred != 0).nonzero().squeeze()]  for element in inputs]
+            reject_examples = (np.array(examples)[neg_pred.numpy()]).tolist()
+            if reject_examples:
+                classifier_rejects.update(reject_inputs, reject_examples)
+
+            if len(classifier_forwards.examples) >= batch_size:
+                qa_inputs = classifier_forwards.inputs
+                qa_examples = classifier_forwards.examples
+                qa_input_ids, qa_attention_mask, qa_token_type_ids = qa_inputs
+
+                y_preds = qa_model(qa_input_ids.to(device),
+                                qa_attention_mask.to(device),
+                                qa_token_type_ids.to(device))
+
+                start_preds, end_preds, class_preds = (p.detach().cpu() for p in y_preds)
+                start_logits, start_index = torch.max(start_preds, dim=1)
+                end_logits, end_index = torch.max(end_preds, dim=1)
+
+                # span logits minus the cls logits seems to be close to the best
+                cls_logits = start_preds[:, 0] + end_preds[:, 0]  # '[CLS]' logits
+                logits = start_logits + end_logits - cls_logits  # (batch_size,)
+                indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
+                result.update(qa_examples, logits.numpy(), indices.numpy(), class_preds.numpy())
+                classifier_forwards.clear()
+            if len(classifier_rejects.examples) >= batch_size:
+                reject_examples = classifier_rejects.examples
+                start_index = torch.full([len(classifier_rejects.examples)], -1)
+                end_index = torch.full([len(classifier_rejects.examples)], -1)
+                indices = torch.stack((start_index, end_index)).transpose(1, 0)
+                result.update(reject_examples, np.zeros(len(classifier_rejects.examples)), indices, np.zeros(len(classifier_rejects.examples)))
+                classifier_rejects.clear()
+        if classifier_forwards.examples:
+            qa_inputs = classifier_forwards.inputs
+            qa_examples = classifier_forwards.examples
+            qa_input_ids, qa_attention_mask, qa_token_type_ids = qa_inputs
+
+            y_preds = qa_model(qa_input_ids.to(device),
+                               qa_attention_mask.to(device),
+                               qa_token_type_ids.to(device))
 
             start_preds, end_preds, class_preds = (p.detach().cpu() for p in y_preds)
             start_logits, start_index = torch.max(start_preds, dim=1)
@@ -554,10 +583,16 @@ def eval_model(
             # span logits minus the cls logits seems to be close to the best
             cls_logits = start_preds[:, 0] + end_preds[:, 0]  # '[CLS]' logits
             logits = start_logits + end_logits - cls_logits  # (batch_size,)
-            indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
-            result.update(examples, logits.numpy(), indices.numpy(), class_preds.numpy())
-
+            indices = torch.stack((start_index, end_index)).transpose(1, 0)  # (batch_size, 2)
+            result.update(qa_examples, logits.numpy(), indices.numpy(), class_preds.numpy())
+        if classifier_rejects.examples:
+            start_index = torch.full([len(classifier_rejects.examples)], -1)
+            end_index = torch.full([len(classifier_rejects.examples)], -1)
+            indices = torch.stack((start_index, end_index)).transpose(1, 0)
+            result.update(classifier_rejects.examples, np.zeros(len(classifier_rejects.examples)),
+                          indices, np.zeros(len(classifier_rejects.examples)))
     return result.score()
+
 
 class Result(object):
     """Stores results of all test data.
@@ -600,8 +635,7 @@ class Result(object):
             Class predicition scores of each examples.
         """
         for i, example in enumerate(examples):
-            if self.is_valid_index(example, indices[i]) and \
-                    self.best_scores[example.example_id] < logits[i]:
+            if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] < logits[i]:
                 self.best_scores[example.example_id] = logits[i]
                 self.examples[example.example_id] = example
                 self.results[example.example_id] = [
@@ -614,17 +648,20 @@ class Result(object):
             doc_start, index, class_pred = self.results[example_id]
             example = self.examples[example_id]
             tokenized_to_original_index = example.tokenized_to_original_index
-            #print('index[0]:'+str(index[0]))
-            #print('doc_start,index[1]:'+str(doc_start)+","+str(index[1]))
-            if doc_start + index[1] >= len(tokenized_to_original_index):
+            if doc_start + index[1] > len(tokenized_to_original_index):
+                yield {
+                    'example': example,
+                    'long_answer': [-1, -1],
+                    'short_answer': [-1, -1],
+                    'yes_no_answer': class_pred
+                }
                 continue
             short_start_index = tokenized_to_original_index[doc_start + index[0]]
             short_end_index = tokenized_to_original_index[doc_start + index[1]]
             long_start_index = -1
             long_end_index = -1
             for candidate in example.candidates:
-                if candidate['start_token'] <= short_start_index and \
-                        short_end_index <= candidate['end_token']:
+                if candidate['start_token'] <= short_start_index and short_end_index <= candidate['end_token']:
                     long_start_index = candidate['start_token']
                     long_end_index = candidate['end_token']
                     break
@@ -686,7 +723,6 @@ class Result(object):
             yes_no_label = self.class_labels[class_pred.argmax()]
 
             if (DEBUG):
-                #logging.info("%s",example)
                 print(example)
                 print('long_pred=', long_pred)
                 print('short_pred=', short_pred)
@@ -702,8 +738,7 @@ class Result(object):
             has_answer = long_label['candidate_index'] != -1
             has_pred = long_pred[0] != -1 and long_pred[1] != -1
             is_correct = False
-            if long_label['start_token'] == long_pred[0] and \
-                    long_label['end_token'] == long_pred[1]:
+            if long_label['start_token'] == long_pred[0] and long_label['end_token'] == long_pred[1]:
                 is_correct = True
             long_scores.append([has_answer, has_pred, is_correct])
 
@@ -717,8 +752,7 @@ class Result(object):
                 is_correct = yes_no_label == class_pred
             else:
                 for short_label in short_labels:
-                    if short_label['start_token'] == short_pred[0] and \
-                            short_label['end_token'] == short_pred[1]:
+                    if short_label['start_token'] == short_pred[0] and short_label['end_token'] == short_pred[1]:
                         is_correct = True
                         break
             short_scores.append([has_answer, has_pred, is_correct])
@@ -733,18 +767,24 @@ class Result(object):
             'overall_score': (long_score + short_score) / 2
         }
 
-#Rekha added
-#EVAL STARTING
+# Rekha added
+# EVAL STARTING
 data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
+
+# In[ ]:
+
 
 eval_start_time = time.time()
 valid_data = next(data_reader)
 valid_data = list(itertools.chain.from_iterable(valid_data))
 valid_dataset = Subset(valid_data, range(len(valid_data)))
 valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
-valid_scores = eval_model(model, valid_loader, device=device)
+valid_scores = eval_model(qa_model, classifier_model, valid_loader, device=device)
 
 print(f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
+
+# In[ ]:
+
 
 long_score = valid_scores['long_score']
 short_score = valid_scores['short_score']
@@ -754,6 +794,3 @@ print(f'\tlong score    : {long_score:.4f}')
 print(f'\tshort score   : {short_score:.4f}')
 print(f'\toverall score : {overall_score:.4f}')
 print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
-
-print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
