@@ -12,10 +12,10 @@ from tqdm import tqdm
 
 from train_classifier import DistilBertForQuestionAnswering, JsonChunkReader, Result, TextDataset
 from train_classifier import convert_data #convert_func
-from train_classifier import num_labels, output_model_file, EVAL_DATA_PATH, eval_collate_fn, collate_fn, batch_size, chunksize, max_seq_len, max_question_len, doc_stride #, global_step
+from train_classifier import output_model_file, EVAL_DATA_PATH, eval_collate_fn, collate_fn, batch_size, chunksize, max_seq_len, max_question_len, doc_stride #, global_step
 
 
-#num_labels = 2 #5
+num_labels = 5
 
 
 def eval_model(
