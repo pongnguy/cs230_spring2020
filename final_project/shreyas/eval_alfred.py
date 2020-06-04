@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from train_classifier import DistilBertForQuestionAnswering, JsonChunkReader, Result, TextDataset
 from train_classifier import convert_data #convert_func
-from train_classifier import num_labels, output_model_file, EVAL_DATA_PATH, eval_collate_fn, batch_size, chunksize, max_seq_len, max_question_len, doc_stride #, global_step
+from train_classifier import num_labels, output_model_file, EVAL_DATA_PATH, eval_collate_fn, collate_fn, batch_size, chunksize, max_seq_len, max_question_len, doc_stride #, global_step
 
 
 #num_labels = 2 #5
@@ -48,8 +48,10 @@ def eval_model(
     model.eval()
     with torch.no_grad():
         result = Result()
-        for inputs, examples in tqdm(valid_loader):
+        for inputs, examples, example_ids, text_labels in tqdm(valid_loader):
             input_ids, attention_mask, token_type_ids = inputs
+            y_batch = (y.to(device) for y in examples)
+
             #y_preds = model(input_ids.to(device),
             #                attention_mask.to(device),
             #                token_type_ids.to(device))
@@ -57,6 +59,8 @@ def eval_model(
                            attention_mask=attention_mask.to(device))
 
             #start_preds, end_preds, class_preds = (p.detach().cpu() for p in y_preds) # alfred our model only does classification
+            _, _, class_preds = y_preds
+            _, _, class_labels = y_batch
             #start_logits, start_index = torch.max(start_preds, dim=1)
             #end_logits, end_index = torch.max(end_preds, dim=1)
 
@@ -118,7 +122,7 @@ if __name__ == '__main__':
     #valid_data = list(itertools.chain.from_iterable(valid_data))
     #valid_dataset = Subset(valid_data, range(len(valid_data)))
     valid_dataset = TextDataset(valid_data)
-    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
+    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn) #eval_collate_fn)
     valid_scores = eval_model(model, valid_loader, device=device)
 
     print(f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')

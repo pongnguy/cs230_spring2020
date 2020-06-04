@@ -168,7 +168,7 @@ def convert_data(
         if re.match(r'<.+>', word):  # remove paragraph tag
             continue
         sub_tokens = tokenizer.tokenize(word)
-        for sub_token in sub_tokens:
+        for sub_token in sub_tokens:    # alfred would skip if sub_tokens is empty (i.e. this would cause original_to_tokenized to return a lower index
             tokenized_to_original_index.append(i)
             all_doc_tokens.append(sub_token)
 
@@ -192,6 +192,8 @@ def convert_data(
 
     # convert into tokenized index
     if start_position != -1 and end_position != -1:
+        orig_start_position = start_position
+        orig_end_position = end_position
         start_position = original_to_tokenized_index[start_position]
         end_position = original_to_tokenized_index[end_position]
 
@@ -200,11 +202,11 @@ def convert_data(
     max_doc_len = max_seq_len - len(question_tokens) - 3  # [CLS], [SEP], [SEP]
 
     # take chunks with a stride of `doc_stride`
-    for doc_start in range(0, len(all_doc_tokens), doc_stride):
+    for doc_start in range(0, len(all_doc_tokens), doc_stride):  # going over doc tokens
         doc_end = doc_start + max_doc_len
         # if truncated document does not contain annotated range
-        if not (doc_start <= start_position and end_position <= doc_end):
-            start, end, label = -1, -1, 'unknown'
+        if not (doc_start <= start_position and end_position <= doc_end): # TODO implies that doc_start --> doc_end fully encompasses the answer
+            start, end, label = -1, -1, 'unknown' # TODO is this correct??
         else:
             start = start_position - doc_start + len(question_tokens) + 2
             end = end_position - doc_start + len(question_tokens) + 2
@@ -213,7 +215,7 @@ def convert_data(
         assert -1 <= start < max_seq_len, f'start position is out of range: {start}'
         assert -1 <= end < max_seq_len, f'end position is out of range: {end}'
 
-        doc_tokens = all_doc_tokens[doc_start:doc_end]
+        doc_tokens = all_doc_tokens[doc_start:doc_end]  # alfred shows doc_start --> doc_end is tokenized
         input_tokens = ['[CLS]'] + question_tokens + ['[SEP]'] + doc_tokens + ['[SEP]']
         examples.append(    # alfred creates an example class from the line and appends to the list of examples
             Example(
@@ -229,7 +231,7 @@ def convert_data(
                 class_label=label  # alfred produced examples includes the class label
             ))
 
-    return examples
+    return examples  # alfred returns multiple examples
 
 
 # In[ ]:
@@ -307,7 +309,7 @@ class TextDataset(Dataset):
     def __len__(self) -> int:
         return len(self.examples)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index):   # alfred map-style dataset
         annotated = list(
             filter(lambda example: example.class_label != 'unknown', self.examples[index]))
         if len(annotated) == 0:
@@ -336,13 +338,15 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
     start_positions = np.array([example.start_position for example in examples])
     end_positions = np.array([example.end_position for example in examples])
     class_labels = [all_labels.index(example.class_label) for example in examples]
+    text_labels = [example.class_label for example in examples]
     start_positions = np.where(start_positions >= max_len, -1, start_positions)
     end_positions = np.where(end_positions >= max_len, -1, end_positions)
     labels = [torch.LongTensor(start_positions),
               torch.LongTensor(end_positions),
-              torch.LongTensor(class_labels)]
+              torch.LongTensor(class_labels)]   # set to label index
+    example_ids = [example.example_id for example in examples]
 
-    return [inputs, labels]
+    return [inputs, labels, example_ids, text_labels]    # alfred added the example_ids for debug
 
 class DistilBertForQuestionAnswering(DistilBertModel):
     """BERT model for QA and classification tasks.
@@ -762,11 +766,11 @@ if __name__ == '__main__':
 
         print('start outer iteration', time.time())
         train_dataset = TextDataset(examples)
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-        for x_batch, y_batch in train_loader:  # alfred where does y_batch get formatted?
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+        for x_batch_loader, y_batch_loader, example_ids, text_labels in train_loader:  # alfred where does y_batch get formatted?
             print('start inner iteration', time.time())
-            x_batch, attention_mask, token_type_ids = x_batch # alfred attention mask provided by the encoding
-            y_batch = (y.to(device) for y in y_batch)
+            x_batch, attention_mask, token_type_ids = x_batch_loader # alfred attention mask provided by the encoding
+            y_batch = (y.to(device) for y in y_batch_loader)
 
             # RekhaDist
             # context = "The US has passed the peak on new coronavirus cases, " \
