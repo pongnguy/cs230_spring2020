@@ -32,7 +32,8 @@ from transformers import BertTokenizer, AdamW, WarmupLinearSchedule, BertModel, 
 
 TRAIN_SIZE = 5000
 VALID_SIZE = 100
-DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
+#DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
+DATA_PATH = '/Guanshuo_TFQA_1stplace/input/simplified-nq-train.jsonl'
 #EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
 EVAL_DATA_PATH = '/Guanshuo_TFQA_1stplace/input/natural_questions/simplified-nq-valid.jsonl'
 
@@ -42,7 +43,7 @@ chunksize = 1000
 # get_ipython().system('wc -l $DATA_PATH')
 # get_ipython().system('wc -l $EVAL_DATA_PATH')
 DEBUG = True
-TRAINING = False
+TRAINING = True
 EVALUATION = True
 
 # In[ ]:
