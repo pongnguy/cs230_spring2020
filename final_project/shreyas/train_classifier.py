@@ -79,7 +79,7 @@ max_seq_len = 384
 max_question_len = 32
 doc_stride = 128
 
-num_labels = 2 #5
+num_labels = 5
 n_epochs = 5
 lr = 8e-5
 warmup = 0.05
@@ -175,14 +175,14 @@ def convert_data(
     # model output: (class_label, start_position, end_position)
     annotations = data['annotations'][0]
     if annotations['yes_no_answer'] in ['YES', 'NO']:
-        class_label = 'hasAnswer' #annotations['yes_no_answer'].lower() # alfred class_label includes 'YES', 'NO'
+        class_label = annotations['yes_no_answer'].lower() #'hasAnswer' # alfred class_label includes 'YES', 'NO'
         start_position = annotations['long_answer']['start_token']
         end_position = annotations['long_answer']['end_token']
     elif annotations['short_answers']:
-        class_label = 'hasAnswer' #'short' # alfred class_label includes 'short'
+        class_label = 'short' #'hasAnswer'  # alfred class_label includes 'short'
         start_position, end_position = _find_short_range(annotations['short_answers'])
     elif annotations['long_answer']['candidate_index'] != -1:
-        class_label = 'hasAnswer' #'long' # alfred class_label includes 'long'
+        class_label = 'long' #'hasAnswer'  # alfred class_label includes 'long'
         start_position = annotations['long_answer']['start_token']
         end_position = annotations['long_answer']['end_token']
     else:
@@ -334,7 +334,7 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
               torch.from_numpy(token_type_ids)]
 
     # output labels
-    all_labels = ['hasAnswer', 'unknown'] #['long', 'no', 'short', 'unknown', 'yes']
+    all_labels = ['long', 'no', 'short', 'unknown', 'yes'] #['hasAnswer', 'unknown']
     start_positions = np.array([example.start_position for example in examples])
     end_positions = np.array([example.end_position for example in examples])
     class_labels = [all_labels.index(example.class_label) for example in examples]
@@ -346,7 +346,7 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
               torch.LongTensor(class_labels)]   # set to label index
     example_ids = [example.example_id for example in examples]
 
-    return [inputs, labels, example_ids, text_labels]    # alfred added the example_ids for debug
+    return [inputs, labels] #, example_ids, text_labels]    # alfred added the example_ids for debug
 
 class DistilBertForQuestionAnswering(DistilBertModel):
     """BERT model for QA and classification tasks.
@@ -415,7 +415,7 @@ def loss_fn_classifier(preds, labels):  # alfred only looks at classification
     _,_, class_preds = preds
     _, _,class_labels = labels
 
-    class_weights = [1.0, 1.0] #, 1.0, 0.6, 1.0]  # alfred y_pred outputs five values (these are classes??)
+    class_weights = [1.0, 1.0, 1.0, 0.6, 1.0]  # alfred y_pred outputs five values (these are classes??)
     class_weights = torch.FloatTensor(class_weights).cuda()
     class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
@@ -757,17 +757,17 @@ if __name__ == '__main__':
         with open(f'pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle', 'rb') as f:  # save variable to binary file
             print('start load pickle file', time.time())
             examples = pickle.load(f)
-            # TODO alfred change all non 'unknown' labels to 'hasAnswer' in y_batch
-            for example_list in examples:
-                for example in example_list:
-                    if example.class_label != 'unknown':
-                        example.class_label = 'hasAnswer'
+            # alfred change all non 'unknown' labels to 'hasAnswer' in y_batch instead of regenerating the pickle files
+            #for example_list in examples:
+            #    for example in example_list:
+            #        if example.class_label != 'unknown':
+            #            example.class_label = 'hasAnswer'
             print('end load pickle file', time.time())
 
         print('start outer iteration', time.time())
         train_dataset = TextDataset(examples)
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-        for x_batch_loader, y_batch_loader, example_ids, text_labels in train_loader:  # alfred where does y_batch get formatted?
+        for x_batch_loader, y_batch_loader in train_loader: #, example_ids, text_labels in train_loader:  # alfred where does y_batch get formatted?
             print('start inner iteration', time.time())
             x_batch, attention_mask, token_type_ids = x_batch_loader # alfred attention mask provided by the encoding
             y_batch = (y.to(device) for y in y_batch_loader)
