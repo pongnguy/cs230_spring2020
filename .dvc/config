@@ -1,5 +1,5 @@
 [core]
-    remote = dropbox
+    remote = aws_s3
 [cache]
     type = "reflink,symlink,hardlink,copy"
 ['remote "aws_s3"']
@@ -8,4 +8,3 @@
     url = //10.0.0.245/DVC/
 ['remote "gdrive_stanford"']
     url = gdrive://1yWItrd7irGZyZIQYc7WzV_MmdRRIIypz
-
