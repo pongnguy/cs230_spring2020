@@ -1,3 +1,6 @@
+import argparse
+from datetime import datetime
+
 from transformers import DistilBertTokenizer, DistilBertModel, DistilBertConfig
 from collections import defaultdict
 from dataclasses import dataclass
@@ -26,14 +29,27 @@ from torch import nn, optim
 from torch.utils.data import Dataset, Subset, DataLoader
 
 from apex import amp
-from transformers import BertTokenizer, AdamW, WarmupLinearSchedule, BertModel, BertPreTrainedModel
+from transformers import BertTokenizer, AdamW, WarmupLinearSchedule
 
-# In[ ]:
+parser = argparse.ArgumentParser()
 
-TRAIN_SIZE = 5000
-VALID_SIZE = 100
-DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(TRAIN_SIZE)+'.jsonl'
-EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
+parser.add_argument("--train_size", type=int, default=10000, help="number of training examples")
+parser.add_argument("--valid_size", type=int, default=2000, help="number of validation examples")
+parser.add_argument("--learning_rate", type=float, default=2e-5, help="initial learning rate")
+parser.add_argument("--epochs", type=int, default=2, help="number of epochs to train")
+parser.add_argument("--batch_size", type=int, default=16, help="batch size to use for training examples")
+parser.add_argument("--fp16", type=bool, default=False, help="whether to use 16-bit precision")
+parser.add_argument("--hidden_layers", type=int, default=6, help="number of hidden layers from pretrained model to use")
+parser.add_argument("--frozen_layers", type=int, default=6, help="number of layers to freeze in pretrained model")
+parser.add_argument("--optimizer", type=str, default="Adam", help="optimizer")
+parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
+
+args = parser.parse_args()
+train_size = args.train_size
+valid_size = args.valid_size
+
+DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(train_size)+'.jsonl'
+EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(valid_size)+'.jsonl'
 
 chunksize = 1000
 
@@ -51,27 +67,27 @@ DEBUG = True
 start_time = time.time()
 
 seed = 1029
-valid_size = VALID_SIZE
-train_size = TRAIN_SIZE
 
 max_seq_len = 384
 max_question_len = 64
 doc_stride = 128
 
 num_labels = 5
-n_epochs = 2
-lr = 2e-5
+n_epochs = args.epochs
+lr = args.learning_rate
 warmup = 0.05
-batch_size = 16
+batch_size = args.batch_size
 accumulation_steps = 4
 
-bert_model = 'bert-base-uncased'
-do_lower_case = 'uncased' in bert_model
 device = torch.device('cuda')
+output_dir=datetime.now().strftime("%d-%m-%Y_%H_%M_%S")
+os.makedirs(output_dir)
+output_model_file = os.path.join(output_dir,'pytorch_model.bin')
+output_optimizer_file = os.path.join(output_dir,'pytorch_optimizer.bin')
+output_amp_file = os.path.join(output_dir, 'pytorch_amp.bin')
 
-output_model_file = 'distil_bert_pytorch_weighted_loss.bin'
-output_optimizer_file = 'bert_pytorch_optimizer_weighted_loss.bin'
-output_amp_file = 'bert_pytorch_amp_weighted_loss.bin'
+with open(os.path.join(output_dir, 'hyperparameters.txt'), 'w') as hyperparameters_file:
+    print(args, file=hyperparameters_file)
 
 random.seed(seed)
 np.random.seed(seed)
@@ -249,7 +265,7 @@ class JsonChunkReader(JsonReader):
         # print(line)
         # print('Length of lines',len(lines), 'chunksize', self.chunksize)
         if lines:
-            with Pool(2) as p:
+            with Pool(10) as p:
                 obj = p.map(self.convert_data, lines)
                 # print('Length of obj', len(obj))
             return obj
@@ -380,11 +396,13 @@ def loss_fn_classifier(preds, labels):
     _, _, class_preds = preds
     _, _, class_labels = labels
 
-    class_weights = [1.0, 1.0, 1.0, 0.3, 1.0]
+    class_weights = [1.0, 1.0, 1.0, args.unknown_weight, 1.0]
     class_weights = torch.FloatTensor(class_weights).cuda()
     class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
     return class_loss
+
+args = parser.parse_args()
 # RekhaDist
 config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
 config.num_labels = 5
@@ -709,15 +727,10 @@ class Result(object):
 
             if (DEBUG):
                 print(example)
-                print('long_pred=', long_pred)
-                print('short_pred=', short_pred)
+                print(yes_no_label)
                 #logging.info('long_pred=%d',long_pred)
                 #logging.info("%s",example.question_text)
-                answer="answer:"
-                for i in range(long_pred[0], long_pred[1]):
-                    answer += example.doc_tokens[i]
                 #logging.info("%s", answer)
-                print(answer)
             # long score
 
 
@@ -789,11 +802,9 @@ print(f'calculate validation score done in {(time.time() - eval_start_time) / 60
 
 long_score = valid_scores['long_score']
 #short_score = valid_scores['short_score']
-overall_score = valid_scores['overall_score']
 print('validation scores:')
 print(f'\tlong score    : {long_score:.4f}')
 #print(f'\tshort score   : {short_score:.4f}')
-print(f'\toverall score : {overall_score:.4f}')
 print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 
 # In[ ]:
