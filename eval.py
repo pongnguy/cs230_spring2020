@@ -30,9 +30,9 @@ from transformers import BertTokenizer, BertConfig, BertModel, BertPreTrainedMod
 
 # In[ ]:
 
-VALID_SIZE = 2000
-EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'.jsonl'
-
+VALID_SIZE = 100
+#EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'_set2.jsonl'
+EVAL_DATA_PATH = '/data/global_data/rekha_data/train_head6k_tail100_total100.jsonl'
 chunksize = 1000
 
 #
@@ -559,6 +559,7 @@ def eval_model(
                 logits = start_logits + end_logits - cls_logits  # (batch_size,)
                 indices = torch.stack((start_index, end_index)).transpose(0, 1)  # (batch_size, 2)
                 result.update(qa_examples, logits.numpy(), indices.numpy(), class_preds.numpy())
+                print("Passed "+str(len(classifier_forwards.examples))+" to stage 2")
                 classifier_forwards.clear()
             if len(classifier_rejects.examples) >= batch_size:
                 reject_examples = classifier_rejects.examples
@@ -566,6 +567,7 @@ def eval_model(
                 end_index = torch.full([len(classifier_rejects.examples)], -1)
                 indices = torch.stack((start_index, end_index)).transpose(1, 0)
                 result.update(reject_examples, np.zeros(len(classifier_rejects.examples)), indices, np.zeros(len(classifier_rejects.examples)))
+                print("Rejected "+str(len(classifier_rejects.examples))+" in classifier iteself")
                 classifier_rejects.clear()
         if classifier_forwards.examples:
             qa_inputs = classifier_forwards.inputs
@@ -585,12 +587,14 @@ def eval_model(
             logits = start_logits + end_logits - cls_logits  # (batch_size,)
             indices = torch.stack((start_index, end_index)).transpose(1, 0)  # (batch_size, 2)
             result.update(qa_examples, logits.numpy(), indices.numpy(), class_preds.numpy())
+            print("Passed " + str(len(classifier_forwards.examples)) + " to stage 2 at the end")
         if classifier_rejects.examples:
             start_index = torch.full([len(classifier_rejects.examples)], -1)
             end_index = torch.full([len(classifier_rejects.examples)], -1)
             indices = torch.stack((start_index, end_index)).transpose(1, 0)
             result.update(classifier_rejects.examples, np.zeros(len(classifier_rejects.examples)),
                           indices, np.zeros(len(classifier_rejects.examples)))
+            print("Rejected " + str(len(classifier_rejects.examples)) + " in classifier itself at the end")
     return result.score()
 
 
@@ -635,11 +639,12 @@ class Result(object):
             Class predicition scores of each examples.
         """
         for i, example in enumerate(examples):
-            if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] < logits[i]:
+            if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] <= logits[i]:
                 self.best_scores[example.example_id] = logits[i]
                 self.examples[example.example_id] = example
                 self.results[example.example_id] = [
                     example.doc_start, indices[i], class_preds[i]]
+                print("update: now results len is:"+str(len(self.results.keys())))
 
     def _generate_predictions(self) -> Generator[Dict, None, None]:
         """Generate predictions of each examples.
@@ -757,7 +762,7 @@ class Result(object):
                         break
             short_scores.append([has_answer, has_pred, is_correct])
 
-        print('Long Answer')
+        print('Long Answer score out of ', len(long_scores))
         long_score = _compute_f1(long_scores)
         print('Short Answer')
         short_score = _compute_f1(short_scores)
