@@ -12,6 +12,7 @@ This work was done as part of the CS230 Spring 2020 final project.
 3.
 
 python train_qa.py
-python train_classifier.py
+./run.sh
+
 python eval.py
 
