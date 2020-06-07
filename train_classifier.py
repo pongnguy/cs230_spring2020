@@ -619,6 +619,16 @@ def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[E
 # Put everything inside this if statement to prevent multiprocessing error on windows
 if __name__ == '__main__':
     args = parser.parse_args()
+    # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
+    # RekhaDist
+    tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
+
+    convert_func = functools.partial(convert_data,
+                                     tokenizer=tokenizer,
+                                     max_seq_len=max_seq_len,
+                                     max_question_len=max_question_len,
+                                     doc_stride=doc_stride)
+    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
     # RekhaDist
     if(stage=='both' or stage=='train'):
         config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
@@ -651,16 +661,7 @@ if __name__ == '__main__':
         model.zero_grad()
         model.train()
 
-        # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
-        # RekhaDist
-        tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
 
-        convert_func = functools.partial(convert_data,
-                                     tokenizer=tokenizer,
-                                     max_seq_len=max_seq_len,
-                                     max_question_len=max_question_len,
-                                     doc_stride=doc_stride)
-        data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
 
         global_step = 0
         print_both(out_file,'Rekha train_size=', train_size)
@@ -725,10 +726,11 @@ if __name__ == '__main__':
     if(stage == 'both' or stage == 'eval'):
         # EVAL STARTING]
         if(stage == 'eval'):
+            classifier_model_name = 'distilbert-base-uncased-distilled-squad'
             config = DistilBertConfig.from_pretrained(classifier_model_name)
             config.num_labels = 5
-            config.dropout = args.classifier_dropout
-            model = DistilBertForTFQA.from_pretrained(args.classifier_model_dir, config=config,
+            config.dropout = args.dropout
+            model = DistilBertForTFQA.from_pretrained(os.curdir, config=config,
                                                                  hidden_layers=args.hidden_layers,
                                                                  batch_size=args.batch_size)
         print_both(out_file,'EVAL STARTING')
