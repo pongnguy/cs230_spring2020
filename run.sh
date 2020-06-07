@@ -13,5 +13,18 @@
 #parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
 #parser.add_argument("--do_train", type=bool, default=True, help="do training or evaluate a trained model")
 
-python3 -u train_classifier.py --train_size=100 --valid_size=10 --dropout=0.2
-python3 -u train_classifier.py --train_size=100 --valid_size=10 --dropout=0.3
+#python3 -u train_classifier.py --learning_rate=1e-10 --train_size=10000 --valid_size=100 | tee out1.txt 2>&1
+#python3 -u train_classifier.py --unknown_weight=0.4 --train_size=10000 --valid_size=100 | tee out2.txt 2>&1
+#python3 -u train_classifier.py --learning_rate=1e-8 --train_size=10000 --valid_size=100 | tee out3.txt 2>&1
+#python3 -u train_classifier.py --unknown_weight=0.5 --train_size=10000 --valid_size=100 | tee out4.txt 2>&1
+#python3 -u train_classifier.py --learning_rate=1e-6 --train_size=10000 --valid_size=100 | tee out5.txt 2>&1
+#python3 -u train_classifier.py --unknown_weight=0.6 --train_size=10000 --valid_size=100 | tee out6.txt 2>&1
+#python3 -u train_classifier.py --learning_rate=1e-4 --train_size=10000 --valid_size=100 | tee out7.txt 2>&1
+#python3 -u train_classifier.py --learning_rate=1e-3 --train_size=10000 --valid_size=100 | tee out8.txt 2>&1
+
+python3 -u train_classifier.py --stage=both --unknown_weight=0.3 --learning_rate=1e-5 --train_size=10000 --valid_size=100 | tee out9_lr1e5.txt 2>&1
+python3 -u train_classifier.py --stage=both --unknown_weight=0.3 --learning_rate=4e-5 --train_size=10000 --valid_size=100 | tee out10_lr2e5.txt 2>&1
+python3 -u train_classifier.py --stage=both --unknown_weight=0.3 --learning_rate=1e-6 --epochs=4 --train_size=10000 --valid_size=100 | tee out10_lr2e5.txt 2>&1
+python3 -u train_classifier.py --stage=both --unknown_weight=0.3 --learning_rate=1e-5 --epochs=4 --train_size=10000 --valid_size=100 | tee out9_lr1e5.txt 2>&1
+python3 -u train_classifier.py --stage=both --unknown_weight=0.3 --learning_rate=1e-5 --train_size=10000 --valid_size=2000 | tee out9_lr1e5.txt 2>&1
+python3 -u train_classifier.py --stage=both --unknown_weight=0.3 --learning_rate=2e-5 --train_size=10000 --valid_size=2000 | tee out10_lr2e5.txt 2>&1
