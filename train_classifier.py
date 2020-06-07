@@ -16,6 +16,7 @@ import re
 import shutil
 import subprocess
 import time
+import sys
 from typing import Callable, Dict, List, Generator, Tuple
 
 import numpy as np
@@ -33,8 +34,10 @@ from transformers import BertTokenizer, AdamW, WarmupLinearSchedule
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument("--data_dir", type=str, default='/data/global_data/rekha_data', help="directory containing training and validation files")
+parser.add_argument("--dropout", type=float, default=0.1, help="-")
 parser.add_argument("--train_size", type=int, default=10000, help="number of training examples")
-parser.add_argument("--valid_size", type=int, default=2000, help="number of validation examples")
+parser.add_argument("--valid_size", type=int, default=10, help="number of validation examples")
 parser.add_argument("--learning_rate", type=float, default=2e-5, help="initial learning rate")
 parser.add_argument("--epochs", type=int, default=2, help="number of epochs to train")
 parser.add_argument("--batch_size", type=int, default=16, help="batch size to use for training examples")
@@ -43,13 +46,14 @@ parser.add_argument("--hidden_layers", type=int, default=6, help="number of hidd
 parser.add_argument("--frozen_layers", type=int, default=6, help="number of layers to freeze in pretrained model")
 parser.add_argument("--optimizer", type=str, default="Adam", help="optimizer")
 parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
+parser.add_argument("--do_train", type=bool, default=True, help="do training or evaluate a trained model")
 
 args = parser.parse_args()
 train_size = args.train_size
 valid_size = args.valid_size
 
-DATA_PATH = '/data/global_data/rekha_data/simplified-nq-train_'+str(train_size)+'.jsonl'
-EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(valid_size)+'.jsonl'
+DATA_PATH = os.path.join(args.data_dir, 'simplified-nq-train_'+str(train_size)+'.jsonl')
+EVAL_DATA_PATH = os.path.join(args.data_dir, 'simplified-nq-valid_'+str(valid_size)+'.jsonl')
 
 chunksize = 1000
 
@@ -57,6 +61,7 @@ chunksize = 1000
 # get_ipython().system('wc -l $DATA_PATH')
 # get_ipython().system('wc -l $EVAL_DATA_PATH')
 DEBUG = True
+EVALUATION = True
 
 # In[ ]:
 
@@ -80,11 +85,20 @@ batch_size = args.batch_size
 accumulation_steps = 4
 
 device = torch.device('cuda')
-output_dir=datetime.now().strftime("%d-%m-%Y_%H_%M_%S")
+output_dir="dr"+str(args.dropout)+"unkWt"+str(args.unknown_weight)+"lr"+str(args.learning_rate)+datetime.now().strftime("%d-%m_%H_%M_%S")
 os.makedirs(output_dir)
 output_model_file = os.path.join(output_dir,'pytorch_model.bin')
 output_optimizer_file = os.path.join(output_dir,'pytorch_optimizer.bin')
 output_amp_file = os.path.join(output_dir, 'pytorch_amp.bin')
+
+def print_both(file, *args):
+    temp = sys.stdout #assign console output to a variable
+    print(' '.join([str(arg) for arg in args]))
+    sys.stdout = file
+    print(' '.join([str(arg) for arg in args]))
+    sys.stdout = temp #set stdout back to console output
+
+out_file=open(os.path.join(output_dir, 'results.txt'), 'w')
 
 with open(os.path.join(output_dir, 'hyperparameters.txt'), 'w') as hyperparameters_file:
     print(args, file=hyperparameters_file)
@@ -350,7 +364,7 @@ class DistilBertForQuestionAnswering(DistilBertModel):
         super(DistilBertForQuestionAnswering, self).__init__(config)
         self.bert = DistilBertModel(config)
         self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
-        self.dropout = nn.Dropout(0.2) #RekhaDist
+        self.dropout = nn.Dropout(args.dropout) #RekhaDist
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
         self.init_weights()
 
@@ -377,19 +391,6 @@ class DistilBertForQuestionAnswering(DistilBertModel):
         end_dummy = torch.randn(batch_size, max_seq_len)
         return start_dummy, end_dummy, classifier_logits
 
-
-# In[ ]:
-
-
-def loss_fn(preds, labels):
-    start_preds, end_preds, class_preds = preds
-    start_labels, end_labels, class_labels = labels
-
-    start_loss = nn.CrossEntropyLoss(ignore_index=-1)(start_preds, start_labels)
-    end_loss = nn.CrossEntropyLoss(ignore_index=-1)(end_preds, end_labels)
-    class_loss = nn.CrossEntropyLoss()(class_preds, class_labels)
-    return start_loss + end_loss + class_loss
-
 #['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
 
 def loss_fn_classifier(preds, labels):
@@ -401,126 +402,6 @@ def loss_fn_classifier(preds, labels):
     class_loss = nn.CrossEntropyLoss(class_weights)(class_preds, class_labels)
 
     return class_loss
-
-args = parser.parse_args()
-# RekhaDist
-config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
-config.num_labels = 5
-model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)
-
-model = model.to(device)
-
-param_optimizer = list(model.named_parameters())
-no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-optimizer_grouped_parameters = [
-    {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-    {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-print('num_train_optimization_steps=', num_train_optimization_steps)
-num_warmup_steps = int(num_train_optimization_steps * warmup)
-print('num_warmup_steps', num_warmup_steps)
-
-optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-
-model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-model.zero_grad()
-model = model.train()
-
-# tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
-# RekhaDist
-tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
-
-convert_func = functools.partial(convert_data,
-                                 tokenizer=tokenizer,
-                                 max_seq_len=max_seq_len,
-                                 max_question_len=max_question_len,
-                                 doc_stride=doc_stride)
-data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
-
-global_step = 0
-print('Rekha train_size=', train_size)
-print('Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-print('Rekha DATA_PATH', DATA_PATH)
-# print('len(data_reader)',len(data_reader))
-for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-    train_dataset = TextDataset(examples)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-    for x_batch, y_batch in train_loader:
-        x_batch, attention_mask, token_type_ids = x_batch
-        y_batch = (y.to(device) for y in y_batch)
-
-        # RekhaDist
-        # context = "The US has passed the peak on new coronavirus cases, " \
-        #           "President Donald Trump said and predicted that some states would reopen this month." \
-        #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
-        #           "the highest for any country in the world."
-        # questions = ["What was President Donald Trump's prediction?",
-        #              "How many deaths have been reported from the virus?",
-        #              "How many cases have been reported in the United States?"]
-        # question_context_for_batch = []
-        #
-        # for question in questions:
-        #     question_context_for_batch.append((question, context))
-        # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
-        # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
-        # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
-        y_pred = model(x_batch.to(device),
-                       attention_mask=attention_mask.to(device))
-
-        #Rekha old
-        # y_pred = model(x_batch.to(device),
-        #                attention_mask=attention_mask.to(device),
-        #                token_type_ids=token_type_ids.to(device))
-        loss = loss_fn_classifier(y_pred, y_batch)
-        with amp.scale_loss(loss, optimizer) as scaled_loss:
-            scaled_loss.backward()
-        if (global_step + 1) % accumulation_steps == 0:
-            optimizer.step()
-            scheduler.step()
-            model.zero_grad()
-
-        global_step += 1
-    print("Training loss:", loss)
-
-    if (time.time() - start_time) / 3600 > 7:
-        break
-
-del examples, train_dataset, train_loader
-gc.collect()
-
-torch.save(model.state_dict(), output_model_file)
-torch.save(optimizer.state_dict(), output_optimizer_file)
-torch.save(amp.state_dict(), output_amp_file)
-
-# In[ ]:
-
-
-print(f'trained {global_step * batch_size} samples')
-print(f'training time: {(time.time() - start_time) / 3600:.1f} hours')
-
-
-# In[ ]:
-
-
-def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
-    # input tokens
-    max_len = max([len(example.input_ids) for example in examples])
-    tokens = np.zeros((len(examples), max_len), dtype=np.int64)
-    token_type_ids = np.ones((len(examples), max_len), dtype=np.int64)
-    for i, example in enumerate(examples):
-        row = example.input_ids
-        tokens[i, :len(row)] = row
-        token_type_id = [0 if i <= row.index(102) else 1
-                         for i in range(len(row))]  # 102 corresponds to [SEP]
-        token_type_ids[i, :len(row)] = token_type_id
-    attention_mask = tokens > 0
-    inputs = [torch.from_numpy(tokens),
-              torch.from_numpy(attention_mask),
-              torch.from_numpy(token_type_ids)]
-
-    return inputs, examples
-
 
 def eval_model(
         model: nn.Module,
@@ -674,21 +555,6 @@ class Result(object):
             else:
                 return x / y
 
-        def _compute_f1_old(answer_stats: List[List[bool]]) -> float:
-            """Computes F1, precision, recall for a list of answer scores.
-            """
-            has_answer, has_pred, is_correct = list(zip(*answer_stats))
-            precision = _safe_divide(sum(is_correct), sum(has_pred))
-            recall = _safe_divide(sum(is_correct), sum(has_answer))
-            print('sum(is_correct)=',sum(is_correct)) #Confusion matrix
-            print('sum(has_pred)=' , sum(has_pred)) # has_pred = TP + FP ==>
-
-            print('sum(has_answer)=', sum(has_answer)) # has_answer = TP + FN ==>
-            print('precision=', precision)
-            print('recall=', recall)
-            f1 = _safe_divide(2 * precision * recall, precision + recall)
-            return f1
-
         def _compute_f1(answer_stats: List[List[bool]]) -> float:
             """Computes F1, precision, recall for a list of answer scores.
             """
@@ -709,10 +575,11 @@ class Result(object):
 
             precision = _safe_divide(tp, tp + fp)
             recall = _safe_divide(tp, tp + fn)
-            print('tp=',tp, '  fp=',fp)    #    Confusion matrix
-            print('fn=', fn, '  tn=', tn)  # Confusion matrix
-            print('precision=', precision)
-            print('recall=', recall)
+            print_both(out_file, 'tp=',tp, '  fp=', fp)    #    Confusion matrix
+            print_both(out_file, 'fn=', fn, '  tn=', tn)  # Confusion matrix
+            print_both(out_file,'precision=', precision)
+            print_both(out_file,'recall=', recall)
+
             f1 = _safe_divide(2 * precision * recall, precision + recall)
             return f1
 
@@ -726,8 +593,8 @@ class Result(object):
             yes_no_label = self.class_labels[class_pred.argmax()]
 
             if (DEBUG):
-                print(example)
-                print(yes_no_label)
+                print_both(out_file,example)
+                print_both(out_file,yes_no_label)
                 #logging.info('long_pred=%d',long_pred)
                 #logging.info("%s",example.question_text)
                 #logging.info("%s", answer)
@@ -766,7 +633,7 @@ class Result(object):
             #             break
             # short_scores.append([has_answer, has_pred, is_correct])
 
-        print('Long Answer')
+        print_both(out_file,'Long Answer')
         long_score = _compute_f1(long_scores)
         # print('Short Answer')
         # short_score = _compute_f1(short_scores)
@@ -776,48 +643,144 @@ class Result(object):
             #'overall_score': (long_score + short_score) / 2
         }
 
+def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
+    # input tokens
+    max_len = max([len(example.input_ids) for example in examples])
+    tokens = np.zeros((len(examples), max_len), dtype=np.int64)
+    token_type_ids = np.ones((len(examples), max_len), dtype=np.int64)
+    for i, example in enumerate(examples):
+        row = example.input_ids
+        tokens[i, :len(row)] = row
+        token_type_id = [0 if i <= row.index(102) else 1
+                         for i in range(len(row))]  # 102 corresponds to [SEP]
+        token_type_ids[i, :len(row)] = token_type_id
+    attention_mask = tokens > 0
+    inputs = [torch.from_numpy(tokens),
+              torch.from_numpy(attention_mask),
+              torch.from_numpy(token_type_ids)]
 
-# In[ ]:
+    return inputs, examples
 
+# Put everything inside this if statement to prevent multiprocessing error on windows
+if __name__ == '__main__':
+    args = parser.parse_args()
+    # RekhaDist
+    config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+    config.num_labels = 5
+    model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)
 
-# Rekha added
-# EVAL STARTING]
-print('EVAL STARTING')
-data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
+    model = model.to(device)
 
-# In[ ]:
+    param_optimizer = list(model.named_parameters())
+    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+    optimizer_grouped_parameters = [
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
+    print_both(out_file,'num_train_optimization_steps=', num_train_optimization_steps)
+    num_warmup_steps = int(num_train_optimization_steps * warmup)
+    print_both(out_file,'num_warmup_steps', num_warmup_steps)
 
+    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
 
-eval_start_time = time.time()
-valid_data = next(data_reader)
-valid_data = list(itertools.chain.from_iterable(valid_data))
-valid_dataset = Subset(valid_data, range(len(valid_data)))
-valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
-valid_scores = eval_model(model, valid_loader, device=device)
+    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+    model.zero_grad()
+    model.train()
 
-print(f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
+    # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
+    # RekhaDist
+    tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
 
-# In[ ]:
+    convert_func = functools.partial(convert_data,
+                                 tokenizer=tokenizer,
+                                 max_seq_len=max_seq_len,
+                                 max_question_len=max_question_len,
+                                 doc_stride=doc_stride)
+    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
 
+    global_step = 0
+    print_both(out_file,'Rekha train_size=', train_size)
+    print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
+    print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
+    # print_both(out_file,'len(data_reader)',len(data_reader))
+    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+        train_dataset = TextDataset(examples)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+        for x_batch, y_batch in train_loader:
+            x_batch, attention_mask, token_type_ids = x_batch
+            y_batch = (y.to(device) for y in y_batch)
 
-long_score = valid_scores['long_score']
-#short_score = valid_scores['short_score']
-print('validation scores:')
-print(f'\tlong score    : {long_score:.4f}')
-#print(f'\tshort score   : {short_score:.4f}')
-print(f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
+            # RekhaDist
+            # context = "The US has passed the peak on new coronavirus cases, " \
+            #           "President Donald Trump said and predicted that some states would reopen this month." \
+            #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
+            #           "the highest for any country in the world."
+            # questions = ["What was President Donald Trump's prediction?",
+            #              "How many deaths have been reported from the virus?",
+            #              "How many cases have been reported in the United States?"]
+            # question_context_for_batch = []
+            #
+            # for question in questions:
+            #     question_context_for_batch.append((question, context))
+            # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
+            # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
+            # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
+            y_pred = model(x_batch.to(device),
+                           attention_mask=attention_mask.to(device))
 
-# In[ ]:
+            #Rekha old
+            # y_pred = model(x_batch.to(device),
+            #                attention_mask=attention_mask.to(device),
+            #                token_type_ids=token_type_ids.to(device))
+            loss = loss_fn_classifier(y_pred, y_batch)
+            with amp.scale_loss(loss, optimizer) as scaled_loss:
+                scaled_loss.backward()
+            if (global_step + 1) % accumulation_steps == 0:
+                optimizer.step()
+                scheduler.step()
+                model.zero_grad()
 
+            global_step += 1
+        print_both(out_file,"Training loss:", loss)
 
-#get_ipython().system('wc -l $DATA_PATH')
-#get_ipython().system('wc -l $EVAL_DATA_PATH')
+        if (time.time() - start_time) / 3600 > 7:
+            break
 
-# In[ ]:
+    del examples, train_dataset, train_loader
+    gc.collect()
 
-print(f'trained {global_step * batch_size} samples')
-print(f'End of file: {(time.time() - start_time) / 3600:.1f} hours')
+    torch.save(model.state_dict(), output_model_file)
+    torch.save(optimizer.state_dict(), output_optimizer_file)
+    torch.save(amp.state_dict(), output_amp_file)
 
-# In[ ]:
+    print_both(out_file,f'trained {global_step * batch_size} samples')
+    print_both(out_file,f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+
+    # EVAL STARTING]
+    print_both(out_file,'EVAL STARTING')
+    data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
+
+    eval_start_time = time.time()
+    valid_data = next(data_reader)
+    valid_data = list(itertools.chain.from_iterable(valid_data))
+    valid_dataset = Subset(valid_data, range(len(valid_data)))
+    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
+    valid_scores = eval_model(model, valid_loader, device=device)
+
+    print_both(out_file,f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
+
+    long_score = valid_scores['long_score']
+    #short_score = valid_scores['short_score']
+    print_both(out_file,'validation scores:')
+    print_both(out_file,f'\tlong score    : {long_score:.4f}')
+    #print_both(out_file,f'\tshort score   : {short_score:.4f}')
+    print_both(out_file,f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
+
+    #get_ipython().system('wc -l $DATA_PATH')
+    #get_ipython().system('wc -l $EVAL_DATA_PATH')
+
+    print_both(out_file,f'trained {global_step * batch_size} samples')
+    print_both(out_file,f'End of file: {(time.time() - start_time) / 3600:.1f} hours')
 
 
