@@ -36,22 +36,22 @@ from models import DistilBertForTFQA
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument("--stage", type=str, default='both', help="both for both, eval for eval only, train for train only")
 parser.add_argument("--data_dir", type=str, default='/data/global_data/rekha_data', help="directory containing training and validation files")
 parser.add_argument("--dropout", type=float, default=0.1, help="-")
 parser.add_argument("--train_size", type=int, default=10000, help="number of training examples")
-parser.add_argument("--valid_size", type=int, default=100, help="number of validation examples")
+parser.add_argument("--valid_size", type=int, default=10, help="number of validation examples")
 parser.add_argument("--learning_rate", type=float, default=2e-5, help="initial learning rate")
 parser.add_argument("--epochs", type=int, default=2, help="number of epochs to train")
 parser.add_argument("--batch_size", type=int, default=16, help="batch size to use for training examples")
 parser.add_argument("--fp16", type=bool, default=False, help="whether to use 16-bit precision")
 parser.add_argument("--hidden_layers", type=int, default=6, help="number of hidden layers from pretrained model to use")
-parser.add_argument("--frozen_layers", type=int, default=0, help="number of layers to freeze in pretrained model")
+parser.add_argument("--frozen_layers", type=int, default=6, help="number of layers to freeze in pretrained model")
 parser.add_argument("--optimizer", type=str, default="Adam", help="optimizer")
-parser.add_argument("--unknown_weight", type=float, default=0.5, help="weight of unknown label in loss function")
-parser.add_argument("--weight_decay", type=float, default=0.01, help="weight decay rate(actual weight) in optimizer")
-parser.add_argument("--do_train", type=bool, default=True, help="do training or evaluate a trained model")
+parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
 
 args = parser.parse_args()
+stage = args.stage
 train_size = args.train_size
 valid_size = args.valid_size
 
@@ -620,125 +620,135 @@ def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[E
 if __name__ == '__main__':
     args = parser.parse_args()
     # RekhaDist
-    config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
-    config.num_labels = 5
-    config.dropout = args.dropout
-    if args.hidden_layers != 6:
-        config.output_hidden_states = True
-    model = DistilBertForTFQA.from_pretrained('distilbert-base-uncased-distilled-squad', config=config,
-                                              frozen_layers=args.frozen_layers, hidden_layers=args.hidden_layers,
-                                              batch_size=args.batch_size, max_seq_len=max_seq_len)
+    if(stage=='both' or stage=='train'):
+        config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
+        config.num_labels = 5
+        config.dropout = args.dropout
+        if args.hidden_layers != 6:
+            config.output_hidden_states = True
+        model = DistilBertForTFQA.from_pretrained('distilbert-base-uncased-distilled-squad', config=config,
+                                                  frozen_layers=args.frozen_layers, hidden_layers=args.hidden_layers,
+                                                  batch_size=args.batch_size, max_seq_len=max_seq_len)
 
-    model = model.to(device)
+        model = model.to(device)
 
-    param_optimizer = list(model.named_parameters())
-    param_optimizer = [x for x in param_optimizer if x[1].requires_grad]
-    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': args.weight_decay},
-        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-    print_both(out_file,'num_train_optimization_steps=', num_train_optimization_steps)
-    num_warmup_steps = int(num_train_optimization_steps * warmup)
-    print_both(out_file,'num_warmup_steps', num_warmup_steps)
-    out_file.flush()
+        param_optimizer = list(model.named_parameters())
+        param_optimizer = [x for x in param_optimizer if x[1].requires_grad]
+        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+        optimizer_grouped_parameters = [
+            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': args.weight_decay},
+            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+        num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
+        print_both(out_file,'num_train_optimization_steps=', num_train_optimization_steps)
+        num_warmup_steps = int(num_train_optimization_steps * warmup)
+        print_both(out_file,'num_warmup_steps', num_warmup_steps)
+        out_file.flush()
 
-    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
+        optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+        scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
 
-    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-    model.zero_grad()
-    model.train()
+        model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+        model.zero_grad()
+        model.train()
 
-    # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
-    # RekhaDist
-    tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
+        # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
+        # RekhaDist
+        tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
 
-    convert_func = functools.partial(convert_data,
-                                 tokenizer=tokenizer,
-                                 max_seq_len=max_seq_len,
-                                 max_question_len=max_question_len,
-                                 doc_stride=doc_stride)
-    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+        convert_func = functools.partial(convert_data,
+                                     tokenizer=tokenizer,
+                                     max_seq_len=max_seq_len,
+                                     max_question_len=max_question_len,
+                                     doc_stride=doc_stride)
+        data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
 
-    global_step = 0
-    print_both(out_file,'Rekha train_size=', train_size)
-    print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-    print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
-    out_file.flush()
-    # print_both(out_file,'len(data_reader)',len(data_reader))
-    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
-        train_dataset = TextDataset(examples)
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-        for x_batch, y_batch in train_loader:
-            x_batch, attention_mask, token_type_ids = x_batch
-            y_batch = (y.to(device) for y in y_batch)
+        global_step = 0
+        print_both(out_file,'Rekha train_size=', train_size)
+        print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
+        print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
+        out_file.flush()
+        # print_both(out_file,'len(data_reader)',len(data_reader))
+        for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+            train_dataset = TextDataset(examples)
+            train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+            for x_batch, y_batch in train_loader:
+                x_batch, attention_mask, token_type_ids = x_batch
+                y_batch = (y.to(device) for y in y_batch)
 
-            # RekhaDist
-            # context = "The US has passed the peak on new coronavirus cases, " \
-            #           "President Donald Trump said and predicted that some states would reopen this month." \
-            #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
-            #           "the highest for any country in the world."
-            # questions = ["What was President Donald Trump's prediction?",
-            #              "How many deaths have been reported from the virus?",
-            #              "How many cases have been reported in the United States?"]
-            # question_context_for_batch = []
-            #
-            # for question in questions:
-            #     question_context_for_batch.append((question, context))
-            # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
-            # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
-            # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
-            y_pred = model(x_batch.to(device),
-                           attention_mask=attention_mask.to(device))
+                # RekhaDist
+                # context = "The US has passed the peak on new coronavirus cases, " \
+                #           "President Donald Trump said and predicted that some states would reopen this month." \
+                #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
+                #           "the highest for any country in the world."
+                # questions = ["What was President Donald Trump's prediction?",
+                #              "How many deaths have been reported from the virus?",
+                #              "How many cases have been reported in the United States?"]
+                # question_context_for_batch = []
+                #
+                # for question in questions:
+                #     question_context_for_batch.append((question, context))
+                # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
+                # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
+                # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
+                y_pred = model(x_batch.to(device),
+                               attention_mask=attention_mask.to(device))
 
-            #Rekha old
-            # y_pred = model(x_batch.to(device),
-            #                attention_mask=attention_mask.to(device),
-            #                token_type_ids=token_type_ids.to(device))
-            loss = loss_fn_classifier(y_pred, y_batch)
-            with amp.scale_loss(loss, optimizer) as scaled_loss:
-                scaled_loss.backward()
-            if (global_step + 1) % accumulation_steps == 0:
-                optimizer.step()
-                scheduler.step()
-                model.zero_grad()
+                #Rekha old
+                # y_pred = model(x_batch.to(device),
+                #                attention_mask=attention_mask.to(device),
+                #                token_type_ids=token_type_ids.to(device))
+                loss = loss_fn_classifier(y_pred, y_batch)
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+                if (global_step + 1) % accumulation_steps == 0:
+                    optimizer.step()
+                    scheduler.step()
+                    model.zero_grad()
 
-            global_step += 1
-        print_both(out_file,"Training loss:", loss)
+                global_step += 1
+            print_both(out_file,"Training loss:", loss)
 
-        if (time.time() - start_time) / 3600 > 7:
-            break
+            if (time.time() - start_time) / 3600 > 7:
+                break
 
-    del examples, train_dataset, train_loader
-    gc.collect()
+        del examples, train_dataset, train_loader
+        gc.collect()
 
-    torch.save(model.state_dict(), output_model_file)
-    torch.save(optimizer.state_dict(), output_optimizer_file)
-    torch.save(amp.state_dict(), output_amp_file)
+        torch.save(model.state_dict(), output_model_file)
+        torch.save(optimizer.state_dict(), output_optimizer_file)
+        torch.save(amp.state_dict(), output_amp_file)
 
-    print_both(out_file,f'trained {global_step * batch_size} samples')
-    print_both(out_file,f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+        print_both(out_file,f'trained {global_step * batch_size} samples')
+        print_both(out_file,f'training time: {(time.time() - start_time) / 3600:.1f} hours')
 
     # EVAL STARTING]
-    print_both(out_file,'EVAL STARTING')
-    data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
+    if(stage == 'both' or stage == 'eval'):
+        # EVAL STARTING]
+        if(stage == 'eval'):
+            config = DistilBertConfig.from_pretrained(classifier_model_name)
+            config.num_labels = 5
+            config.dropout = args.classifier_dropout
+            model = DistilBertForTFQA.from_pretrained(args.classifier_model_dir, config=config,
+                                                                 hidden_layers=args.hidden_layers,
+                                                                 batch_size=args.batch_size)
+        print_both(out_file,'EVAL STARTING')
+        data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
 
-    eval_start_time = time.time()
-    valid_data = next(data_reader)
-    valid_data = list(itertools.chain.from_iterable(valid_data))
-    valid_dataset = Subset(valid_data, range(len(valid_data)))
-    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
-    valid_scores = eval_model(model, valid_loader, device=device)
+        eval_start_time = time.time()
+        valid_data = next(data_reader)
+        valid_data = list(itertools.chain.from_iterable(valid_data))
+        valid_dataset = Subset(valid_data, range(len(valid_data)))
+        valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
+        valid_scores = eval_model(model, valid_loader, device=device)
 
-    print_both(out_file,f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
+        print_both(out_file,f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
 
-    long_score = valid_scores['long_score']
-    #short_score = valid_scores['short_score']
-    print_both(out_file,'validation scores:')
-    print_both(out_file,f'\tlong score    : {long_score:.4f}')
-    #print_both(out_file,f'\tshort score   : {short_score:.4f}')
-    print_both(out_file,f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
+        long_score = valid_scores['long_score']
+        #short_score = valid_scores['short_score']
+        print_both(out_file,'validation scores:')
+        print_both(out_file,f'\tlong score    : {long_score:.4f}')
+        #print_both(out_file,f'\tshort score   : {short_score:.4f}')
+        print_both(out_file,f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 
     #get_ipython().system('wc -l $DATA_PATH')
     #get_ipython().system('wc -l $EVAL_DATA_PATH')
