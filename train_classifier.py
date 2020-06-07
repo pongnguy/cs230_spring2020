@@ -49,6 +49,7 @@ parser.add_argument("--hidden_layers", type=int, default=6, help="number of hidd
 parser.add_argument("--frozen_layers", type=int, default=6, help="number of layers to freeze in pretrained model")
 parser.add_argument("--optimizer", type=str, default="Adam", help="optimizer")
 parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
+parser.add_argument("--weight_decay", type=float, default=0.01, help="weight decay rate(actual weight) in optimizer")
 
 args = parser.parse_args()
 stage = args.stage
