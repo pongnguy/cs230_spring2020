@@ -1,4 +1,4 @@
-from transformers import DistilBertTokenizer, DistilBertModel
+import argparse
 from collections import defaultdict
 from dataclasses import dataclass
 import functools
@@ -28,9 +28,22 @@ from torch.utils.data import Dataset, Subset, DataLoader
 from apex import amp
 from transformers import BertTokenizer, BertConfig, BertModel, BertPreTrainedModel, DistilBertModel, DistilBertConfig
 
-# In[ ]:
+from models import DistilBertForTFQA
 
-VALID_SIZE = 100
+parser = argparse.ArgumentParser()
+
+parser.add_argument("--data_dir", type=str, default='/data/global_data/rekha_data', help="directory containing training and validation files")
+parser.add_argument("--classifier_model_dir", type=str, default='/data/sv/distilbert', help="model file")
+parser.add_argument("--classifier_dropout", type=float, default=0.1, help="-")
+parser.add_argument("--qa_dropout", type=float, default=0.1, help="-")
+parser.add_argument("--valid_size", type=int, default=100, help="number of validation examples")
+parser.add_argument("--batch_size", type=int, default=16, help="batch size to use for training examples")
+parser.add_argument("--fp16", type=bool, default=False, help="whether to use 16-bit precision")
+parser.add_argument("--hidden_layers", type=int, default=6, help="number of hidden layers from pretrained model to use")
+
+args = parser.parse_args()
+
+VALID_SIZE = args.valid_size
 #EVAL_DATA_PATH = '/data/global_data/rekha_data/simplified-nq-valid_'+str(VALID_SIZE)+'_set2.jsonl'
 EVAL_DATA_PATH = '/data/global_data/rekha_data/train_head6k_tail100_total100.jsonl'
 chunksize = 1000
@@ -38,7 +51,7 @@ chunksize = 1000
 #
 # get_ipython().system('wc -l $DATA_PATH')
 # get_ipython().system('wc -l $EVAL_DATA_PATH')
-DEBUG = False
+DEBUG = True
 
 # In[ ]:
 
@@ -84,6 +97,7 @@ class Example(object):
     example_id: int
     candidates: List[Dict]
     annotations: Dict
+    doc_tokens: List[str]
     doc_start: int
     question_len: int
     tokenized_to_original_index: List[int]
@@ -189,6 +203,7 @@ def convert_data(
                 example_id=data['example_id'],
                 candidates=data['long_answer_candidates'],
                 annotations=annotations,
+                doc_tokens=doc_words,
                 doc_start=doc_start,
                 question_len=len(question_tokens),
                 tokenized_to_original_index=tokenized_to_original_index,
@@ -254,64 +269,6 @@ class JsonChunkReader(JsonReader):
         raise StopIteration
 
 
-# In[ ]:
-
-
-class TextDataset(Dataset):
-    """Dataset for [TensorFlow 2.0 Question Answering](https://www.kaggle.com/c/tensorflow2-question-answering).
-
-    Parameters
-    ----------
-    examples : list of Example
-        The whole Dataset.
-    """
-
-    def __init__(self, examples: List[Example]):
-        self.examples = examples
-
-    def __len__(self) -> int:
-        return len(self.examples)
-
-    def __getitem__(self, index):
-        annotated = list(
-            filter(lambda example: example.class_label != 'unknown', self.examples[index]))
-        if len(annotated) == 0:
-            return random.choice(self.examples[index])
-        return random.choice(annotated)
-
-
-def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
-    # input tokens
-    max_len = max([len(example.input_ids) for example in examples])
-    tokens = np.zeros((len(examples), max_len), dtype=np.int64)
-    token_type_ids = np.ones((len(examples), max_len), dtype=np.int64)
-    for i, example in enumerate(examples):
-        row = example.input_ids
-        tokens[i, :len(row)] = row
-        token_type_id = [0 if i <= row.index(102) else 1
-                         for i in range(len(row))]  # 102 corresponds to [SEP]
-        token_type_ids[i, :len(row)] = token_type_id
-    attention_mask = tokens > 0
-    inputs = [torch.from_numpy(tokens),
-              torch.from_numpy(attention_mask),
-              torch.from_numpy(token_type_ids)]
-
-    # output labels
-    all_labels = ['long', 'no', 'short', 'unknown', 'yes']
-    start_positions = np.array([example.start_position for example in examples])
-    end_positions = np.array([example.end_position for example in examples])
-    class_labels = [all_labels.index(example.class_label) for example in examples]
-    start_positions = np.where(start_positions >= max_len, -1, start_positions)
-    end_positions = np.where(end_positions >= max_len, -1, end_positions)
-    labels = [torch.LongTensor(start_positions),
-              torch.LongTensor(end_positions),
-              torch.LongTensor(class_labels)]
-
-    return [inputs, labels]
-
-
-# In[ ]:
-
 
 class BertForQuestionAnswering(BertPreTrainedModel):
     """BERT model for QA and classification tasks.
@@ -360,59 +317,6 @@ class BertForQuestionAnswering(BertPreTrainedModel):
 
         return start_logits, end_logits, classifier_logits
 
-class DistilBertForQuestionAnswering(DistilBertModel):
-    """BERT model for QA and classification tasks.
-
-    Parameters
-    ----------
-    config : transformers.BertConfig. Configuration class for BERT.
-
-    Returns
-    -------
-    start_logits : torch.Tensor with shape (batch_size, sequence_size).
-        Starting scores of each tokens.
-    end_logits : torch.Tensor with shape (batch_size, sequence_size).
-        Ending scores of each tokens.
-    classifier_logits : torch.Tensor with shape (batch_size, num_classes).
-        Classification scores of each labels.
-    """
-
-    def __init__(self, config):
-        config.num_labels = 5
-        super(DistilBertForQuestionAnswering, self).__init__(config)
-        self.bert = DistilBertModel(config)
-        self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
-        self.dropout = nn.Dropout(config.dropout) #RekhaDist
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
-        self.init_weights()
-
-    def forward(self, input_ids, attention_mask=None, position_ids=None, head_mask=None):
-        outputs = self.bert(input_ids,
-                            attention_mask=attention_mask,
-                            #token_type_ids=token_type_ids,
-                            #position_ids=position_ids,
-                            #head_mask=head_mask
-                            )
-
-        #print('Outputs shape=', outputs.shape)
-        sequence_output = outputs[0]
-        #print("sequence_output type",sequence_output.type())
-        pooled_output = sequence_output[:,0,:] #Rekha hack check
-
-
-        # predict start & end position
-        qa_logits = self.qa_outputs(sequence_output)
-        start_logits, end_logits = qa_logits.split(1, dim=-1)
-        start_logits = start_logits.squeeze(-1)
-        end_logits = end_logits.squeeze(-1)
-
-        # classification
-        pooled_output = self.dropout(pooled_output)
-        classifier_logits = self.classifier(pooled_output)
-
-        return start_logits, end_logits, classifier_logits
-
-
 # In[ ]:
 
 
@@ -446,8 +350,9 @@ qa_model = BertForQuestionAnswering.from_pretrained('/data/sv/bert_trained', con
 
 config = DistilBertConfig.from_pretrained(classifier_model_name)
 config.num_labels = 5
-config.dropout = DROPOUT
-classifier_model = DistilBertForQuestionAnswering.from_pretrained('/data/sv/distilbert', config=config)
+config.dropout = args.classifier_dropout
+classifier_model = DistilBertForTFQA.from_pretrained(args.classifier_model_dir, config=config,
+                                                     hidden_layers=args.hidden_layers, batch_size=args.batch_size)
 
 def eval_collate_fn(examples: List[Example]) -> Tuple[List[torch.Tensor], List[Example]]:
     # input tokens
@@ -513,7 +418,8 @@ def eval_model(
         `overall_score`: score of the competition metric
     """
     qa_model.to(device)
-    #qa_model.half()
+    if args.fp16:
+        qa_model.half()
     qa_model.eval()
     classifier_model.to(device)
     classifier_model.eval()
@@ -728,7 +634,7 @@ class Result(object):
             yes_no_label = self.class_labels[class_pred.argmax()]
 
             if (DEBUG):
-                print(example)
+                print(example.example_id)
                 print('long_pred=', long_pred)
                 print('short_pred=', short_pred)
                 #logging.info('long_pred=%d',long_pred)
@@ -769,7 +675,6 @@ class Result(object):
         return {
             'long_score': long_score,
             'short_score': short_score,
-            'overall_score': (long_score + short_score) / 2
         }
 
 # Rekha added

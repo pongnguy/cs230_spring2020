@@ -32,20 +32,23 @@ from torch.utils.data import Dataset, Subset, DataLoader
 from apex import amp
 from transformers import BertTokenizer, AdamW, WarmupLinearSchedule
 
+from models import DistilBertForTFQA
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--data_dir", type=str, default='/data/global_data/rekha_data', help="directory containing training and validation files")
 parser.add_argument("--dropout", type=float, default=0.1, help="-")
 parser.add_argument("--train_size", type=int, default=10000, help="number of training examples")
-parser.add_argument("--valid_size", type=int, default=10, help="number of validation examples")
+parser.add_argument("--valid_size", type=int, default=100, help="number of validation examples")
 parser.add_argument("--learning_rate", type=float, default=2e-5, help="initial learning rate")
 parser.add_argument("--epochs", type=int, default=2, help="number of epochs to train")
 parser.add_argument("--batch_size", type=int, default=16, help="batch size to use for training examples")
 parser.add_argument("--fp16", type=bool, default=False, help="whether to use 16-bit precision")
 parser.add_argument("--hidden_layers", type=int, default=6, help="number of hidden layers from pretrained model to use")
-parser.add_argument("--frozen_layers", type=int, default=6, help="number of layers to freeze in pretrained model")
+parser.add_argument("--frozen_layers", type=int, default=0, help="number of layers to freeze in pretrained model")
 parser.add_argument("--optimizer", type=str, default="Adam", help="optimizer")
-parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
+parser.add_argument("--unknown_weight", type=float, default=0.5, help="weight of unknown label in loss function")
+parser.add_argument("--weight_decay", type=float, default=0.01, help="weight decay rate(actual weight) in optimizer")
 parser.add_argument("--do_train", type=bool, default=True, help="do training or evaluate a trained model")
 
 args = parser.parse_args()
@@ -85,7 +88,7 @@ batch_size = args.batch_size
 accumulation_steps = 4
 
 device = torch.device('cuda')
-output_dir="dr"+str(args.dropout)+"unkWt"+str(args.unknown_weight)+"lr"+str(args.learning_rate)+datetime.now().strftime("%d-%m_%H_%M_%S")
+output_dir="valid"+str(valid_size)+"_dr_"+str(args.dropout)+"_unkWt_"+str(args.unknown_weight)+"lr"+str(args.learning_rate)+datetime.now().strftime("%d-%m_%H_%M_%S")
 os.makedirs(output_dir)
 output_model_file = os.path.join(output_dir,'pytorch_model.bin')
 output_optimizer_file = os.path.join(output_dir,'pytorch_optimizer.bin')
@@ -342,54 +345,6 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
               torch.LongTensor(class_labels)]
 
     return [inputs, labels]
-
-class DistilBertForQuestionAnswering(DistilBertModel):
-    """BERT model for QA and classification tasks.
-
-    Parameters
-    ----------
-    config : transformers.BertConfig. Configuration class for BERT.
-
-    Returns
-    -------
-    start_logits : torch.Tensor with shape (batch_size, sequence_size).
-        Starting scores of each tokens.
-    end_logits : torch.Tensor with shape (batch_size, sequence_size).
-        Ending scores of each tokens.
-    classifier_logits : torch.Tensor with shape (batch_size, num_classes).
-        Classification scores of each labels.
-    """
-
-    def __init__(self, config):
-        super(DistilBertForQuestionAnswering, self).__init__(config)
-        self.bert = DistilBertModel(config)
-        self.qa_outputs = nn.Linear(config.hidden_size, 2)  # start/end
-        self.dropout = nn.Dropout(args.dropout) #RekhaDist
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
-        self.init_weights()
-
-    def forward(self, input_ids, attention_mask=None, position_ids=None, head_mask=None):
-        outputs = self.bert(input_ids,
-                            attention_mask=attention_mask,
-                            #token_type_ids=token_type_ids,
-                            #position_ids=position_ids,
-                            #head_mask=head_mask
-                            )
-
-        #print('Outputs shape=', outputs.shape)
-        sequence_output = outputs[0]
-        #print("sequence_output type",sequence_output.type())
-        pooled_output = sequence_output[:,0,:] #Rekha hack check
-
-
-
-        # classification
-        pooled_output = self.dropout(pooled_output)
-        classifier_logits = self.classifier(pooled_output)
-
-        start_dummy = torch.randn(batch_size, max_seq_len)
-        end_dummy = torch.randn(batch_size, max_seq_len)
-        return start_dummy, end_dummy, classifier_logits
 
 #['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
 
@@ -667,19 +622,26 @@ if __name__ == '__main__':
     # RekhaDist
     config = DistilBertConfig.from_pretrained('distilbert-base-uncased-distilled-squad')
     config.num_labels = 5
-    model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased-distilled-squad', config=config)
+    config.dropout = args.dropout
+    if args.hidden_layers != 6:
+        config.output_hidden_states = True
+    model = DistilBertForTFQA.from_pretrained('distilbert-base-uncased-distilled-squad', config=config,
+                                              frozen_layers=args.frozen_layers, hidden_layers=args.hidden_layers,
+                                              batch_size=args.batch_size, max_seq_len=max_seq_len)
 
     model = model.to(device)
 
     param_optimizer = list(model.named_parameters())
+    param_optimizer = [x for x in param_optimizer if x[1].requires_grad]
     no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
     optimizer_grouped_parameters = [
-        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': args.weight_decay},
         {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
     num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
     print_both(out_file,'num_train_optimization_steps=', num_train_optimization_steps)
     num_warmup_steps = int(num_train_optimization_steps * warmup)
     print_both(out_file,'num_warmup_steps', num_warmup_steps)
+    out_file.flush()
 
     optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
     scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
@@ -703,6 +665,7 @@ if __name__ == '__main__':
     print_both(out_file,'Rekha train_size=', train_size)
     print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
     print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
+    out_file.flush()
     # print_both(out_file,'len(data_reader)',len(data_reader))
     for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
         train_dataset = TextDataset(examples)
@@ -782,5 +745,5 @@ if __name__ == '__main__':
 
     print_both(out_file,f'trained {global_step * batch_size} samples')
     print_both(out_file,f'End of file: {(time.time() - start_time) / 3600:.1f} hours')
-
+    out_file.close()
 
