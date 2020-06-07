@@ -1,0 +1,6 @@
+num_train_optimization_steps= 78
+num_warmup_steps 3
+Rekha train_size= 5000
+Rekha total=int(np.ceil(train_size / chunksize))= 5
+Rekha DATA_PATH /data/global_data/rekha_data/simplified-nq-train_5000.jsonl
+HBox(children=(FloatProgress(value=0.0, max=5.0), HTML(value='')))
