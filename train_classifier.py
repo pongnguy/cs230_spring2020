@@ -37,12 +37,16 @@ import json
 import pickle
 from os import path
 
+#import asyncio
+#import aiofiles as aiof
+
 
 def print_both(file, *args):
     temp = sys.stdout #assign console output to a variable
     print(' '.join([str(arg) for arg in args]))
     sys.stdout = file
     print(' '.join([str(arg) for arg in args]))
+    file.flush()  # force flush to see output in file on disk
     sys.stdout = temp #set stdout back to console output
 
 
