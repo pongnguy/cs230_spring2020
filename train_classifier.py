@@ -32,6 +32,11 @@ from torch.utils.data import Dataset, Subset, DataLoader
 from apex import amp
 from transformers import BertTokenizer, AdamW, WarmupLinearSchedule
 
+import pdb
+import json
+import pickle
+from os import path
+
 
 def print_both(file, *args):
     temp = sys.stdout #assign console output to a variable
@@ -708,12 +713,48 @@ if __name__ == '__main__':
                                  doc_stride=doc_stride)
     data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
 
+    # saves all the examples if they do not already exist
+    seq = 0
+    assert(chunksize == 1000)  # hardcoding this
+    # TODO check there exist pickles up to the requested training size (i.e. seq = training / chunksize)
+    if not path.exists(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle'):
+        print('start reading training set from json file', time.time())
+        for examples in data_reader:
+            print('end reading', time.time())
+            with open(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle',
+                      'wb') as f:  # save variable to binary file
+                pickle.dump(examples, f)
+            examples_idx_max = seq
+            seq += 1
+            print('start reading training set from json file', time.time())
+    else:
+        # TODO get highest seq number starting from 0
+        print('pickle files exist', time.time())
+        while path.exists(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % (seq + 1)}.pickle'):
+            seq += 1
+
+        examples_idx_max = seq
+        assert (train_size % 1000 == 0 and train_size < 300000)  # checks if train_size is a multiple of 1000 since the pickles are chunksize 1000
+        pickle_idx_max = int(train_size / 1000)
+
     global_step = 0
     print_both(out_file,'Rekha train_size=', train_size)
     print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
     print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
     # print_both(out_file,'len(data_reader)',len(data_reader))
-    for examples in tqdm(data_reader, total=int(np.ceil(train_size / chunksize))):
+    for i in tqdm(range(pickle_idx_max)):
+        # load in the pickle
+        with open(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle',
+                  'rb') as f:  # save variable to binary file
+            print('start load pickle file', time.time())
+            examples = pickle.load(f)
+            # alfred change all non 'unknown' labels to 'hasAnswer' in y_batch instead of regenerating the pickle files
+            # for example_list in examples:
+            #    for example in example_list:
+            #        if example.class_label != 'unknown':
+            #            example.class_label = 'hasAnswer'
+            print('end load pickle file', time.time())
+
         train_dataset = TextDataset(examples)
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
         for x_batch, y_batch in train_loader:
