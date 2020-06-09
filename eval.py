@@ -668,9 +668,9 @@ class Result(object):
                         break
             short_scores.append([has_answer, has_pred, is_correct])
 
-        print('Long Answer score out of ', len(long_scores))
         long_score = _compute_f1(long_scores)
-        print('Short Answer')
+        print('Long Answer score', long_score)
+        print('Short Answer score')
         short_score = _compute_f1(short_scores)
         return {
             'long_score': long_score,
@@ -698,7 +698,7 @@ print(f'calculate validation score done in {(time.time() - eval_start_time) / 60
 
 long_score = valid_scores['long_score']
 short_score = valid_scores['short_score']
-overall_score = valid_scores['overall_score']
+#overall_score = valid_scores['overall_score']
 print('validation scores:')
 print(f'\tlong score    : {long_score:.4f}')
 print(f'\tshort score   : {short_score:.4f}')
