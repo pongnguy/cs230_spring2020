@@ -279,7 +279,7 @@ def collate_fn(examples: List[Example]) -> List[List[torch.Tensor]]:
     all_labels = ['long', 'no', 'short', 'unknown', 'yes']
     start_positions = np.array([example.start_position for example in examples])
     end_positions = np.array([example.end_position for example in examples])
-    class_labels = [all_labels.index(example.class_label) for example in examples]
+    class_labels = [all_labels.index(example.class_label) for example in examples] # alfred class label as the index
     start_positions = np.where(start_positions >= max_len, -1, start_positions)
     end_positions = np.where(end_positions >= max_len, -1, end_positions)
     labels = [torch.LongTensor(start_positions),
@@ -322,9 +322,9 @@ class DistilBertForQuestionAnswering(DistilBertModel):
                             )
 
         #print('Outputs shape=', outputs.shape)
-        sequence_output = outputs[0]
+        sequence_output = outputs[0] # these are last hidden states
         #print("sequence_output type",sequence_output.type())
-        pooled_output = sequence_output[:,0,:] #Rekha hack check
+        pooled_output = sequence_output[:,0,:] #Rekha hack check # alfred returns the hidden state of the [CLS] token which is taken as fixed-dimensional pooled representation of the input sequence
 
 
 
@@ -332,8 +332,8 @@ class DistilBertForQuestionAnswering(DistilBertModel):
         pooled_output = self.dropout(pooled_output)
         classifier_logits = self.classifier(pooled_output)
 
-        start_dummy = torch.randn(batch_size, max_seq_len)
-        end_dummy = torch.randn(batch_size, max_seq_len)
+        start_dummy = torch.zeros(batch_size, max_seq_len)
+        end_dummy = torch.zeros(batch_size, max_seq_len)
         return start_dummy, end_dummy, classifier_logits
 
 #['LONG', 'NO', 'SHORT', 'UNKNOWN', 'YES']
@@ -442,16 +442,17 @@ class Result(object):
             # if self.is_valid_index(example, indices[i]) and self.best_scores[example.example_id] < logits[i]:
             if True:
                 #self.best_scores[example.example_id] = logits[i]
-                self.examples[example.example_id] = example
-                self.results[example.example_id] = [
-                    example.doc_start, class_preds[i]]  # Store class_preds in results
+                key_id = str(example.example_id)+'_'+str(example.doc_start)
+                self.examples[key_id] = example # BUG this will overwrite previous chunks having the same example_id
+                self.results[key_id] = [
+                    example.doc_start, class_preds[i]]  # Store class_preds in results # alfred these are raw numbers
 
     def _generate_predictions(self) -> Generator[Dict, None, None]:
         """Generate predictions of each examples.
         """
-        for example_id in self.results.keys():
-            doc_start, class_pred = self.results[example_id]
-            example = self.examples[example_id]
+        for example_id_doc_start in self.results.keys():
+            _, class_pred = self.results[example_id_doc_start]
+            example = self.examples[example_id_doc_start]
             #tokenized_to_original_index = example.tokenized_to_original_index
 
             #short_start_index = tokenized_to_original_index[doc_start + index[0]]
@@ -465,9 +466,9 @@ class Result(object):
             #       break
             yield {
                 'example': example,
-                'long_answer': [-1, -1],
-                'short_answer': [-1, -1],
-                'yes_no_answer': class_pred
+                #'long_answer': [-1, -1],
+                #'short_answer': [-1, -1],
+                'class_label': class_pred
             }
 
     def end(self) -> Dict[str, Dict]:
@@ -508,15 +509,31 @@ class Result(object):
             tn = 0
             fp = 0
             fn = 0
+            num_has_answer = 0
             for ha, hp in zip(has_answer, has_pred):
-                if(ha and hp):
-                    tp = tp + 1
-                elif(not ha and not hp):
-                    tn = tn + 1
+                if(hp and ha):
+                    tp += 1
+                    num_has_answer += 1
                 elif(hp and not ha):
-                    fp = fp + 1
-                elif(ha and not hp):
-                    fn = fn + 1
+                    fp += 1
+                elif(not hp and ha):
+                    fn += 1
+                    num_has_answer += 1
+                elif(not hp and not ha):
+                    tn += 1
+
+                #if(ha and hp and is_correct):
+                #    tp += 1
+                #elif(ha and hp and not is_correct):
+                #    fp += 1
+                #elif(not ha and not hp and is_correct):
+                #    tn += 1
+                #elif(not ha and not hp and not is_correct):
+                #    fn += 1
+                #elif(hp and not ha):
+                #    fp = fp + 1
+                #elif(ha and not hp):
+                #    fn = fn + 1
 
             precision = _safe_divide(tp, tp + fp)
             recall = _safe_divide(tp, tp + fn)
@@ -524,22 +541,29 @@ class Result(object):
             print_both(out_file, 'fn=', fn, '  tn=', tn)  # Confusion matrix
             print_both(out_file,'precision=', precision)
             print_both(out_file,'recall=', recall)
+            print_both(out_file, 'num has answer=', num_has_answer)
 
             f1 = _safe_divide(2 * precision * recall, precision + recall)
             return f1
 
+        classification_scores = []
         long_scores = []
         short_scores = []
         for pred in self._generate_predictions():
             example = pred['example']
-            long_pred = pred['long_answer']     # alfred this always returns [-1, -1]
-            short_pred = pred['short_answer']
-            class_pred = pred['yes_no_answer']
-            yes_no_label = self.class_labels[class_pred.argmax()] # alfred what is this here for?
+            #long_pred = pred['long_answer']     # alfred this always returns [-1, -1]
+            #short_pred = pred['short_answer']
+            #class_pred = pred['yes_no_answer']
+            #yes_no_label = self.class_labels[class_pred.argmax()] # alfred what is this here for?
+            class_pred = pred['class_label']
+            class_pred = self.class_labels[class_pred.argmax()]
 
             if (DEBUG):
-                print_both(out_file,example)
-                print_both(out_file,yes_no_label)
+                print_both(debug_file,example)
+                print_both(debug_file, example.doc_start)
+                print_both(debug_file, example.class_label)
+                print_both(debug_file,'prediction '+class_pred)
+                #print_both(out_file,yes_no_label)
                 #logging.info('long_pred=%d',long_pred)
                 #logging.info("%s",example.question_text)
                 #logging.info("%s", answer)
@@ -550,18 +574,21 @@ class Result(object):
 
 
             # Actual ans
-            long_label = example.annotations['long_answer']
-            has_answer = long_label['candidate_index'] != -1        # input labels true or false for long ans part
+            #long_label = example.annotations['long_answer']
+            #has_answer = long_label['candidate_index'] != -1        # input labels true or false for long ans part
 
             # predicted output
-            has_pred = yes_no_label != 'UNKNOWN'
+            #has_pred = yes_no_label != 'UNKNOWN'
 
 
 
-            is_correct = False
-            if long_label['start_token'] == long_pred[0] and long_label['end_token'] == long_pred[1]:
-                is_correct = True  # BUG alfred there is an error here
-            long_scores.append([has_answer, has_pred, is_correct])  # alfred won't this always return false??
+            #is_correct = False
+            #if long_label['start_token'] == long_pred[0] and long_label['end_token'] == long_pred[1]:
+            #    is_correct = True  # BUG there is an error here
+            has_pred = (class_pred.upper() != 'UNKNOWN')
+            has_answer = (example.class_label.upper() != 'UNKNOWN')
+            is_correct = (has_pred == has_answer)
+            classification_scores.append([has_answer, has_pred, is_correct])  # alfred won't this always return false??
 
             # short score
             # short_labels = example.annotations['short_answers']
@@ -578,12 +605,12 @@ class Result(object):
             #             break
             # short_scores.append([has_answer, has_pred, is_correct])
 
-        print_both(out_file,'Long Answer')
-        long_score = _compute_f1(long_scores)
+        print_both(out_file,'Classification Answer')
+        classification_score = _compute_f1(classification_scores)
         # print('Short Answer')
         # short_score = _compute_f1(short_scores)
         return {
-            'long_score': long_score,
+            'classification_score': classification_score,
             # 'short_score': short_score,
             #'overall_score': (long_score + short_score) / 2
         }
@@ -631,8 +658,8 @@ if __name__ == '__main__':
     train_size = args.train_size
     valid_size = args.valid_size
 
-    DATA_PATH = os.path.join(args.data_dir, 'simplified-nq-train_' + str(train_size) + '.jsonl')
-    EVAL_DATA_PATH = os.path.join(args.data_dir, 'simplified-nq-valid_' + str(valid_size) + '.jsonl')
+    DATA_PATH = os.path.join(args.data_dir, 'simplified-nq-train.' + str(train_size) + '.jsonl')
+    EVAL_DATA_PATH = os.path.join(args.data_dir, 'simplified-nq-valid.' + str(valid_size) + '.jsonl')
 
     chunksize = 1000
 
@@ -670,6 +697,8 @@ if __name__ == '__main__':
     output_amp_file = os.path.join(output_dir, 'pytorch_amp.bin')
 
     out_file = open(os.path.join(output_dir, 'results.txt'), 'w')
+    if DEBUG:
+        debug_file = open(os.path.join(output_dir, 'debug.txt'), 'w')
 
     with open(os.path.join(output_dir, 'hyperparameters.txt'), 'w') as hyperparameters_file:
         print(args, file=hyperparameters_file)
@@ -815,6 +844,8 @@ if __name__ == '__main__':
         print_both(out_file,f'training time: {(time.time() - start_time) / 3600:.1f} hours')
 
 
+
+
     # EVAL STARTING (Skip over training if EVAL = True)
     print_both(out_file,'EVAL STARTING')
 
@@ -832,15 +863,17 @@ if __name__ == '__main__':
     valid_data = next(data_reader)
     valid_data = list(itertools.chain.from_iterable(valid_data))
     valid_dataset = Subset(valid_data, range(len(valid_data)))
+    print('len of valid_data from data_reader ', len(valid_data))
     valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=eval_collate_fn)
     valid_scores = eval_model(model, valid_loader, device=device)
 
     print_both(out_file,f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
+    print_both(out_file,f'validation size {valid_size}')
 
-    long_score = valid_scores['long_score']
+    classification_score = valid_scores['classification_score']
     #short_score = valid_scores['short_score']
     print_both(out_file,'validation scores:')
-    print_both(out_file,f'\tlong score    : {long_score:.4f}')
+    print_both(out_file,f'\tclassification score    : {classification_score:.4f}')
     #print_both(out_file,f'\tshort score   : {short_score:.4f}')
     print_both(out_file,f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 
