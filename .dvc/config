@@ -1,5 +1,5 @@
 [core]
-    remote = aws_s3
+    remote = dropbox
 [cache]
     type = "reflink,symlink,hardlink,copy"
 ['remote "aws_s3"']

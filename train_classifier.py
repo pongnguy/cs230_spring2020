@@ -394,7 +394,7 @@ def eval_model(
             #result.update(examples, np.array(list(class_preds)))
             #result.update(examples, class_preds.numpy())
 
-            result.update(examples, class_preds.numpy())
+            result.update(examples, class_preds.numpy()) # add the predictions to the examples
 
     return result.score()
 
@@ -444,7 +444,7 @@ class Result(object):
                 #self.best_scores[example.example_id] = logits[i]
                 self.examples[example.example_id] = example
                 self.results[example.example_id] = [
-                    example.doc_start, class_preds[i]]
+                    example.doc_start, class_preds[i]]  # Store class_preds in results
 
     def _generate_predictions(self) -> Generator[Dict, None, None]:
         """Generate predictions of each examples.
@@ -452,7 +452,7 @@ class Result(object):
         for example_id in self.results.keys():
             doc_start, class_pred = self.results[example_id]
             example = self.examples[example_id]
-            tokenized_to_original_index = example.tokenized_to_original_index
+            #tokenized_to_original_index = example.tokenized_to_original_index
 
             #short_start_index = tokenized_to_original_index[doc_start + index[0]]
             #short_end_index = tokenized_to_original_index[doc_start + index[1]]
@@ -532,10 +532,10 @@ class Result(object):
         short_scores = []
         for pred in self._generate_predictions():
             example = pred['example']
-            long_pred = pred['long_answer']
+            long_pred = pred['long_answer']     # alfred this always returns [-1, -1]
             short_pred = pred['short_answer']
             class_pred = pred['yes_no_answer']
-            yes_no_label = self.class_labels[class_pred.argmax()]
+            yes_no_label = self.class_labels[class_pred.argmax()] # alfred what is this here for?
 
             if (DEBUG):
                 print_both(out_file,example)
@@ -560,8 +560,8 @@ class Result(object):
 
             is_correct = False
             if long_label['start_token'] == long_pred[0] and long_label['end_token'] == long_pred[1]:
-                is_correct = True
-            long_scores.append([has_answer, has_pred, is_correct])
+                is_correct = True  # BUG alfred there is an error here
+            long_scores.append([has_answer, has_pred, is_correct])  # alfred won't this always return false??
 
             # short score
             # short_labels = example.annotations['short_answers']
@@ -624,7 +624,8 @@ if __name__ == '__main__':
     parser.add_argument("--frozen_layers", type=int, default=6, help="number of layers to freeze in pretrained model")
     parser.add_argument("--optimizer", type=str, default="Adam", help="optimizer")
     parser.add_argument("--unknown_weight", type=float, default=0.3, help="weight of unknown label in loss function")
-    parser.add_argument("--do_train", type=bool, default=True, help="do training or evaluate a trained model")
+    parser.add_argument("--do_train", type=lambda x: (str(x).lower() in ['true','1', 'yes']), default=True, help="do training or evaluate a trained model")
+    parser.add_argument("--eval_model_file", type=str, default="", help="path to saved model")
 
     args = parser.parse_args()
     train_size = args.train_size
@@ -639,7 +640,7 @@ if __name__ == '__main__':
     # get_ipython().system('wc -l $DATA_PATH')
     # get_ipython().system('wc -l $EVAL_DATA_PATH')
     DEBUG = True
-    EVALUATION = True
+    EVALUATION = not args.do_train
 
     # In[ ]:
 
@@ -689,130 +690,142 @@ if __name__ == '__main__':
 
     model = model.to(device)
 
-    param_optimizer = list(model.named_parameters())
-    no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-    optimizer_grouped_parameters = [
-        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
-    num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
-    print_both(out_file,'num_train_optimization_steps=', num_train_optimization_steps)
-    num_warmup_steps = int(num_train_optimization_steps * warmup)
-    print_both(out_file,'num_warmup_steps', num_warmup_steps)
-
-    optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
-    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
-
-    model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
-    model.zero_grad()
-    model.train()
-
-    # tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=do_lower_case)
-    # RekhaDist
     tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', return_token_type_ids=True)
-
     convert_func = functools.partial(convert_data,
-                                 tokenizer=tokenizer,
-                                 max_seq_len=max_seq_len,
-                                 max_question_len=max_question_len,
-                                 doc_stride=doc_stride)
-    data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+                                     tokenizer=tokenizer,
+                                     max_seq_len=max_seq_len,
+                                     max_question_len=max_question_len,
+                                     doc_stride=doc_stride)
 
-    # saves all the examples if they do not already exist
-    seq = 0
-    assert(chunksize == 1000)  # hardcoding this
-    # TODO check there exist pickles up to the requested training size (i.e. seq = training / chunksize)
-    if not path.exists(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle'):
-        print('start reading training set from json file', time.time())
-        for examples in data_reader:
-            print('end reading', time.time())
-            with open(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle',
-                      'wb') as f:  # save variable to binary file
-                pickle.dump(examples, f)
-            examples_idx_max = seq
-            seq += 1
+
+
+    if not EVALUATION:
+        param_optimizer = list(model.named_parameters())
+        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+        optimizer_grouped_parameters = [
+            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]
+        num_train_optimization_steps = int(n_epochs * train_size / batch_size / accumulation_steps)
+        print_both(out_file,'num_train_optimization_steps=', num_train_optimization_steps)
+        num_warmup_steps = int(num_train_optimization_steps * warmup)
+        print_both(out_file,'num_warmup_steps', num_warmup_steps)
+
+        optimizer = AdamW(optimizer_grouped_parameters, lr=lr, correct_bias=False)
+        scheduler = WarmupLinearSchedule(optimizer, warmup_steps=num_warmup_steps, t_total=num_train_optimization_steps)
+
+        model, optimizer = amp.initialize(model, optimizer, opt_level='O1', verbosity=0)
+        model.zero_grad()
+        model.train()
+
+
+        data_reader = JsonChunkReader(DATA_PATH, convert_func, chunksize=chunksize)
+
+        # saves all the examples if they do not already exist
+        seq = 0
+        assert(chunksize == 1000)  # hardcoding this
+        # TODO check there exist pickles up to the requested training size (i.e. seq = training / chunksize)
+        if not path.exists(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle'):
             print('start reading training set from json file', time.time())
-    else:
-        # TODO get highest seq number starting from 0
-        print('pickle files exist', time.time())
-        while path.exists(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % (seq + 1)}.pickle'):
-            seq += 1
+            for examples in data_reader:
+                print('end reading', time.time())
+                with open(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % seq}.pickle',
+                          'wb') as f:  # save variable to binary file
+                    pickle.dump(examples, f)
+                examples_idx_max = seq
+                seq += 1
+                print('start reading training set from json file', time.time())
+        else:
+            # TODO get highest seq number starting from 0
+            print('pickle files exist', time.time())
+            while path.exists(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % (seq + 1)}.pickle'):
+                seq += 1
 
-        examples_idx_max = seq
-        assert (train_size % 1000 == 0 and train_size < 300000)  # checks if train_size is a multiple of 1000 since the pickles are chunksize 1000
-        pickle_idx_max = int(train_size / 1000)
+            examples_idx_max = seq
+            assert (train_size % 1000 == 0 and train_size < 300000)  # checks if train_size is a multiple of 1000 since the pickles are chunksize 1000
+            pickle_idx_max = int(train_size / 1000)
 
-    global_step = 0
-    print_both(out_file,'Rekha train_size=', train_size)
-    print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
-    print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
-    # print_both(out_file,'len(data_reader)',len(data_reader))
-    for i in tqdm(range(pickle_idx_max)):
-        # load in the pickle
-        with open(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle',
-                  'rb') as f:  # save variable to binary file
-            print('start load pickle file', time.time())
-            examples = pickle.load(f)
-            # alfred change all non 'unknown' labels to 'hasAnswer' in y_batch instead of regenerating the pickle files
-            # for example_list in examples:
-            #    for example in example_list:
-            #        if example.class_label != 'unknown':
-            #            example.class_label = 'hasAnswer'
-            print('end load pickle file', time.time())
+        global_step = 0
+        print_both(out_file,'Rekha train_size=', train_size)
+        print_both(out_file,'Rekha total=int(np.ceil(train_size / chunksize))=', int(np.ceil(train_size / chunksize)))
+        print_both(out_file,'Rekha DATA_PATH', DATA_PATH)
+        # print_both(out_file,'len(data_reader)',len(data_reader))
+        for i in tqdm(range(pickle_idx_max)):
+            # load in the pickle
+            with open(f'final_project/shreyas/pickles/examples_chunk={chunksize}_seq={"%03d" % i}.pickle',
+                      'rb') as f:  # save variable to binary file
+                print('start load pickle file', time.time())
+                examples = pickle.load(f)
+                # alfred change all non 'unknown' labels to 'hasAnswer' in y_batch instead of regenerating the pickle files
+                # for example_list in examples:
+                #    for example in example_list:
+                #        if example.class_label != 'unknown':
+                #            example.class_label = 'hasAnswer'
+                print('end load pickle file', time.time())
 
-        train_dataset = TextDataset(examples)
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-        for x_batch, y_batch in train_loader:
-            x_batch, attention_mask, token_type_ids = x_batch
-            y_batch = (y.to(device) for y in y_batch)
+            train_dataset = TextDataset(examples)
+            train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+            for x_batch, y_batch in train_loader:
+                x_batch, attention_mask, token_type_ids = x_batch
+                y_batch = (y.to(device) for y in y_batch)
 
-            # RekhaDist
-            # context = "The US has passed the peak on new coronavirus cases, " \
-            #           "President Donald Trump said and predicted that some states would reopen this month." \
-            #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
-            #           "the highest for any country in the world."
-            # questions = ["What was President Donald Trump's prediction?",
-            #              "How many deaths have been reported from the virus?",
-            #              "How many cases have been reported in the United States?"]
-            # question_context_for_batch = []
-            #
-            # for question in questions:
-            #     question_context_for_batch.append((question, context))
-            # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
-            # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
-            # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
-            y_pred = model(x_batch.to(device),
-                           attention_mask=attention_mask.to(device))
+                # RekhaDist
+                # context = "The US has passed the peak on new coronavirus cases, " \
+                #           "President Donald Trump said and predicted that some states would reopen this month." \
+                #           "The US has over 637,000 confirmed Covid-19 cases and over 30,826 deaths, " \
+                #           "the highest for any country in the world."
+                # questions = ["What was President Donald Trump's prediction?",
+                #              "How many deaths have been reported from the virus?",
+                #              "How many cases have been reported in the United States?"]
+                # question_context_for_batch = []
+                #
+                # for question in questions:
+                #     question_context_for_batch.append((question, context))
+                # encoding = tokenizer.batch_encode_plus(question_context_for_batch, pad_to_max_length=True, return_tensors="pt")
+                # input_ids, attention_mask = encoding["input_ids"], encoding["attention_mask"]
+                # start_scores, end_scores = model(input_ids, attention_mask=attention_mask)
+                y_pred = model(x_batch.to(device),
+                               attention_mask=attention_mask.to(device))
 
-            #Rekha old
-            # y_pred = model(x_batch.to(device),
-            #                attention_mask=attention_mask.to(device),
-            #                token_type_ids=token_type_ids.to(device))
-            loss = loss_fn_classifier(y_pred, y_batch)
-            with amp.scale_loss(loss, optimizer) as scaled_loss:
-                scaled_loss.backward()
-            if (global_step + 1) % accumulation_steps == 0:
-                optimizer.step()
-                scheduler.step()
-                model.zero_grad()
+                #Rekha old
+                # y_pred = model(x_batch.to(device),
+                #                attention_mask=attention_mask.to(device),
+                #                token_type_ids=token_type_ids.to(device))
+                loss = loss_fn_classifier(y_pred, y_batch)
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+                if (global_step + 1) % accumulation_steps == 0:
+                    optimizer.step()
+                    scheduler.step()
+                    model.zero_grad()
 
-            global_step += 1
-        print_both(out_file,"Training loss:", loss)
+                global_step += 1
+            print_both(out_file,"Training loss:", loss)
 
-        if (time.time() - start_time) / 3600 > 7:
-            break
+            if (time.time() - start_time) / 3600 > 7:
+                break
 
-    del examples, train_dataset, train_loader
-    gc.collect()
+        del examples, train_dataset, train_loader
+        gc.collect()
 
-    torch.save(model.state_dict(), output_model_file)
-    torch.save(optimizer.state_dict(), output_optimizer_file)
-    torch.save(amp.state_dict(), output_amp_file)
+        torch.save(model.state_dict(), output_model_file)
+        torch.save(optimizer.state_dict(), output_optimizer_file)
+        torch.save(amp.state_dict(), output_amp_file)
 
-    print_both(out_file,f'trained {global_step * batch_size} samples')
-    print_both(out_file,f'training time: {(time.time() - start_time) / 3600:.1f} hours')
+        print_both(out_file,f'trained {global_step * batch_size} samples')
+        print_both(out_file,f'training time: {(time.time() - start_time) / 3600:.1f} hours')
 
-    # EVAL STARTING]
+
+    # EVAL STARTING (Skip over training if EVAL = True)
     print_both(out_file,'EVAL STARTING')
+
+    # load an existing model
+    # ------
+    # load saved weights
+
+    eval_model_file = args.eval_model_file
+    model.load_state_dict(torch.load(eval_model_file))
+
+
     data_reader = JsonChunkReader(EVAL_DATA_PATH, convert_func, chunksize=chunksize)
 
     eval_start_time = time.time()
@@ -834,7 +847,7 @@ if __name__ == '__main__':
     #get_ipython().system('wc -l $DATA_PATH')
     #get_ipython().system('wc -l $EVAL_DATA_PATH')
 
-    print_both(out_file,f'trained {global_step * batch_size} samples')
+    #print_both(out_file,f'trained {global_step * batch_size} samples')
     print_both(out_file,f'End of file: {(time.time() - start_time) / 3600:.1f} hours')
 
 
