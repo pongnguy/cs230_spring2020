@@ -1,0 +1,7 @@
+md5: fede7322de6a2018572c162655748f05
+outs:
+- md5: fb17870295fe51601a24ba6f39172944
+  path: seventh-row.json
+  cache: true
+  metric: false
+  persist: false

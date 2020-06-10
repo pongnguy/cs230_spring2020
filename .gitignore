@@ -108,7 +108,7 @@ __pypackages__/
 # Data files
 #*.json
 #*.jsonl
-#*.bin
+*.bin
 *.ckpt*
 
 # Celery stuff
@@ -151,3 +151,4 @@ deployment.xml
 
 # pickle files
 .pickle
+/large log files

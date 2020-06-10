@@ -1,0 +1,7 @@
+md5: b7589228d6817a43834a0cdc489da60c
+outs:
+- md5: ee7236478bd3872670e6df35ee687845
+  path: simplified-nq-test.jsonl
+  cache: true
+  metric: false
+  persist: false

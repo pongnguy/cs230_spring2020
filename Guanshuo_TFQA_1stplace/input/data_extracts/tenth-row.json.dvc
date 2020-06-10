@@ -1,0 +1,7 @@
+md5: 0ce0e34be12e956d7a2623be585442c7
+outs:
+- md5: 2db2905f98abd0a17c0ef5a48d4f5120
+  path: tenth-row.json
+  cache: true
+  metric: false
+  persist: false

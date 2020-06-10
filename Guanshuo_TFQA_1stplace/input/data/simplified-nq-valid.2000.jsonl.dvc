@@ -1,0 +1,7 @@
+md5: dab83ade726fa8701cafd66e3384f1f3
+outs:
+- md5: 62f11a1a755f0ebe2121e8caf6ad9213
+  path: simplified-nq-valid.2000.jsonl
+  cache: true
+  metric: false
+  persist: false

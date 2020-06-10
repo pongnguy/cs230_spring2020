@@ -1,0 +1,1 @@
+Namespace(batch_size=16, data_dir='Guanshuo_TFQA_1stplace\\input\\data', do_train=False, dropout=0.3, epochs=2, eval_model_file='dr0.3unkWt0.3lr2e-0509-06_04_09_37\\pytorch_model.bin', fp16=False, frozen_layers=6, hidden_layers=6, learning_rate=2e-05, optimizer='Adam', train_size=10000, unknown_weight=0.3, valid_size=100)

@@ -1,0 +1,8 @@
+num_train_optimization_steps= 312
+num_warmup_steps 15
+Rekha train_size= 10000
+Rekha total=int(np.ceil(train_size / chunksize))= 10
+Rekha DATA_PATH Guanshuo_TFQA_1stplace\input\data\simplified-nq-train.10000.jsonl
+Training loss: tensor(1.8585, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(1.6186, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.4582, device='cuda:0', grad_fn=<NllLossBackward>)

@@ -2,6 +2,7 @@
     remote = dropbox
 [cache]
     type = "reflink,symlink,hardlink,copy"
+    dir = D:/.dvc/cs230_spring2020/cache
 ['remote "aws_s3"']
     url = s3://dvc-remote
 ['remote "sharefolder"']

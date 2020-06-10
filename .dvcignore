@@ -1,0 +1,5 @@
+# All source code
+*.py
+
+# All logs
+*.txt

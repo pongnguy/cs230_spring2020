@@ -1,0 +1,13 @@
+EVAL STARTING
+Classification Answer
+tp= 861   fp= 64750
+fn= 0   tn= 0
+precision= 0.01312279953056652
+recall= 1.0
+num has answer= 861
+calculate validation score done in 42.5 minutes.
+validation size 2000
+validation scores:
+	classification score    : 0.0259
+all process done in 0.7 hours.
+End of file: 0.7 hours

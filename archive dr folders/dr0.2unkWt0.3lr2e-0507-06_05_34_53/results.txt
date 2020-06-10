@@ -1,0 +1,5 @@
+num_train_optimization_steps= 312
+num_warmup_steps 15
+Rekha train_size= 10000
+Rekha total=int(np.ceil(train_size / chunksize))= 10
+Rekha DATA_PATH Guanshuo_TFQA_1stplace\input\simplified-nq-train_10000.jsonl

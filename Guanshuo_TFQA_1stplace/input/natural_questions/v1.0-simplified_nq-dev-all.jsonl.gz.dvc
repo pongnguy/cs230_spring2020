@@ -1,0 +1,7 @@
+md5: d083cdefec60af628e504c3f7b6a2083
+outs:
+- md5: 25ed72090c85019f34f87b79005e1efe
+  path: v1.0-simplified_nq-dev-all.jsonl.gz
+  cache: true
+  metric: false
+  persist: false

@@ -1,0 +1,7 @@
+md5: 70121c0eaacd29028b4b972bcb88d081
+outs:
+- md5: a9a31fec3c1f6bc9b5a9bebce2a81e59
+  path: sixth-row.json
+  cache: true
+  metric: false
+  persist: false

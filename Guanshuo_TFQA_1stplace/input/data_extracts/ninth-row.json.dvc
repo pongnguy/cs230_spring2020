@@ -1,0 +1,7 @@
+md5: f31925c65d8833f9a54d35dd25e5a572
+outs:
+- md5: 748b433e86825fb2a7f5307ecc7f5a13
+  path: ninth-row.json
+  cache: true
+  metric: false
+  persist: false

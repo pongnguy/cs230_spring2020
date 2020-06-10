@@ -1,0 +1,1 @@
+Namespace(batch_size=16, data_dir='Gyuanshuo_TFQA_1stplace/input', do_train=True, dropout=0.2, epochs=2, fp16=False, frozen_layers=6, hidden_layers=6, learning_rate=2e-05, optimizer='Adam', train_size=10000, unknown_weight=0.3, valid_size=10)

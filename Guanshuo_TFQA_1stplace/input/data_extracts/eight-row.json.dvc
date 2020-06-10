@@ -1,0 +1,7 @@
+md5: d5e701502add67fdcac7a0a21ac801af
+outs:
+- md5: a8eaf99b06480674739cddae06bed728
+  path: eight-row.json
+  cache: true
+  metric: false
+  persist: false

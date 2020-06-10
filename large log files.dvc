@@ -1,0 +1,7 @@
+md5: 6de413da2fa18d2cbf9b4765db41cb6d
+outs:
+- md5: d751713988987e9331980363e24189ce.dir
+  path: large log files
+  cache: true
+  metric: false
+  persist: false

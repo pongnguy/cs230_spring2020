@@ -1,0 +1,7 @@
+md5: 18c9e0b03d6f9171873b682b9f4bab32
+outs:
+- md5: fd8ceb8f42e78c7a38fdc1eb79db31af
+  path: third-row.json
+  cache: true
+  metric: false
+  persist: false

@@ -1,0 +1,75 @@
+dr0.3unkWt0.3lr2e-0509-06_16_07_13
+Classification Answer
+tp= 91   fp= 2887
+fn= 17   tn= 3257
+precision= 0.030557421087978508
+recall= 0.8425925925925926
+num has answer= 108
+calculate validation score done in 6.1 minutes.
+validation size 100
+validation scores:
+	classification score    : 0.0590
+all process done in 0.1 hours.
+End of file: 0.1 hours.0
+
+
+
+dr0.3unkWt0.3lr2e-0509-06_16_18_06
+Classification Answer
+tp= 752   fp= 29762
+fn= 109   tn= 34988
+precision= 0.02464442550960215
+recall= 0.8734030197444832
+num has answer= 861
+calculate validation score done in 50.0 minutes.
+validation size 2000
+validation scores:
+	classification score    : 0.0479
+all process done in 0.8 hours.
+End of file: 0.8 hours
+
+
+
+All training examples using saved weights, 5 classification labels
+Classification Answer
+tp= 83   fp= 1202
+fn= 25   tn= 4942
+precision= 0.06459143968871596
+recall= 0.7685185185185185
+num has answer= 108
+calculate validation score done in 5.5 minutes.
+validation size 100
+validation scores:
+	classification score    : 0.1192
+all process done in 0.1 hours.
+End of file: 0.1 hours
+
+
+dr0.3unkWt0.02lr2e-0509-06_18_56_01 (train 10000, valid 100)
+Classification Answer
+tp= 108   fp= 6144
+fn= 0   tn= 0
+precision= 0.01727447216890595
+recall= 1.0
+num has answer= 108
+calculate validation score done in 5.0 minutes.
+validation size 100
+validation scores:
+	classification score    : 0.0340
+all process done in 0.3 hours.
+End of file: 0.3 hours
+
+
+dr0.3unkWt0.02lr2e-0509-06_18_56_01 (train 10000, valid 2000)
+Classification Answer
+tp= 861   fp= 64750
+fn= 0   tn= 0
+precision= 0.01312279953056652
+recall= 1.0
+num has answer= 861
+calculate validation score done in 42.5 minutes.
+validation size 2000
+validation scores:
+	classification score    : 0.0259
+all process done in 0.7 hours.
+End of file: 0.7 hours

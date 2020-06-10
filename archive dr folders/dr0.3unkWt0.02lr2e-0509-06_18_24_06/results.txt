@@ -1,0 +1,30 @@
+num_train_optimization_steps= 312
+num_warmup_steps 15
+Rekha train_size= 10000
+Rekha total=int(np.ceil(train_size / chunksize))= 10
+Rekha DATA_PATH Guanshuo_TFQA_1stplace\input\data\simplified-nq-train.10000.jsonl
+Training loss: tensor(1.8585, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(1.6186, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.4582, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.5298, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.7386, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.4063, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.8307, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.8061, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.5548, device='cuda:0', grad_fn=<NllLossBackward>)
+Training loss: tensor(0.5463, device='cuda:0', grad_fn=<NllLossBackward>)
+trained 10080 samples
+training time: 0.3 hours
+EVAL STARTING
+Classification Answer
+tp= 83   fp= 1203
+fn= 25   tn= 4941
+precision= 0.0645412130637636
+recall= 0.7685185185185185
+num has answer= 108
+calculate validation score done in 5.3 minutes.
+validation size 100
+validation scores:
+	classification score    : 0.1191
+all process done in 0.3 hours.
+End of file: 0.3 hours
