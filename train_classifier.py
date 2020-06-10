@@ -606,11 +606,11 @@ class Result(object):
             # short_scores.append([has_answer, has_pred, is_correct])
 
         print_both(out_file,'Classification Answer')
-        classification_score = _compute_f1(classification_scores)
+        classification_f1_score = _compute_f1(classification_scores)
         # print('Short Answer')
         # short_score = _compute_f1(short_scores)
         return {
-            'classification_score': classification_score,
+            'classification_f1_score': classification_f1_score,
             # 'short_score': short_score,
             #'overall_score': (long_score + short_score) / 2
         }
@@ -693,6 +693,7 @@ if __name__ == '__main__':
     output_dir = "dr" + str(args.dropout) + "unkWt" + str(args.unknown_weight) + "lr" + str(args.learning_rate) + datetime.now().strftime("%d-%m_%H_%M_%S")
     os.makedirs(output_dir)
     output_model_file = os.path.join(output_dir, 'pytorch_model.bin')
+    print('output model file ', output_model_file)
     output_optimizer_file = os.path.join(output_dir, 'pytorch_optimizer.bin')
     output_amp_file = os.path.join(output_dir, 'pytorch_amp.bin')
 
@@ -836,6 +837,7 @@ if __name__ == '__main__':
         del examples, train_dataset, train_loader
         gc.collect()
 
+        print_both(out_file,'saving model to ', output_model_file)
         torch.save(model.state_dict(), output_model_file)
         torch.save(optimizer.state_dict(), output_optimizer_file)
         torch.save(amp.state_dict(), output_amp_file)
@@ -853,7 +855,11 @@ if __name__ == '__main__':
     # ------
     # load saved weights
 
-    eval_model_file = args.eval_model_file
+    if EVALUATION:
+        eval_model_file = args.eval_model_file
+    else:
+        eval_model_file = output_model_file
+
     model.load_state_dict(torch.load(eval_model_file))
 
 
@@ -870,10 +876,10 @@ if __name__ == '__main__':
     print_both(out_file,f'calculate validation score done in {(time.time() - eval_start_time) / 60:.1f} minutes.')
     print_both(out_file,f'validation size {valid_size}')
 
-    classification_score = valid_scores['classification_score']
+    classification_f1_score = valid_scores['classification_f1_score']
     #short_score = valid_scores['short_score']
     print_both(out_file,'validation scores:')
-    print_both(out_file,f'\tclassification score    : {classification_score:.4f}')
+    print_both(out_file,f'\tclassification f1 score    : {classification_f1_score:.4f}')
     #print_both(out_file,f'\tshort score   : {short_score:.4f}')
     print_both(out_file,f'all process done in {(time.time() - start_time) / 3600:.1f} hours.')
 
